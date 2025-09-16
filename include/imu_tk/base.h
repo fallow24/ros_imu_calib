@@ -31,7 +31,7 @@
 #include <vector>
 #include <iostream>
 #include <stdexcept>
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 
 namespace imu_tk
 {

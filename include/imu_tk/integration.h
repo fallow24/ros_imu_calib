@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 #include <ceres/rotation.h>
 
 #include "imu_tk/base.h"

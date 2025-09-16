@@ -1,0 +1,13 @@
+bag_file: "/home/fabi/Documents/Bagfiles/calib_imu2.bag"
+imu_topic: "/imu/2/raw"
+imu_frequency_hz: 200
+num_samples_per_interval: 500
+min_nr_recorded_intervals: 30
+variance_win_size: 202
+th_variance_min: 5
+th_variance_max: 12
+initial_static_interval_duration: 60.0
+gravity_magnitude: 1.0
+use_acc_means: true
+save_acc_calib: "/home/fabi/catkin_ws/src/imu_tk/acc_calib2.txt"
+save_gyr_calib: "/home/fabi/catkin_ws/src/imu_tk/gyr_calib2.txt"

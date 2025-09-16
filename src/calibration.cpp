@@ -149,7 +149,11 @@ template <typename _T>
   verbose_output_(false){}
 
 template <typename _T>
-  bool MultiPosCalibration_<_T>::calibrateAcc ( const std::vector< TriadData_<_T> >& acc_samples )
+  bool MultiPosCalibration_<_T>::calibrateAcc ( const std::vector< TriadData_<_T> >& acc_samples , 
+    int min_recorded_intervals,
+    int variance_win_size,
+    int th_var_min,
+    int th_var_max)
 {
   cout<<"Accelerometers calibration: calibrating..."<<endl;
   
@@ -167,7 +171,7 @@ template <typename _T>
   int min_cost_th = -1;
   std::vector< double > min_cost_calib_params;
   
-  for (int th_mult = 2; th_mult <= 10; th_mult++)
+  for (int th_mult = th_var_min; th_mult <= th_var_max; th_mult++)
   {
     std::vector< imu_tk::DataInterval > static_intervals;
     std::vector< imu_tk::TriadData_<_T> > static_samples;
@@ -186,7 +190,7 @@ template <typename _T>
     acc_calib_params[8] = init_acc_calib_.biasZ();
     
     std::vector< DataInterval > extracted_intervals;
-    staticIntervalsDetector ( acc_samples, th_mult*norm_th, static_intervals );
+    staticIntervalsDetector ( acc_samples, th_mult*norm_th, static_intervals, variance_win_size);
     extractIntervalsSamples ( acc_samples, static_intervals, 
                               static_samples, extracted_intervals,
                               interval_n_samples_, acc_use_means_ );
@@ -214,16 +218,23 @@ template <typename _T>
     }
     
     ceres::Solver::Options options;
+    options.max_num_iterations = 5000;
+    options.function_tolerance = 1e-24;
+    options.gradient_tolerance = 1e-28;
+    options.parameter_tolerance = 1e-26;
+    options.max_linear_solver_iterations = 10000;
     options.linear_solver_type = ceres::DENSE_QR;
     options.minimizer_progress_to_stdout = verbose_output_;
 
     ceres::Solver::Summary summary;
     ceres::Solve ( options, &problem, &summary );
-    if( summary.final_cost < min_cost)
+
+    // TODO: Not only look at the minimum cost, but also the quality of extracted intervals!
+    if( summary.final_cost < min_cost && extracted_intervals.size() >= min_recorded_intervals)
     {
       min_cost = summary.final_cost;
       min_cost_th = th_mult;
-      min_cost_static_intervals_ = static_intervals;
+      min_cost_static_intervals_ = extracted_intervals;
       min_cost_calib_params = acc_calib_params;
     }
     cout<<"residual "<<summary.final_cost<<endl;
@@ -275,9 +286,14 @@ template <typename _T>
 
 template <typename _T> 
   bool MultiPosCalibration_<_T>::calibrateAccGyro ( const vector< TriadData_<_T> >& acc_samples, 
-                                                   const vector< TriadData_<_T> >& gyro_samples )
+                                                   const vector< TriadData_<_T> >& gyro_samples,
+                                                   int min_recorded_intervals,
+                                                   int variance_win_size,
+                                                   int th_var_min,
+                                                   int th_var_max)
 {
-  if( !calibrateAcc( acc_samples ) )
+  if( !calibrateAcc( acc_samples, min_recorded_intervals, 
+    variance_win_size, th_var_min, th_var_max ) )
     return false;
   
   cout<<"Gyroscopes calibration: calibrating..."<<endl;
@@ -371,6 +387,11 @@ template <typename _T>
   }
   
   ceres::Solver::Options options;
+  options.max_num_iterations = 5000;
+  options.function_tolerance = 1e-24;
+  options.gradient_tolerance = 1e-28;
+  options.parameter_tolerance = 1e-26;
+  options.max_linear_solver_iterations = 10000;
   options.linear_solver_type = ceres::DENSE_QR;
   options.minimizer_progress_to_stdout = verbose_output_;
 

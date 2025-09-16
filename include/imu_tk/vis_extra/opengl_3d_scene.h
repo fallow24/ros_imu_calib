@@ -32,10 +32,10 @@
 #include <vector>
 #include <map>
 
-#include <QGLWidget>
-#include <QVector>
-#include <QMutex>
-#include <Eigen/Geometry>
+// #include <QGLWidget>
+// #include <QVector>
+// #include <QMutex>
+#include <eigen3/Eigen/Geometry>
 
 #include <limits>
 #include <GL/glu.h>

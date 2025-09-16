@@ -59,5 +59,5 @@ namespace imu_tk
 template <typename _T> 
   void staticIntervalsDetector ( const std::vector< TriadData_<_T> > &samples,
                                  _T threshold, std::vector< DataInterval > &intervals,
-                                 int win_size = 101 );
+                                 int win_size = 202 );
 }

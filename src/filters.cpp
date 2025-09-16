@@ -35,7 +35,7 @@ template <typename _T>
                                          _T threshold, std::vector< imu_tk::DataInterval >& intervals, 
                                          int win_size )
 {
-  if ( win_size < 11 ) win_size = 11;
+  if ( win_size < 22 ) win_size = 22;
   if( !(win_size % 2) ) win_size++;
   
   int h = win_size / 2;
