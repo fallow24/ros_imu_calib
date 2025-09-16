@@ -2,6 +2,32 @@
 
 This is a ROS wrapper for imu_tk, learn details from original [README.md](./README_original.md) please.
 
+## Dependencies 
+
+This program depends on [gnuplot](http://www.gnuplot.info/), [yaml-cpp](https://github.com/jbeder/yaml-cpp), [Eigen](https://libeigen.gitlab.io/docs/), and [Ceres](http://ceres-solver.org/index.html).
+
+On Linux (Ubuntu/Debian-based) you can try:
+```Bash
+sudo apt install libeigen3-dev libyaml-cpp-dev gnuplot gnuplot-qt
+```
+
+Getting Ceres to work is a bit tricky, since this program depends on a very old version.
+Install Ceres version 1.14.0 by doing the following:
+
+```Bash
+git clone https://ceres-solver.googlesource.com/ceres-solver
+cd ceres-solver
+git checkout 1.14.0
+mkdir build
+cd build
+cmake .. -DMINIGLOG=TRUE -DTBB=OFF -DSUITESPARSE=OFF
+make
+sudo make install 
+```
+
+If you have trouble installing Ceres' dependencies refer to [their website](http://ceres-solver.org/installation.html#). 
+You don't need glog, TBB, or Suitesparse, which might be helpful if you are on a more recent machine (e.g. >= Ubuntu 20.04), where old versions of these libraries are no longer available. 
+
 ## Build
 
 Place this package inside your catkin workspace (e.g. `~/catkin_ws/src`), then build it through `catkin_make`.
@@ -33,10 +59,29 @@ Run `imu_calib_node` to get calibration result(e.g. misalignment, scale and bias
 
 `imu_calib_node` usage: 
 
-> rosrun imu_tk imu_calib_node [BAG] [IMU_TOPIC]
+> rosrun imu_tk imu_calib_node [CONFIG]
 
 ```Bash
-rosrun imu_tk imu_calib_node imu.bag /imu
+rosrun imu_tk imu_calib_node ~/catkin_ws/src/ros_imu_calib/config/imu_calib.yaml
+```
+
+Follow the output of the program on your terminal.
+You should be prompted to inspect the static intervals in a plot window.
+Refer to the [original paper](http://dx.doi.org/10.1109/ICRA.2014.6907297)) for more details.
+This is the corresponding citation:
+
+```
+@INPROCEEDINGS{6907297,
+  author={Tedaldi, David and Pretto, Alberto and Menegatti, Emanuele},
+  booktitle={2014 IEEE International Conference on Robotics and Automation (ICRA)}, 
+  title={A robust and easy to implement method for IMU calibration without external equipments}, 
+  year={2014},
+  volume={},
+  number={},
+  pages={3042-3049},
+  keywords={Calibration;Accelerometers;Gyroscopes;Sensors;Gravity;Accuracy;Vectors},
+  doi={10.1109/ICRA.2014.6907297}
+}
 ```
 
 ### Correction
@@ -64,3 +109,12 @@ B = [ b_y ]
 
 X' = T*K*(X - B)
 ```
+
+## Future work
+
+I do not plan to maintain this forever.
+However, I want to spread this beatiful software and make it easy to use. 
+Plans going forward include:
+
+- Add a branch for ROS2
+- Update codebase to recent Ceres version 
