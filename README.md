@@ -11,22 +11,19 @@ On Linux (Ubuntu/Debian-based) you can try:
 sudo apt install libeigen3-dev libyaml-cpp-dev gnuplot gnuplot-qt
 ```
 
-Getting Ceres to work is a bit tricky, since this program depends on a very old version.
-Install Ceres version 1.14.0 by doing the following:
+Install Ceres by doing the following:
 
 ```Bash
 git clone https://ceres-solver.googlesource.com/ceres-solver
 cd ceres-solver
-git checkout 1.14.0
 mkdir build
 cd build
-cmake .. -DMINIGLOG=TRUE -DTBB=OFF -DSUITESPARSE=OFF
+cmake ..
 make
 sudo make install 
 ```
 
-If you have trouble installing Ceres' dependencies refer to [their website](http://ceres-solver.org/installation.html#). 
-You don't need glog, TBB, or Suitesparse, which might be helpful if you are on a more recent machine (e.g. >= Ubuntu 20.04), where old versions of these libraries are no longer available. 
+If you have trouble installing Ceres' dependencies refer to [their website](http://ceres-solver.org/installation.html#).  
 
 ## Build
 
