@@ -137,6 +137,100 @@ template <typename _T1> struct MultiPosGyroResidual
   const bool optimize_bias_;
 };
 
+/*
+Helper function that takes a time series and applies smoothing and differentiation. 
+*/
+template<typename _T1>
+std::vector<imu_tk::TriadData_<_T1>> movingAverageCentralDiff(
+    const std::vector<imu_tk::TriadData_<_T1>>& data,
+    int window_size = 5)
+{
+    int N = data.size();
+    std::vector<imu_tk::TriadData_<_T1>> smoothed;
+    smoothed.reserve(N);
+
+    // Moving average smoothing
+    for (int i = 0; i < N; ++i) {
+        int start = std::max(0, i - window_size/2);
+        int end = std::min(N - 1, i + window_size/2);
+        int count = end - start + 1;
+        Eigen::Matrix<_T1, 3, 1> avg(0, 0, 0);
+        for (int j = start; j <= end; ++j) {
+            avg += data[j].data();
+        }
+        avg /= static_cast<_T1>(count);
+        smoothed.emplace_back(data[i].timestamp(), avg);
+    }
+
+    // Central difference derivative
+    std::vector<imu_tk::TriadData_<_T1>> derivative;
+    derivative.reserve(N - 2);
+    for (int i = 1; i < N - 1; ++i) {
+        _T1 dt = smoothed[i + 1].timestamp() - smoothed[i - 1].timestamp();
+        if (dt == 0) continue; // Avoid division by zero
+        Eigen::Matrix<_T1, 3, 1> diff = (smoothed[i + 1].data() - smoothed[i - 1].data()) / dt;
+        derivative.emplace_back(smoothed[i].timestamp(), diff);
+    }
+    return derivative;
+}
+
+/*
+Implements an extrinsic calibration based on rotation (no translation!)
+The robot should be rotated around the base without translation.
+During this motion, due to the off-centered placement of the IMU, there are 
+centripetal- and tangential-forces being measured by the accelerometer.
+This can be compensated for by knowing the offset from the base to the IMU. 
+*/
+template <typename _T1> struct MotionExtrinsicResidual
+{
+  MotionExtrinsicResidual(const _T1 &g_mag,
+                          const std::vector< TriadData_<_T1> > &gyro_samples, 
+                          const std::vector< TriadData_<_T1> > &acc_samples, 
+                          const DataInterval &interval_pos01, 
+                          const CalibratedTriad_<_T1> &gyro_calib, 
+                          const CalibratedTriad_<_T1> &acc_calib) :
+    g_mag_(g_mag), 
+    gyro_samples_(gyro_samples), 
+    acc_samples_(acc_samples), 
+    interval_pos01_(interval_pos01),
+    gyro_calib_(gyro_calib),
+    acc_calib_(acc_calib) 
+  {}
+
+  template <typename _T2>
+  bool operator() ( const _T2* const params, _T2* residuals ) const
+  {
+    Eigen::Matrix<_T2, 3, 1> extr;
+    extr << params[0], params[1], params[2];
+    residuals[0] = 0;
+    std::vector< TriadData_<_T2> > calib_gyro_samples, calib_acc_samples;
+    calib_gyro_samples.reserve( interval_pos01_.end_idx - interval_pos01_.start_idx + 1 );
+    calib_acc_samples.reserve( interval_pos01_.end_idx - interval_pos01_.start_idx + 1 );
+
+    for( int i = interval_pos01_.start_idx; i <= interval_pos01_.end_idx; i++ ) {
+      calib_gyro_samples.push_back( TriadData_<_T2>( gyro_calib_.unbiasNormalize( gyro_samples_[i] ) ) );
+      calib_acc_samples.push_back( TriadData_<_T2>( acc_calib_.unbiasNormalize(acc_samples_[i]) ) );
+    }
+
+    std::vector< TriadData_<_T1> > derivative_gyro = movingAverageCentralDiff(calib_gyro_samples);
+
+    for( int i = interval_pos01_.start_idx; i <= interval_pos01_.end_idx; i++ ) {
+      Eigen::Matrix<_T2, 3, 1> gyr = calib_gyro_samples[i].data();
+      Eigen::Matrix<_T2, 3, 1> acc = calib_acc_samples[i].data();
+      residuals[0] += _T2(g_mag_) - (acc - derivative_gyro[i].data().cross(extr) - gyr.cross(gyr.cross(extr))).norm(); 
+    }
+
+    return true;
+  }
+  
+  const _T1 g_mag_;
+  const std::vector< TriadData_<_T1> > gyro_samples_;
+  const std::vector< TriadData_<_T1> > acc_samples_;
+  const DataInterval interval_pos01_;
+  const CalibratedTriad_<_T1> gyro_calib_;
+  const CalibratedTriad_<_T1> acc_calib_;
+};
+
 template <typename _T>
   MultiPosCalibration_<_T>::MultiPosCalibration_() :
   g_mag_(9.81),
@@ -218,13 +312,14 @@ template <typename _T>
     }
     
     ceres::Solver::Options options;
+    options.linear_solver_type = ceres::DENSE_QR;
+    options.minimizer_progress_to_stdout = verbose_output_;
+    // Below options might be overkill but we dont need to optimize for speed anyway
     options.max_num_iterations = 5000;
     options.function_tolerance = 1e-24;
     options.gradient_tolerance = 1e-28;
     options.parameter_tolerance = 1e-26;
     options.max_linear_solver_iterations = 10000;
-    options.linear_solver_type = ceres::DENSE_QR;
-    options.minimizer_progress_to_stdout = verbose_output_;
 
     ceres::Solver::Summary summary;
     ceres::Solve ( options, &problem, &summary );
@@ -340,42 +435,37 @@ template <typename _T>
   gyro_calib_params[11] = 0.0;
   
   ceres::Problem problem;
-      
+  
+  // Extract movement (between static intervals)
+  // Attention: We count 2 indices, one counts intervals, other counts timestamps.
+  // Timestamp index should not be reset in the inner loop, so is initialized here.
   for( int i = 0, t_idx = 0; i < n_static_pos - 1; i++ )
   {
+    // Get gravity from static positions i and i+1
     Eigen::Matrix<_T, 3, 1> g_versor_pos0 = static_acc_means[i].data(),
                             g_versor_pos1 = static_acc_means[i + 1].data();
-                               
+    // Normalize the gravity                   
     g_versor_pos0 /= g_versor_pos0.norm();                           
     g_versor_pos1 /= g_versor_pos1.norm();
     
-    int gyro_idx0 = -1, gyro_idx1 = -1;
+    // Get gyroscope indices between the static intervals
+    int gyro_idx0 = -1, gyro_idx1 = -1; // We have to look at the timestamps
     _T ts0 = calib_acc_samples_[extracted_intervals[i].end_idx].timestamp(), 
        ts1 = calib_acc_samples_[extracted_intervals[i + 1].start_idx].timestamp();
      
-    // Assume monotone signal time
-    for( ; t_idx < n_samps; t_idx++ )
-    {
-      if( gyro_idx0 < 0 )
-      {
+    // Assign indices based on the timestamps (assume monotone signal time)
+    for( ; t_idx < n_samps; t_idx++ ) {
+      if( gyro_idx0 < 0 ) {
         if( calib_gyro_samples_[t_idx].timestamp() >= ts0 )
           gyro_idx0 = t_idx;
-      }
-      else
-      {
-        if( calib_gyro_samples_[t_idx].timestamp() >= ts1 )
-        {
+      } else {
+        if( calib_gyro_samples_[t_idx].timestamp() >= ts1 ){
           gyro_idx1 = t_idx - 1;
           break;
         }
       }
     }
-    
-//     cout<<"from "<<calib_gyro_samples_[gyro_idx0].timestamp()<<" to "
-//         <<calib_gyro_samples_[gyro_idx1].timestamp()
-//         <<" v0 : "<< g_versor_pos0(0)<<" "<< g_versor_pos0(1)<<" "<< g_versor_pos0(2)
-//         <<" v1 : "<< g_versor_pos1(0)<<" "<< g_versor_pos1(1)<<" "<< g_versor_pos1(2)<<endl;
-    
+    // gyroscope indices corresponding to movement have been found 
     DataInterval gyro_interval(gyro_idx0, gyro_idx1);
     
     ceres::CostFunction* cost_function =
