@@ -1,10 +1,10 @@
 project(imu_tk)
 
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10)
 cmake_policy(SET CMP0015 NEW)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++14)
+add_compile_options(-std=c++17)
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
   set(CMAKE_BUILD_TYPE "Release")
@@ -23,14 +23,14 @@ include_directories(./include
                     /usr/include
                     ${Boost_INCLUDE_DIRS}
                     ${EIGEN_INCLUDE_DIR}
-                    ${CERES_INCLUDE_DIRS})
+                    )
 
 aux_source_directory( ./src IMU_TK_CORE_SRC )
 set( IMU_TK_SRC ${IMU_TK_CORE_SRC} )
 
 add_library(imu_tk ${IMU_TK_SRC})
 target_link_libraries(imu_tk
-  ${CERES_LIBRARIES}
+  Ceres::ceres
   ${OPENGL_LIBRARIES}
   ${GLUT_LIBRARY}
 )
@@ -38,7 +38,7 @@ set_target_properties(imu_tk PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURC
 
 set (IMU_TK_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include CACHE STRING "imu_tk include directories")
 set (IMU_TK_LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib CACHE STRING "imu_tk libraries directories")
-set (IMU_TK_LIBS imu_tk ${CERES_LIBRARIES} 
+set (IMU_TK_LIBS imu_tk Ceres::ceres
      CACHE STRING "imu_tk libraries")
 message( "${IMU_TK_LIBS}" )
 
@@ -186,7 +186,7 @@ include_directories(
  target_link_libraries(imu_calib_node
    ${catkin_LIBRARIES}
    ${IMU_TK_LIBS}
-   ${CERES_LIBRARIES}
+   Ceres::ceres
    ${YAML_CPP_LIBRARIES}
  )
 

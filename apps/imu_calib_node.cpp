@@ -62,7 +62,7 @@ int main(int argc, char** argv)
     sensor_msgs::Imu::ConstPtr s = m.instantiate<sensor_msgs::Imu>();
     if (s != NULL) {
       if (i++ % 1000 == 0) {
-        cout << ".";
+        cout << "."; // Notify user that something's happening
         cout.flush();
       }    
       acc_data.push_back(TriadData(s->header.stamp.toSec(), s->linear_acceleration.x, s->linear_acceleration.y, s->linear_acceleration.z));
@@ -86,7 +86,8 @@ int main(int argc, char** argv)
   mp_calib.enableAccUseMeans(use_acc_means);
   mp_calib.setGyroDataPeriod(1.0 / imu_frequency_hz);
   mp_calib.calibrateAccGyro(acc_data, gyro_data, 
-    min_nr_recorded_intervals, variance_win_size, th_variance_min, th_variance_max);
+    min_nr_recorded_intervals, variance_win_size, 
+    th_variance_min, th_variance_max);
   mp_calib.getAccCalib().save(save_acc_calib);
   mp_calib.getGyroCalib().save(save_gyr_calib);
   

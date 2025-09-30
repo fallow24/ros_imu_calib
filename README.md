@@ -117,4 +117,3 @@ However, I want to spread this beatiful software and make it easy to use.
 Plans going forward include:
 
 - Add a branch for ROS2
-- Update codebase to recent Ceres version 
