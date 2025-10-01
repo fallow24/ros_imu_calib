@@ -87,3 +87,5 @@ template void imu_tk::staticIntervalsDetector<double> ( const std::vector< Triad
 template void imu_tk::staticIntervalsDetector<float> ( const std::vector< TriadData_<float> > &samples,
                                                        float threshold, std::vector< DataInterval > &intervals,
                                                        int win_size = 101 );
+
+

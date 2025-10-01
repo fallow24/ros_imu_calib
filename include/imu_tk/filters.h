@@ -29,6 +29,7 @@
 #pragma once
 
 #include <vector>
+#include <ceres/jet.h>
 #include "imu_tk/base.h"
 
 namespace imu_tk
@@ -60,4 +61,91 @@ template <typename _T>
   void staticIntervalsDetector ( const std::vector< TriadData_<_T> > &samples,
                                  _T threshold, std::vector< DataInterval > &intervals,
                                  int win_size = 202 );
+
+
+template<typename _T1>
+  std::vector<imu_tk::TriadData_<_T1>> gaussianDerivativeConvolution(
+    const std::vector<imu_tk::TriadData_<_T1>>& data,
+    _T1 sigma = 1.0)
+{
+    // Derivative of Gaussian kernel (size 5, normalized, sampled at -2,-1,0,1,2)
+    // g'(x) = -x * exp(-x^2/(2*sigma^2)) / (sigma^3 * sqrt(2*pi))
+    const int kernel_size = 5;
+    const int half_k = kernel_size / 2;
+    std::vector<_T1> kernel(kernel_size);
+    _T1 sum = _T1(0.0);
+    for (int i = -half_k; i <= half_k; ++i) {
+        kernel[i + half_k] = _T1(-i) * ceres::exp(-(_T1(i * i)) / (_T1(2.0) * sigma * sigma));
+        sum += ceres::abs(kernel[i + half_k]);
+    }
+    // Normalize the kernel
+    for (int i = 0; i < kernel_size; ++i) kernel[i] /= sum;
+
+    int N = data.size();
+    std::vector<imu_tk::TriadData_<_T1>> derivative;
+    derivative.reserve(N);
+
+    // Convolve kernel with each axis separately
+    for (int i = 0; i < N; ++i) {
+        Eigen::Matrix<_T1, 3, 1> deriv;
+        deriv.setZero();
+        _T1 dt_sum = _T1(0.0);
+        for (int k = -half_k; k <= half_k; ++k) {
+            int idx = i + k;
+            if (idx < 0 || idx >= N) continue;
+            // Use kernel value and difference in timestamp for scaling
+            deriv += kernel[k + half_k] * data[idx].data();
+            dt_sum += kernel[k + half_k] * data[idx].timestamp();
+        }
+        // Estimate dt as average difference between timestamps in kernel window
+        _T1 dt = _T1(0.0);
+        if (i > 0 && i < N - 1)
+            dt = (data[std::min(i + half_k, N - 1)].timestamp() - data[std::max(i - half_k, 0)].timestamp()) / _T1(kernel_size);
+        else
+            dt = _T1(1.0);
+        if (dt != 0)
+            deriv /= dt;
+        derivative.emplace_back(data[i].timestamp(), deriv);
+    }
+    return derivative;
+}
+
+
+/*
+Helper function that takes a time series and applies smoothing and differentiation. 
+*/
+// template<typename _T1>
+// std::vector<imu_tk::TriadData_<_T1>> movingAverageCentralDiff(
+//     const std::vector<imu_tk::TriadData_<_T1>>& data,
+//     int window_size = 5) // TODO: fix that magic number
+// {
+//     int N = data.size();
+//     std::vector<imu_tk::TriadData_<_T1>> smoothed;
+//     smoothed.reserve(N);
+
+//     // Moving average smoothing
+//     for (int i = 0; i < N; ++i) {
+//         int start = std::max(0, i - window_size/2);
+//         int end = std::min(N - 1, i + window_size/2);
+//         int count = end - start + 1;
+//         Eigen::Matrix<_T1, 3, 1> avg(0, 0, 0);
+//         for (int j = start; j <= end; ++j) {
+//             avg += data[j].data();
+//         }
+//         avg /= static_cast<_T1>(count);
+//         smoothed.emplace_back(data[i].timestamp(), avg);
+//     }
+
+//     // Central difference derivative
+//     std::vector<imu_tk::TriadData_<_T1>> derivative;
+//     derivative.reserve(N - 2);
+//     for (int i = 1; i < N - 1; ++i) {
+//         _T1 dt = smoothed[i + 1].timestamp() - smoothed[i - 1].timestamp();
+//         if (dt == 0) continue; // Avoid division by zero
+//         Eigen::Matrix<_T1, 3, 1> diff = (smoothed[i + 1].data() - smoothed[i - 1].data()) / dt;
+//         derivative.emplace_back(smoothed[i].timestamp(), diff);
+//     }
+//     return derivative;
+// }
+
 }

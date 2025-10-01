@@ -65,8 +65,22 @@ int main(int argc, char** argv)
         cout << "."; // Notify user that something's happening
         cout.flush();
       }    
-      acc_data.push_back(TriadData(s->header.stamp.toSec(), s->linear_acceleration.x, s->linear_acceleration.y, s->linear_acceleration.z));
-      gyro_data.push_back(TriadData(s->header.stamp.toSec(), s->angular_velocity.x, s->angular_velocity.y, s->angular_velocity.z));
+      acc_data.push_back(
+        TriadData(
+          s->header.stamp.toSec(), 
+          s->linear_acceleration.x, 
+          s->linear_acceleration.y, 
+          s->linear_acceleration.z
+        )
+      );
+      gyro_data.push_back(
+        TriadData(
+          s->header.stamp.toSec(), 
+          s->angular_velocity.x, 
+          s->angular_velocity.y, 
+          s->angular_velocity.z
+        )
+      );
     }
   }
   cout << endl << "Read " << i << " messages" << endl;

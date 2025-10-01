@@ -324,7 +324,7 @@ public:
    * @param acc_samples Acceleremoters data vector, ordered by increasing timestamps,
    *                    collected at the sensor data rate. 
    * @param gyro_samples Gyroscopes data vector, ordered by increasing timestamps,
-   *                     collected in parallel with the acceleations 
+   *                     collected in parallel with the accelerations 
    *                     at the sensor data rate.
    */
   bool calibrateAccGyro( const std::vector< TriadData_<_T> > &acc_samples, 
@@ -334,12 +334,34 @@ public:
                          int th_var_min = 2,
                          int th_var_max = 10 );
 
+  /** @brief Estimate the calibration parameters for the acceleremoters 
+   *         and the gyroscopes triads (see CalibratedTriad_) using the
+   *         multi-position calibration method. Then estimate the extrinsic
+   *         parameters (base to IMU) based on rotating the robot around
+   *         the base without translation. 
+   * 
+   * @param acc_samples Acceleremoters data vector, ordered by increasing timestamps,
+   *                    collected at the sensor data rate. 
+   * @param gyro_samples Gyroscopes data vector, ordered by increasing timestamps,
+   *                     collected in parallel with the accelerations 
+   *                     at the sensor data rate.
+   */
+  bool calibrateAccGyroExtrinsic( const std::vector< TriadData_<_T> > &acc_samples, 
+                                  const std::vector< TriadData_<_T> > &gyro_samples,
+                                  int min_recorded_intervals = 9, 
+                                  int variance_win_size = 202,
+                                  int th_var_min = 2,
+                                  int th_var_max = 10 );
+
   /** @brief Provide the calibration parameters for the acceleremoters triad (it should be called after
    *         calibrateAcc() or calibrateAccGyro() ) */
   const CalibratedTriad_<_T>& getAccCalib() const  { return acc_calib_; };
   /** @brief Provide the calibration parameters for the gyroscopes triad (it should be called after
    *         calibrateAccGyro() ). */
   const CalibratedTriad_<_T>& getGyroCalib() const  { return gyro_calib_; };
+  /** @brief Provide the calibrated extrinsic vector (it should be called after
+   *         calibrateAccGyroExtrinsic() ) */
+  const std::vector<_T>& getExtrinsicCalib() const { return extrinsic_vector_; };
   
   /** @brief Provide the calibrated acceleremoters data vector (it should be called after
    *         calibrateAcc() or calibrateAccGyro() ) */
@@ -349,6 +371,7 @@ public:
    *         calibrateAccGyro() ) */
   const std::vector< TriadData_<_T> >& getCalibGyroSamples() const { return calib_gyro_samples_; };
   
+
 private:
   
   _T g_mag_;
@@ -362,7 +385,7 @@ private:
   CalibratedTriad_<_T> init_acc_calib_, init_gyro_calib_;
   CalibratedTriad_<_T> acc_calib_, gyro_calib_;
   std::vector< TriadData_<_T> > calib_acc_samples_, calib_gyro_samples_;
-  
+  std::vector<_T> extrinsic_vector_; 
   bool verbose_output_;
 };
 
