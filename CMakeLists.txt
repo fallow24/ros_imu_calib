@@ -1,4 +1,4 @@
-project(imu_tk)
+project(ros_imu_calib)
 
 cmake_minimum_required(VERSION 3.10)
 cmake_policy(SET CMP0015 NEW)
@@ -170,8 +170,8 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(imu_calib_node apps/imu_calib_node.cpp)
-
+add_executable(bag_calib apps/bag_calib.cpp)
+add_executable(bag_calib_extr apps/bag_calib_extr.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -183,7 +183,14 @@ include_directories(
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
- target_link_libraries(imu_calib_node
+ target_link_libraries(bag_calib
+   ${catkin_LIBRARIES}
+   ${IMU_TK_LIBS}
+   Ceres::ceres
+   ${YAML_CPP_LIBRARIES}
+ )
+
+ target_link_libraries(bag_calib_extr
    ${catkin_LIBRARIES}
    ${IMU_TK_LIBS}
    Ceres::ceres

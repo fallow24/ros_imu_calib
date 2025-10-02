@@ -362,6 +362,20 @@ public:
   /** @brief Provide the calibrated extrinsic vector (it should be called after
    *         calibrateAccGyroExtrinsic() ) */
   const std::vector<_T>& getExtrinsicCalib() const { return extrinsic_vector_; };
+    /** @brief Save the calibrated extrinsic vector (it should be called after
+   *         calibrateAccGyroExtrinsic() ) to disk */
+  const bool saveExtrinsicCalib(std::string filename) const {
+    std::ofstream file( filename.data() );
+    if (file.is_open())
+    {
+      file << "extrinsic: ["
+           << extrinsic_vector_[0] << ", " 
+           << extrinsic_vector_[1] << ", "
+           << extrinsic_vector_[2] << "]" << std::endl; 
+      return true;
+    }
+    return false;  
+  };
   
   /** @brief Provide the calibrated acceleremoters data vector (it should be called after
    *         calibrateAcc() or calibrateAccGyro() ) */
@@ -450,10 +464,15 @@ template <typename _T>
   std::ofstream file( filename.data() );
   if (file.is_open())
   {
-    file<<mis_mat_<<std::endl<<std::endl
-        <<scale_mat_<<std::endl<<std::endl
-        <<bias_vec_<<std::endl<<std::endl;
-    
+    file << "misalignment: [";
+    file << mis_mat_(0,0) << ", " << mis_mat_(0,1) << ", " << mis_mat_(0,2) << ", " << std::endl << "\t"
+         << mis_mat_(1,0) << ", " << mis_mat_(1,1) << ", " << mis_mat_(1,2) << ", " << std::endl << "\t"
+         << mis_mat_(2,0) << ", " << mis_mat_(2,1) << ", " << mis_mat_(2,2) << "]" << std::endl;
+    file << "scale: [";
+    file << scale_mat_(0,0) << ", " << scale_mat_(0,1) << ", " << scale_mat_(0,2) << ", " << std::endl << "\t"
+         << scale_mat_(1,0) << ", " << scale_mat_(1,1) << ", " << scale_mat_(1,2) << ", " << std::endl << "\t"
+         << scale_mat_(2,0) << ", " << scale_mat_(2,1) << ", " << scale_mat_(2,2) << "]" << std::endl;
+    file << "bias: [" << bias_vec_(0,0) << ", " << bias_vec_(1,0) << ", " << bias_vec_(2,0) << "]" << std::endl;    
     return true;
   }
   return false;  
