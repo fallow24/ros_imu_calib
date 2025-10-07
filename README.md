@@ -1,6 +1,10 @@
-# IMU-TK
+# ROS-IMU-CALIB
 
-This is a ROS wrapper for imu_tk, learn details from original [README.md](./README_original.md) please.
+This originated as a ROS wrapper for imu_tk, learn details from original [README.md](./README_original.md) please.
+
+The program is able to perform intrinsic calibration of an IMU (accelerometer and gyroscope) without external equipment. 
+I have also added extrinsic calibration with respect to the robot base (the offset vector from the base to the IMU).
+When performing extrinsic calibration (when collecting the dataset) the operator must ensure that only rotations around the robot base are performed.
 
 ## Dependencies 
 
@@ -91,7 +95,7 @@ This is the corresponding citation:
 }
 ```
 
-### Correction
+### Intrinsic Correction
 
 Given a raw sensor reading X (e.g., the acceleration ), the calibrated "unbiased" reading X' is obtained.
 
@@ -116,6 +120,16 @@ B = [ b_y ]
 
 X' = T*K*(X - B)
 ```
+
+### Extrinsic Correction
+
+Given the extrinsic offset vector R one can correct the accelerometer reading A using the gyoroscope reading W (and its derivative dW)
+
+```Txt
+A' = A - (dW x R) - (W x W x R) 
+```
+
+where `x` denotes the 3d vector cross product
 
 ## Future work
 

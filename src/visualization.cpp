@@ -1,6 +1,7 @@
 /* 
  * imu_tk - Inertial Measurement Unit Toolkit
  * 
+ *  Copyright (c) 2025, Fabian Arzberger <fabian.arzberger@uni-wuerzburg.de>
  *  Copyright (c) 2014, Alberto Pretto <pretto@diag.uniroma1.it>
  *  All rights reserved.
  *
