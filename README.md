@@ -50,17 +50,27 @@ Procedure:
 4. Have you rotated the IMU 36 ~ 50 times? If not, go back to step 2.
 5. Done.
 
+If you desire extrinsic calibration with respect to the robot base, make sure that ONLY rotations around the robot base happen in the bagfile. Additional translation of the IMU will affect the extrinsic results! 
+
 ### Calibration
 
-Run `imu_calib_node` to get calibration result(e.g. misalignment, scale and bias).
+Run either `bag_calib` or `bag_calib_extr` to get calibration result (e.g. misalignment, scale and bias).
 
-`imu_calib_node` usage: 
+`bag_calib` usage: 
 
-> rosrun imu_tk imu_calib_node [CONFIG]
+> rosrun ros_imu_calib bag_calib [CONFIG]
+
+`bag_calib_extr` usage:
+
+> rosrun ros_imu_calib bag_calib_extr [CONFIG]
+
+For example:
 
 ```Bash
-rosrun imu_tk imu_calib_node ~/catkin_ws/src/ros_imu_calib/config/imu_calib.yaml
+rosrun ros_imu_calib bag_calib ~/catkin_ws/src/ros_imu_calib/config/imu_calib.yaml
 ```
+
+Please have a look at the example parameters given in the YAML config file.
 
 Follow the output of the program on your terminal.
 You should be prompted to inspect the static intervals in a plot window.

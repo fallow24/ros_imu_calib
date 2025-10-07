@@ -63,89 +63,117 @@ template <typename _T>
                                  int win_size = 202 );
 
 
-template<typename _T1>
-  std::vector<imu_tk::TriadData_<_T1>> gaussianDerivativeConvolution(
-    const std::vector<imu_tk::TriadData_<_T1>>& data,
-    _T1 sigma = 1.0)
-{
-    // Derivative of Gaussian kernel (size 5, normalized, sampled at -2,-1,0,1,2)
-    // g'(x) = -x * exp(-x^2/(2*sigma^2)) / (sigma^3 * sqrt(2*pi))
-    const int kernel_size = 5;
-    const int half_k = kernel_size / 2;
-    std::vector<_T1> kernel(kernel_size);
-    _T1 sum = _T1(0.0);
-    for (int i = -half_k; i <= half_k; ++i) {
-        kernel[i + half_k] = _T1(-i) * ceres::exp(-(_T1(i * i)) / (_T1(2.0) * sigma * sigma));
-        sum += ceres::abs(kernel[i + half_k]);
-    }
-    // Normalize the kernel
-    for (int i = 0; i < kernel_size; ++i) kernel[i] /= sum;
 
-    int N = data.size();
-    std::vector<imu_tk::TriadData_<_T1>> derivative;
+// Compute smoothed derivative of a 3D signal using centered derivative-of-Gaussian convolution.
+// Compatible with Eigen matrices and Ceres Jet types.
+template<typename T>
+std::vector<imu_tk::TriadData_<T> > gaussianDerivativeConvolution(
+    const std::vector<imu_tk::TriadData_<T> >& data,
+    T sigma = T(0.03),
+    int kernel_size = 39)
+{
+    if (data.empty())
+        return {};
+
+    const int half_k = kernel_size / 2;
+
+    std::vector<T> kernel(kernel_size);
+
+    // --- Derivative-of-Gaussian kernel ---
+    const T inv_s2 = T(1.0) / (sigma * sigma);
+    const T norm_factor = T(1.0) / (sigma * sigma * sigma * ceres::sqrt(T(2.0) * M_PI));
+
+    for (int i = -half_k; i <= half_k; ++i) {
+        T x = T(i); // sample position (centered)
+        kernel[i + half_k] = norm_factor * -x * ceres::exp(-T(0.5) * x * x * inv_s2);
+    }
+
+    // --- Ensure zero mean ---
+    T mean = std::accumulate(kernel.begin(), kernel.end(), T(0.0)) / T(kernel_size);
+    for (auto &v : kernel)
+        v -= mean;
+
+    // --- Normalize kernel energy ---
+    T energy = T(0.0);
+    for (auto v : kernel)
+        energy += v * v;
+    energy = ceres::sqrt(energy);
+    if (energy > T(0.0))
+        for (auto &v : kernel)
+            v /= energy;
+
+    // --- Convolution ---
+    const int N = static_cast<int>(data.size());
+    std::vector<imu_tk::TriadData_<T>> derivative;
     derivative.reserve(N);
 
-    // Convolve kernel with each axis separately
     for (int i = 0; i < N; ++i) {
-        Eigen::Matrix<_T1, 3, 1> deriv;
+        Eigen::Matrix<T, 3, 1> deriv;
         deriv.setZero();
-        _T1 dt_sum = _T1(0.0);
+
         for (int k = -half_k; k <= half_k; ++k) {
             int idx = i + k;
-            if (idx < 0 || idx >= N) continue;
-            // Use kernel value and difference in timestamp for scaling
+            if (idx < 0 || idx >= N)
+                continue;
             deriv += kernel[k + half_k] * data[idx].data();
-            dt_sum += kernel[k + half_k] * data[idx].timestamp();
         }
-        // Estimate dt as average difference between timestamps in kernel window
-        _T1 dt = _T1(0.0);
-        if (i > 0 && i < N - 1)
-            dt = (data[std::min(i + half_k, N - 1)].timestamp() - data[std::max(i - half_k, 0)].timestamp()) / _T1(kernel_size);
-        else
-            dt = _T1(1.0);
-        if (dt != 0)
-            deriv /= dt;
+
+        // Store derivative with same timestamp
         derivative.emplace_back(data[i].timestamp(), deriv);
     }
+
     return derivative;
 }
 
+// Compute smoothing of a 3D signal using centered Gaussian convolution.
+// Compatible with Eigen matrices and Ceres Jet types.
+template<typename T>
+std::vector<imu_tk::TriadData_<T>> gaussianSmoothingConvolution(
+    const std::vector<imu_tk::TriadData_<T>>& data,
+    T sigma = T(0.03),
+    int kernel_size = 39)
+{
+    if (data.empty())
+        return {};
 
-/*
-Helper function that takes a time series and applies smoothing and differentiation. 
-*/
-// template<typename _T1>
-// std::vector<imu_tk::TriadData_<_T1>> movingAverageCentralDiff(
-//     const std::vector<imu_tk::TriadData_<_T1>>& data,
-//     int window_size = 5) // TODO: fix that magic number
-// {
-//     int N = data.size();
-//     std::vector<imu_tk::TriadData_<_T1>> smoothed;
-//     smoothed.reserve(N);
+    const int half_k = kernel_size / 2;
+    std::vector<T> kernel(kernel_size);
 
-//     // Moving average smoothing
-//     for (int i = 0; i < N; ++i) {
-//         int start = std::max(0, i - window_size/2);
-//         int end = std::min(N - 1, i + window_size/2);
-//         int count = end - start + 1;
-//         Eigen::Matrix<_T1, 3, 1> avg(0, 0, 0);
-//         for (int j = start; j <= end; ++j) {
-//             avg += data[j].data();
-//         }
-//         avg /= static_cast<_T1>(count);
-//         smoothed.emplace_back(data[i].timestamp(), avg);
-//     }
+    // --- Gaussian kernel ---
+    const T inv_s2 = T(1.0) / (sigma * sigma);
+    const T norm_factor = T(1.0) / (sigma * ceres::sqrt(T(2.0) * M_PI));
 
-//     // Central difference derivative
-//     std::vector<imu_tk::TriadData_<_T1>> derivative;
-//     derivative.reserve(N - 2);
-//     for (int i = 1; i < N - 1; ++i) {
-//         _T1 dt = smoothed[i + 1].timestamp() - smoothed[i - 1].timestamp();
-//         if (dt == 0) continue; // Avoid division by zero
-//         Eigen::Matrix<_T1, 3, 1> diff = (smoothed[i + 1].data() - smoothed[i - 1].data()) / dt;
-//         derivative.emplace_back(smoothed[i].timestamp(), diff);
-//     }
-//     return derivative;
-// }
+    for (int i = -half_k; i <= half_k; ++i) {
+        T x = T(i);  // sample position (centered)
+        kernel[i + half_k] = norm_factor * ceres::exp(-T(0.5) * x * x * inv_s2);
+    }
 
+    // --- Normalize kernel area ---
+    T sum = std::accumulate(kernel.begin(), kernel.end(), T(0.0));
+    if (ceres::abs(sum) > T(0.0))
+        for (auto &v : kernel)
+            v /= sum;
+
+    // --- Convolution ---
+    const int N = static_cast<int>(data.size());
+    std::vector<imu_tk::TriadData_<T>> smoothed;
+    smoothed.reserve(N);
+
+    for (int i = 0; i < N; ++i) {
+        Eigen::Matrix<T, 3, 1> smoothed_sample;
+        smoothed_sample.setZero();
+
+        for (int k = -half_k; k <= half_k; ++k) {
+            int idx = i + k;
+            if (idx < 0 || idx >= N)
+                continue;
+            smoothed_sample += kernel[k + half_k] * data[idx].data();
+        }
+
+        smoothed.emplace_back(data[i].timestamp(), smoothed_sample);
+    }
+
+    return smoothed;
 }
+
+} // end namespace imutk

@@ -1,13 +1,14 @@
-bag_file: "/home/fabi/Documents/Bagfiles/calib_imu2.bag"
-imu_topic: "/imu/2/raw"
-imu_frequency_hz: 200
-num_samples_per_interval: 500
-min_nr_recorded_intervals: 30
-variance_win_size: 202
-th_variance_min: 5
-th_variance_max: 12
-initial_static_interval_duration: 60.0
-gravity_magnitude: 1.0
-use_acc_means: true
-save_acc_calib: "/home/fabi/catkin_ws/src/imu_tk/acc_calib2.txt"
-save_gyr_calib: "/home/fabi/catkin_ws/src/imu_tk/gyr_calib2.txt"
+bag_file: "/home/fabi/Documents/Bagfiles/2025-10-06-14-34-10.bag"
+imu_topic: "/imu/1/raw"
+imu_frequency_hz: 200         
+num_samples_per_interval: 200     # min number of how many samples to extract for each static interval
+min_nr_recorded_intervals: 50     # min number of how many static intervals should be found
+variance_win_size: 51             # sliding window size for static detector
+th_variance_min: 2                # minimum  multiple for variance threshold in static detector
+th_variance_max: 12               # maximum multiple for variance threshold int static detector
+initial_static_interval: 60.0     # duration (in s) of the initial static interval
+gravity_magnitude: 1.0            # magnitude of the gravity vector
+use_acc_means: true               # use mean accelerometer values for gyro calibration 
+lowpass_hz : 5                    # lowpass filter frequency cutoff for (noisy) derivative
+save_acc_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/acc_calib1.txt"
+save_gyr_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/gyr_calib1.txt"

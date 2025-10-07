@@ -40,12 +40,14 @@ int main(int argc, char** argv)
   int variance_win_size         = config["variance_win_size"].as<int>();
   int th_variance_min          = config["th_variance_min"].as<int>();
   int th_variance_max          = config["th_variance_max"].as<int>();
-  double initial_static_interval_duration = config["initial_static_interval_duration"].as<double>();
+  double initial_static_interval = config["initial_static_interval"].as<double>();
   double gravity_magnitude      = config["gravity_magnitude"].as<double>();
   bool use_acc_means            = config["use_acc_means"].as<bool>();
   string save_acc_calib         = config["save_acc_calib"].as<string>();
   string save_gyr_calib         = config["save_gyr_calib"].as<string>();
   string save_extr_calib        = config["save_extr_calib"].as<string>();
+  std::vector<double> extr_init = config["extr_initial_guess"].as<std::vector<double> >();
+  double lowpass_hz             = config["lowpass_hz"].as<double>();
 
   vector< TriadData > acc_data, gyro_data;
   
@@ -92,7 +94,8 @@ int main(int argc, char** argv)
   init_acc_calib.setBias( Vector3d(0, 0, 0) );
   init_gyro_calib.setScale( Vector3d(1, 1, 1) );
   MultiPosCalibration mp_calib;  
-  mp_calib.setInitStaticIntervalDuration(initial_static_interval_duration);
+  mp_calib.setInitExtrinsicCalibration(extr_init);
+  mp_calib.setInitStaticIntervalDuration(initial_static_interval);
   mp_calib.setIntarvalsNumSamples(num_samples_per_interval);
   mp_calib.setInitAccCalibration( init_acc_calib );
   mp_calib.setInitGyroCalibration( init_gyro_calib );
@@ -100,6 +103,7 @@ int main(int argc, char** argv)
   mp_calib.enableVerboseOutput(true);
   mp_calib.enableAccUseMeans(use_acc_means);
   mp_calib.setGyroDataPeriod(1.0 / imu_frequency_hz);
+  mp_calib.setLowpassFreq(lowpass_hz);
   mp_calib.calibrateAccGyroExtrinsic(acc_data, gyro_data, 
     min_nr_recorded_intervals, variance_win_size, 
     th_variance_min, th_variance_max);

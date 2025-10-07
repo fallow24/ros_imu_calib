@@ -148,10 +148,12 @@ template <typename _T1> struct MultiPosExtrinsicResidual
 {
   MultiPosExtrinsicResidual(const _T1 &g_mag,
                             const std::vector< TriadData_<_T1> > &calib_gyro_samples, 
+                            const std::vector< TriadData_<_T1> > &angular_acceleration,
                             const std::vector< TriadData_<_T1> > &calib_acc_samples, 
                             const DataInterval &interval_pos01) :
     g_mag_(g_mag), 
     gyro_samples_(calib_gyro_samples), 
+    derivative_gyro_(angular_acceleration),
     acc_samples_(calib_acc_samples), 
     interval_pos01_(interval_pos01)
   {}
@@ -161,18 +163,13 @@ template <typename _T1> struct MultiPosExtrinsicResidual
   {
     Eigen::Matrix<_T2, 3, 1> extr;
     extr << params[0], params[1], params[2];
-    //residuals[0] = 0;
-    std::vector< TriadData_<_T2> > gyro_samples;
-    gyro_samples.reserve(gyro_samples_.size());
-    for (const auto& sample : gyro_samples_)
-        gyro_samples.emplace_back(sample); 
-
-    std::vector< TriadData_<_T2> > derivative_gyro = gaussianDerivativeConvolution<_T2>(gyro_samples, _T2(1.0));
+    residuals[0] = _T2(0.0);
 
     for( int i = interval_pos01_.start_idx; i <= interval_pos01_.end_idx; i++ ) {
       Eigen::Matrix<_T2, 3, 1> gyr = gyro_samples_[i].data().template cast<_T2>();
       Eigen::Matrix<_T2, 3, 1> acc = acc_samples_[i].data().template cast<_T2>();
-      residuals[0] += _T2(g_mag_) - (acc - derivative_gyro[i].data().cross(extr) - gyr.cross(gyr.cross(extr))).norm(); 
+      Eigen::Matrix<_T2, 3, 1> derivative_gyro = derivative_gyro_[i].data().template cast<_T2>();
+      residuals[0] += ceres::abs( _T2(g_mag_) - (acc - derivative_gyro.cross(extr) - gyr.cross(gyr.cross(extr)) ).norm() ); 
     }
 
     return true;
@@ -180,16 +177,18 @@ template <typename _T1> struct MultiPosExtrinsicResidual
 
   static ceres::CostFunction* Create( const _T1 &g_mag,
                                       const std::vector< TriadData_<_T1> > &gyro_samples, 
+                                      const std::vector< TriadData_<_T1> > &angular_acceleration,
                                       const std::vector< TriadData_<_T1> > &acc_samples, 
                                       const DataInterval &interval_pos01)
   {
     return ( new ceres::AutoDiffCostFunction< MultiPosExtrinsicResidual, 1, 3> (
-      new MultiPosExtrinsicResidual( g_mag, gyro_samples, acc_samples, interval_pos01)
+      new MultiPosExtrinsicResidual( g_mag, gyro_samples, angular_acceleration, acc_samples, interval_pos01)
     ));
   }
   
   const _T1 g_mag_;
   const std::vector< TriadData_<_T1> > gyro_samples_;
+  const std::vector< TriadData_<_T1> > derivative_gyro_;
   const std::vector< TriadData_<_T1> > acc_samples_;
   const DataInterval interval_pos01_;
 };
@@ -498,7 +497,7 @@ template <typename _T>
     return false;
   }
 
-  cout << "Estimating extrinsic parameters..." << endl;
+  cout << endl << "Estimating extrinsic parameters..." << endl;
 
   // Extracting static intervals (again... not optimal but ok)
   std::vector< TriadData_<_T> > static_acc_means;
@@ -510,11 +509,15 @@ template <typename _T>
   );
   int n_static_pos = static_acc_means.size(), n_samps = gyro_samples.size();
   
+  // Derive gyro 
+  std::vector< TriadData_<_T> > dw = gaussianDerivativeConvolution<_T>(calib_gyro_samples_, sigma_, win_size_); 
+  std::vector< TriadData_<_T> > smooth_acc = gaussianSmoothingConvolution<_T>(calib_acc_samples_, sigma_, win_size_);
+
   // Setup and define the optimization problem
   std::vector< double > extrinsic_calib_params(3);
-  extrinsic_calib_params[0] = 0; // Todo add initial guess
-  extrinsic_calib_params[1] = 0;
-  extrinsic_calib_params[2] = 0;
+  extrinsic_calib_params[0] = init_extrinsic_vector_[0]; 
+  extrinsic_calib_params[1] = init_extrinsic_vector_[1];
+  extrinsic_calib_params[2] = init_extrinsic_vector_[2];
   ceres::Problem problem; 
 
   // Extract movement (between static intervals)
@@ -543,7 +546,7 @@ template <typename _T>
     DataInterval gyro_interval(gyro_idx0, gyro_idx1);
     
     ceres::CostFunction* cost_function =
-      MultiPosExtrinsicResidual<_T>::Create(g_mag_, calib_gyro_samples_, calib_acc_samples_, gyro_interval);
+      MultiPosExtrinsicResidual<_T>::Create(g_mag_, calib_gyro_samples_, dw, smooth_acc, gyro_interval);
 
     problem.AddResidualBlock ( cost_function, NULL /* squared loss */, extrinsic_calib_params.data() ); 
   }

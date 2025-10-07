@@ -285,6 +285,23 @@ public:
   /** @brief Set the gyroscopes initial guess calibration parameters */
   void setInitGyroCalibration( CalibratedTriad_<_T> &init_calib ){ init_gyro_calib_ = init_calib; };
   
+  /** @brief Set the extrinsic initial guess calibration parameters */
+  void setInitExtrinsicCalibration( std::vector<_T> &init_calib ){ init_extrinsic_vector_ = init_calib; };
+  
+  /** @brief Set the lowpass cut frequency for calculating derivatives of noisy signal.
+   * setGyroDataPeriod() should be called beforehand!
+   * Also sets the sigma and win_size parameters needed for the gaussian kernels (see filter.h) 
+   */
+  void setLowpassFreq(int val) { 
+    lowpass_frequency_cut_ = val; 
+    sigma_ = 1.0 / (2 * M_PI * lowpass_frequency_cut_);
+    if (gyro_dt_ <= 0.0) {
+      throw std::runtime_error("setGyroDataPeriod() must be called before setLowpassFreq() !");
+    }
+    win_size_ = 6 * sigma_ / gyro_dt_;
+    win_size_ = win_size_ % 2 == 0 ? win_size_ + 1 : win_size_;
+  };
+
   /** @brief If the parameter enabled is true, the accelerometers calibration is obtained 
    *         using the mean accelerations of each static interval instead of all samples.
    *         Default is false.
@@ -400,6 +417,10 @@ private:
   CalibratedTriad_<_T> acc_calib_, gyro_calib_;
   std::vector< TriadData_<_T> > calib_acc_samples_, calib_gyro_samples_;
   std::vector<_T> extrinsic_vector_; 
+  std::vector<_T> init_extrinsic_vector_;
+  int lowpass_frequency_cut_;
+  _T sigma_;
+  int win_size_;
   bool verbose_output_;
 };
 
