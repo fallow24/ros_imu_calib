@@ -92,6 +92,11 @@ public:
                     const _T &mis_xz = _T(0), const _T &mis_xy = _T(0), const _T &mis_yx = _T(0), 
                     const _T &s_x = _T(1),    const _T &s_y = _T(1),    const _T &s_z = _T(1), 
                     const _T &b_x = _T(0),    const _T &b_y = _T(0),    const _T &b_z  = _T(0) );
+  
+  // accept full matrices (misalignment, scale) and bias vector
+  CalibratedTriad_( const Eigen::Matrix<_T,3,3>& misalignment,
+                    const Eigen::Matrix<_T,3,3>& scale,
+                    const Eigen::Matrix<_T,3,1>& bias );
  
   ~CalibratedTriad_(){};
                
@@ -457,6 +462,17 @@ template <typename _T>
                     
   bias_vec_ <<  b_x , b_y , b_z ; 
   
+  update();
+}
+
+template <typename _T> 
+  imu_tk::CalibratedTriad_<_T>::CalibratedTriad_( const Eigen::Matrix<_T,3,3>& misalignment,
+                                                const Eigen::Matrix<_T,3,3>& scale,
+                                                const Eigen::Matrix<_T,3,1>& bias )
+{
+  mis_mat_   = misalignment;
+  scale_mat_ = scale;
+  bias_vec_  = bias;
   update();
 }
 

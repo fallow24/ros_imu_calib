@@ -71,7 +71,7 @@ namespace imu_tk
         const std::vector<std::vector<_T>> &getExtrinsicCalib() const { return extrinsic_vectors_; }
 
     private:
-        // Per-topic outputs
+        // Per-topic outputs (post allignment)
         std::vector<CalibratedTriad_<_T>> acc_calibs_;
         std::vector<CalibratedTriad_<_T>> gyro_calibs_;
         std::vector<std::vector<_T>> extrinsic_vectors_;
@@ -87,7 +87,7 @@ namespace imu_tk
         int win_size_;
         bool verbose_output_;
 
-        // Persistent per-topic intrinsic calibrators to reuse caches
+        // Persistent per-topic intrinsic calibrators to reuse caches (pre alignment!)
         std::vector<MultiPosCalibration_<_T>> per_topic_calibs_;
     };
 

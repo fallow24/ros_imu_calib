@@ -13,50 +13,58 @@ namespace
     template <typename _T1>
     struct MultiSensorAccAlignResidual
     {
-        MultiSensorAccAlignResidual(const TriadData_<_T1> &ref, const TriadData_<_T1> &other)
-            : ref_(ref), other_(other) {}
+        MultiSensorAccAlignResidual(const TriadData_<_T1> &ref,
+                                    const TriadData_<_T1> &other,
+                                    const Eigen::Matrix<_T1,3,1> &other_bias)
+            : ref_(ref), other_(other), other_bias_(other_bias) {}
         template <typename _T2>
         bool operator()(const _T2 *const params, _T2 *residuals) const
         {
+            // params: 6 mis + 3 scales, no bias
             CalibratedTriad_<_T2> calib(params[0], params[1], params[2],
                                         params[3], params[4], params[5],
                                         params[6], params[7], params[8],
-                                        params[9], params[10], params[11]);
-            Eigen::Matrix<_T2, 3, 1> v_ref = ref_.data().template cast<_T2>();
-            Eigen::Matrix<_T2, 3, 1> v_other = calib.unbiasNormalize(other_.data().template cast<_T2>());
+                                        _T2(0), _T2(0), _T2(0));
+            Eigen::Matrix<_T2, 3, 1> v_ref  = ref_.data().template cast<_T2>();
+            Eigen::Matrix<_T2, 3, 1> v_oth0 = other_.data().template cast<_T2>() - other_bias_.template cast<_T2>();
+            Eigen::Matrix<_T2, 3, 1> v_other = calib.normalize(v_oth0);
             Eigen::Matrix<_T2, 3, 1> diff = v_other - v_ref;
             residuals[0] = diff(0);
             residuals[1] = diff(1);
             residuals[2] = diff(2);
             return true;
         }
-        const TriadData_<_T1> ref_;
-        const TriadData_<_T1> other_;
+        const TriadData_<_T1> ref_, other_;
+        const Eigen::Matrix<_T1,3,1> other_bias_;
     };
 
     // Align gyro of sensor j to reference (already calibrated) on paired samples
     template <typename _T1>
     struct MultiSensorGyroAlignResidual
     {
-        MultiSensorGyroAlignResidual(const TriadData_<_T1> &ref, const TriadData_<_T1> &other)
-            : ref_(ref), other_(other) {}
+        MultiSensorGyroAlignResidual(const TriadData_<_T1> &ref,
+                                     const TriadData_<_T1> &other,
+                                     const Eigen::Matrix<_T1,3,1> &other_bias)
+            : ref_(ref), other_(other), other_bias_(other_bias) {}
         template <typename _T2>
         bool operator()(const _T2 *const params, _T2 *residuals) const
         {
+            // params: 6 mis + 3 scales, no bias
             CalibratedTriad_<_T2> calib(params[0], params[1], params[2],
                                         params[3], params[4], params[5],
                                         params[6], params[7], params[8],
-                                        params[9], params[10], params[11]);
-            Eigen::Matrix<_T2, 3, 1> v_ref = ref_.data().template cast<_T2>();
-            Eigen::Matrix<_T2, 3, 1> v_other = calib.unbiasNormalize(other_.data().template cast<_T2>());
+                                        _T2(0), _T2(0), _T2(0));
+            Eigen::Matrix<_T2, 3, 1> v_ref  = ref_.data().template cast<_T2>();
+            Eigen::Matrix<_T2, 3, 1> v_oth0 = other_.data().template cast<_T2>() - other_bias_.template cast<_T2>();
+            Eigen::Matrix<_T2, 3, 1> v_other = calib.normalize(v_oth0);
             Eigen::Matrix<_T2, 3, 1> diff = v_other - v_ref;
             residuals[0] = diff(0);
             residuals[1] = diff(1);
             residuals[2] = diff(2);
             return true;
         }
-        const TriadData_<_T1> ref_;
-        const TriadData_<_T1> other_;
+        const TriadData_<_T1> ref_, other_;
+        const Eigen::Matrix<_T1,3,1> other_bias_;
     };
 
     // Simple extrinsic residual aligning centrifugal correction between ref and other
@@ -163,8 +171,8 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
         if (i == reference_index)
             continue;
 
-        // Use double parameter blocks for Ceres
-        std::vector<double> params(12);
+        // Use 9 parameters: misalignment (6) + scales (3), bias fixed (original)
+        std::vector<double> params(9);
         params[0] = static_cast<double>(acc_calibs_[i].misYZ());
         params[1] = static_cast<double>(acc_calibs_[i].misZY());
         params[2] = static_cast<double>(acc_calibs_[i].misZX());
@@ -174,18 +182,19 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
         params[6] = static_cast<double>(acc_calibs_[i].scaleX());
         params[7] = static_cast<double>(acc_calibs_[i].scaleY());
         params[8] = static_cast<double>(acc_calibs_[i].scaleZ());
-        params[9] = static_cast<double>(acc_calibs_[i].biasX());
-        params[10] = static_cast<double>(acc_calibs_[i].biasY());
-        params[11] = static_cast<double>(acc_calibs_[i].biasZ());
+
+        const auto &before_acc = per_topic_calibs_[i].getAccCalib();
+        Eigen::Matrix<_T,3,1> other_bias_acc = before_acc.getBiasVector();
 
         ceres::Problem problem;
         size_t n = std::min(ref_samples.size(), acc_samples_all[i].size());
         for (size_t k = 0; k < n; ++k)
         {
             ceres::CostFunction *cost_function =
-                new ceres::AutoDiffCostFunction<MultiSensorAccAlignResidual<_T>, 3, 12>(
+                new ceres::AutoDiffCostFunction<MultiSensorAccAlignResidual<_T>, 3, 9>(
                     new MultiSensorAccAlignResidual<_T>(ref_calib.unbiasNormalize(ref_samples[k]),
-                                                        acc_samples_all[i][k]));
+                                                        acc_samples_all[i][k],
+                                                        other_bias_acc));
             problem.AddResidualBlock(cost_function, nullptr, params.data());
         }
         ceres::Solver::Options options;
@@ -204,12 +213,37 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
         ceres::Solver::Summary summary;
         ceres::Solve(options, &problem, &summary);
 
-        // Cast optimized parameters back to template type
+        // Rebuild triad: optimized mis+scale, bias = original (pre-alignment)
+        Eigen::Matrix<_T,3,1> B_before_acc = before_acc.getBiasVector();
         acc_calibs_[i] = CalibratedTriad_<_T>(
             static_cast<_T>(params[0]), static_cast<_T>(params[1]), static_cast<_T>(params[2]),
             static_cast<_T>(params[3]), static_cast<_T>(params[4]), static_cast<_T>(params[5]),
             static_cast<_T>(params[6]), static_cast<_T>(params[7]), static_cast<_T>(params[8]),
-            static_cast<_T>(params[9]), static_cast<_T>(params[10]), static_cast<_T>(params[11]));
+            B_before_acc(0), B_before_acc(1), B_before_acc(2));
+
+        // Keep original scale; fold scale ratio only into misalignment diagonal entries
+        {
+            const _T s_before_x = before_acc.scaleX();
+            const _T s_before_y = before_acc.scaleY();
+            const _T s_before_z = before_acc.scaleZ();
+            const _T s_after_x  = acc_calibs_[i].scaleX();
+            const _T s_after_y  = acc_calibs_[i].scaleY();
+            const _T s_after_z  = acc_calibs_[i].scaleZ();
+
+            const _T rx = (s_before_x != _T(0)) ? (s_after_x / s_before_x) : _T(1);
+            const _T ry = (s_before_y != _T(0)) ? (s_after_y / s_before_y) : _T(1);
+            const _T rz = (s_before_z != _T(0)) ? (s_after_z / s_before_z) : _T(1);
+
+            Eigen::Matrix<_T,3,3> M_new = acc_calibs_[i].getMisalignmentMatrix();
+            M_new(0,0) *= rx;
+            M_new(1,1) *= ry;
+            M_new(2,2) *= rz;
+
+            Eigen::Matrix<_T,3,3> S_before = before_acc.getScaleMatrix();
+
+            // Rebuild triad: adjusted misalignment (diag scaled), original scale, original bias
+            acc_calibs_[i] = CalibratedTriad_<_T>(M_new, S_before, B_before_acc);
+        }
     }
     return true;
 }
@@ -274,8 +308,8 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         if (i == reference_index)
             continue;
 
-        // Use double parameter blocks for Ceres
-        std::vector<double> params(12);
+        // Use 9 parameters: misalignment (6) + scales (3), bias fixed (original)
+        std::vector<double> params(9);
         params[0] = static_cast<double>(gyro_calibs_[i].misYZ());
         params[1] = static_cast<double>(gyro_calibs_[i].misZY());
         params[2] = static_cast<double>(gyro_calibs_[i].misZX());
@@ -285,18 +319,19 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         params[6] = static_cast<double>(gyro_calibs_[i].scaleX());
         params[7] = static_cast<double>(gyro_calibs_[i].scaleY());
         params[8] = static_cast<double>(gyro_calibs_[i].scaleZ());
-        params[9] = static_cast<double>(gyro_calibs_[i].biasX());
-        params[10] = static_cast<double>(gyro_calibs_[i].biasY());
-        params[11] = static_cast<double>(gyro_calibs_[i].biasZ());
+
+        const auto &before_gyr = per_topic_calibs_[i].getGyroCalib();
+        Eigen::Matrix<_T,3,1> other_bias_gyr = before_gyr.getBiasVector();
 
         ceres::Problem problem;
         size_t n = std::min(ref_samples.size(), gyro_samples_all[i].size());
         for (size_t k = 0; k < n; ++k)
         {
             ceres::CostFunction *cost_function =
-                new ceres::AutoDiffCostFunction<MultiSensorGyroAlignResidual<_T>, 3, 12>(
+                new ceres::AutoDiffCostFunction<MultiSensorGyroAlignResidual<_T>, 3, 9>(
                     new MultiSensorGyroAlignResidual<_T>(ref_calib.unbiasNormalize(ref_samples[k]),
-                                                         gyro_samples_all[i][k]));
+                                                         gyro_samples_all[i][k],
+                                                         other_bias_gyr));
             problem.AddResidualBlock(cost_function, nullptr, params.data());
         }
         ceres::Solver::Options options;
@@ -317,12 +352,37 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         ceres::Solver::Summary summary;
         ceres::Solve(options, &problem, &summary);
 
-        // Cast optimized parameters back to template type
+        // Rebuild triad: optimized mis+scale, bias = original (pre-alignment)
+        Eigen::Matrix<_T,3,1> B_before_gyr = before_gyr.getBiasVector();
         gyro_calibs_[i] = CalibratedTriad_<_T>(
             static_cast<_T>(params[0]), static_cast<_T>(params[1]), static_cast<_T>(params[2]),
             static_cast<_T>(params[3]), static_cast<_T>(params[4]), static_cast<_T>(params[5]),
             static_cast<_T>(params[6]), static_cast<_T>(params[7]), static_cast<_T>(params[8]),
-            static_cast<_T>(params[9]), static_cast<_T>(params[10]), static_cast<_T>(params[11]));
+            B_before_gyr(0), B_before_gyr(1), B_before_gyr(2));
+
+        // Keep original scale, fold scale ratio only into misalignment diagonal entries 
+        {
+            const _T s_before_x = before_gyr.scaleX();
+            const _T s_before_y = before_gyr.scaleY();
+            const _T s_before_z = before_gyr.scaleZ();
+            const _T s_after_x  = gyro_calibs_[i].scaleX();
+            const _T s_after_y  = gyro_calibs_[i].scaleY();
+            const _T s_after_z  = gyro_calibs_[i].scaleZ();
+
+            const _T rx = (s_before_x != _T(0)) ? (s_after_x / s_before_x) : _T(1);
+            const _T ry = (s_before_y != _T(0)) ? (s_after_y / s_before_y) : _T(1);
+            const _T rz = (s_before_z != _T(0)) ? (s_after_z / s_before_z) : _T(1);
+
+            Eigen::Matrix<_T,3,3> M_new = gyro_calibs_[i].getMisalignmentMatrix();
+            M_new(0,0) *= rx;
+            M_new(1,1) *= ry;
+            M_new(2,2) *= rz;
+
+            Eigen::Matrix<_T,3,3> S_before = before_gyr.getScaleMatrix();
+
+            // Rebuild triad: adjusted misalignment (diag scaled), original scale, original bias
+            gyro_calibs_[i] = CalibratedTriad_<_T>(M_new, S_before, B_before_gyr);
+        }
     }
 
     return true;
@@ -395,7 +455,7 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyroExtrinsic(
 
             // Transform from sensor i's original frame to the aligned frame
             Eigen::Matrix<_T, 3, 3> T = M_after * M_before.inverse();
-            std::cout << "Transformation from " << i << " to ref:\n" << T << std::endl; 
+            std::cout << "Rotation from " << i << " to ref:\n" << T << std::endl; 
 
             // Apply rotation to the extrinsic vector
             Eigen::Matrix<_T, 3, 1> extr_i_aligned = T * extr_i_local;
