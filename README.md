@@ -133,6 +133,9 @@ B = [ b_y ]
 X' = T*K*(X - B)
 ```
 
+**NOTE:** In the multi-IMU case, the misalignment matrix might not have diagonal entries of 1.
+This is intended to represent the axes misalignment to the reference sensor instead of to its own axis.
+
 ### Extrinsic Correction
 
 Given the extrinsic offset vector R one can correct the accelerometer reading A using the gyoroscope reading W (and its derivative dW)
