@@ -23,7 +23,7 @@ using namespace Eigen;
 int main(int argc, char** argv)
 {
   if (argc < 2) {
-    cout << "Usage: rosrun imu_tk imu_calib_node <config.yaml>" << endl;
+    cout << "Usage: rosrun ros_imu_calib bag_calib <config.yaml>" << endl;
     cout << "Have a look at \"catkin_ws/src/imu_tk/config/imu_calib.yaml\"" << endl;
     return -1;
   }

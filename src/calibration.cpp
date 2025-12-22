@@ -203,7 +203,11 @@ template <typename _T>
   acc_use_means_(false),
   gyro_dt_(-1.0),
   optimize_gyro_bias_(false),
-  verbose_output_(false){}
+  verbose_output_(false),
+  cached_acc_(false),
+  cached_gyr_(false),
+  cached_extr_(false)
+{}
 
 template <typename _T>
   bool MultiPosCalibration_<_T>::calibrateAcc ( const std::vector< TriadData_<_T> >& acc_samples , 
@@ -337,7 +341,7 @@ template <typename _T>
         
     waitForKey();
   }
-  
+  cached_acc_ = true; // mark accelerometer calibration as cached
   return true;
     
 }
@@ -350,9 +354,13 @@ template <typename _T>
                                                    int th_var_min,
                                                    int th_var_max)
 {
-  if( !calibrateAcc( acc_samples, min_recorded_intervals, 
-    variance_win_size, th_var_min, th_var_max ) )
-    return false;
+  // Only run accelerometer calibration if not already available
+  if( !cached_acc_ )
+  {
+    if( !calibrateAcc( acc_samples, min_recorded_intervals, 
+      variance_win_size, th_var_min, th_var_max ) )
+      return false;
+  }
   
   cout<<"Gyroscopes calibration: calibrating..."<<endl;
   
@@ -478,7 +486,7 @@ template <typename _T>
         <<1.0/gyro_calib_.scaleY()<<endl
         <<1.0/gyro_calib_.scaleZ()<<endl;
   }
-  
+  cached_gyr_ = true; // mark gyro calibration as cached
   return true;
 }
 
@@ -490,16 +498,16 @@ template <typename _T>
                                                            int th_var_min,
                                                            int th_var_max)
 {
-  // Perform intrinsic calibration first
-  if (!calibrateAccGyro(acc_samples, gyro_samples,
-    min_recorded_intervals, variance_win_size, th_var_min, th_var_max)) 
-  {
-    cout << "Could not perform intrinsic calibration!" << endl;
-    return false;
-  }
-
-  cout << endl << "Estimating extrinsic parameters..." << endl;
-
+  // Perform intrinsic calibration first if needed
+  if (!cached_gyr_) {
+    if (!calibrateAccGyro(acc_samples, gyro_samples,
+      min_recorded_intervals, variance_win_size, th_var_min, th_var_max)) 
+    {
+      cout << "Could not perform intrinsic calibration!" << endl;
+      return false;
+    }
+  } 
+  
   // Extracting static intervals (again... not optimal but ok)
   std::vector< TriadData_<_T> > static_acc_means;
   std::vector< DataInterval > extracted_intervals;
@@ -547,7 +555,7 @@ template <typename _T>
     DataInterval gyro_interval(gyro_idx0, gyro_idx1);
     
     ceres::CostFunction* cost_function =
-      MultiPosExtrinsicResidual<_T>::Create(g_mag_, calib_gyro_samples_, dw, smooth_acc, gyro_interval);
+      MultiPosExtrinsicResidual<_T>::Create(g_mag_, gyro_samples, dw, smooth_acc, gyro_interval);
 
     problem.AddResidualBlock ( cost_function, NULL /* squared loss */, extrinsic_calib_params.data() ); 
   }
@@ -579,7 +587,7 @@ template <typename _T>
     cout << extrinsic_vector_[1] << endl;
     cout << extrinsic_vector_[2] << endl;
   }
-
+  cached_extr_ = true; // mark extrinsic calibration as cached
   return true;
 }
 

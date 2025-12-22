@@ -1,7 +1,9 @@
 project(ros_imu_calib)
 
-cmake_minimum_required(VERSION 3.10)
-cmake_policy(SET CMP0015 NEW)
+cmake_minimum_required(VERSION 3.5)
+#cmake_policy(SET CMP0015 NEW)
+
+
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++17)
@@ -13,6 +15,10 @@ endif()
 if(NOT DEFINED BUILD_IMU_TK_EXAMPLES)
   set(BUILD_IMU_TK_EXAMPLES "ON")
 endif(NOT DEFINED BUILD_IMU_TK_EXAMPLES)
+
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_BUILD_RPATH_USE_ORIGIN TRUE)
+set(CMAKE_SKIP_RPATH FALSE)
 
 find_package(Boost REQUIRED)
 find_package(yaml-cpp REQUIRED)  
@@ -172,6 +178,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(bag_calib apps/bag_calib.cpp)
 add_executable(bag_calib_extr apps/bag_calib_extr.cpp)
+add_executable(bag_calib_multi apps/bag_calib_multi.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -191,6 +198,13 @@ add_executable(bag_calib_extr apps/bag_calib_extr.cpp)
  )
 
  target_link_libraries(bag_calib_extr
+   ${catkin_LIBRARIES}
+   ${IMU_TK_LIBS}
+   Ceres::ceres
+   ${YAML_CPP_LIBRARIES}
+ )
+
+ target_link_libraries(bag_calib_multi
    ${catkin_LIBRARIES}
    ${IMU_TK_LIBS}
    Ceres::ceres

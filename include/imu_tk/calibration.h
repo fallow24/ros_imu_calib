@@ -264,6 +264,11 @@ public:
   /** @brief True if the verbose output is enabled */ 
   bool verboseOutput() const { return verbose_output_; };
   
+  // Cached state query helpers
+  inline bool isAccCached() const { return cached_acc_; }
+  inline bool isGyroCached() const { return cached_gyr_; }
+  inline bool isExtrinsicCached() const { return cached_extr_; }
+
   /** @brief Set the magnitude of the gravitational filed 
    *         used in the calibration (i.e., the gravity measured in
    *         the place where the calibration dataset has been acquired)
@@ -423,6 +428,11 @@ private:
   _T sigma_;
   int win_size_;
   bool verbose_output_;
+
+  // Caching flags to avoid recomputing if results already available
+  bool cached_acc_;
+  bool cached_gyr_;
+  bool cached_extr_;
 };
 
 typedef MultiPosCalibration_<double> MultiPosCalibration;

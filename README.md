@@ -3,8 +3,12 @@
 This originated as a ROS wrapper for imu_tk, learn details from original [README.md](./README_original.md) please.
 
 The program is able to perform intrinsic calibration of an IMU (accelerometer and gyroscope) without external equipment. 
-I have also added extrinsic calibration with respect to the robot base (the offset vector from the base to the IMU).
-When performing extrinsic calibration (when collecting the dataset) the operator must ensure that only rotations around the robot base are performed.
+
+## Updates
+
+- I have added extrinsic calibration with respect to the robot base (the offset vector from the base to the IMU). When performing extrinsic calibration (when collecting the dataset) the operator must ensure that only rotations around the robot base are performed.
+  
+- I have added multi-IMU calibration (align multiple IMUs to one reference IMU), such that all the IMUs share the same coordinate system as the given reference IMU. For multi-IMU, the program is able to calibrate intrinsic and (optionally) extrinsic parameters.
 
 ## Dependencies 
 
@@ -58,7 +62,7 @@ If you desire extrinsic calibration with respect to the robot base, make sure th
 
 ### Calibration
 
-Run either `bag_calib` or `bag_calib_extr` to get calibration result (e.g. misalignment, scale and bias).
+Run either `bag_calib`, `bag_calib_extr`, or `bag_calib_multi` to get calibration result (e.g. misalignment, scale and bias).
 
 `bag_calib` usage: 
 
@@ -68,6 +72,10 @@ Run either `bag_calib` or `bag_calib_extr` to get calibration result (e.g. misal
 
 > rosrun ros_imu_calib bag_calib_extr [CONFIG]
 
+`bag_calib_multi` usage:
+
+> rosrun ros_imu_calib bag_calib_multi [CONFIG]
+
 For example:
 
 ```Bash
@@ -75,6 +83,10 @@ rosrun ros_imu_calib bag_calib ~/catkin_ws/src/ros_imu_calib/config/imu_calib.ya
 ```
 
 Please have a look at the example parameters given in the YAML config file.
+**Make sure to update the paths accordinly!**
+
+You might use this [example bagfile](https://drive.google.com/file/d/1wRyGn3pAfVio9VZlECjIbqagfqa8B2HJ/view?usp=sharing).
+
 
 Follow the output of the program on your terminal.
 You should be prompted to inspect the static intervals in a plot window.
