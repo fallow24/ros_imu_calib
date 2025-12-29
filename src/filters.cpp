@@ -102,6 +102,18 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
     S(1, 1) *= diag_m1_new;
     S(2, 2) *= diag_m2_new;
   }
+
+  // Check if R is a proper rotation by verifying orthogonality and determinant
+  Eigen::Matrix<_T, 3, 3> should_be_identity = R.transpose() * R;
+  _T identity_error = (should_be_identity - Eigen::Matrix<_T, 3, 3>::Identity()).norm();
+  _T det_R = R.determinant();
+  if (identity_error > _T(1e-5) || std::abs(det_R - _T(1)) > _T(1e-5))
+  {
+    std::cerr << "Warning: Resulting R is not a proper rotation matrix. "
+              << "Orthogonality error: " << identity_error
+              << ", Determinant: " << det_R << std::endl;
+  }
+
 }
 
 template <typename _T>
