@@ -1,8 +1,8 @@
 #pragma once
 #include <vector>
 #include <cstddef>
-#include <stdexcept> // added
-#include <cmath>     // added
+#include <stdexcept> 
+#include <cmath>     
 #include "imu_tk/calibration.h"
 
 namespace imu_tk

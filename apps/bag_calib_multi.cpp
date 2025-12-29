@@ -174,12 +174,60 @@ int main(int argc, char **argv)
   for (size_t idx = 0; idx < imu_topics.size(); ++idx)
   {
     std::string base = sanitize_topic(imu_topics[idx]);
-    std::string acc_path = save_calib_dir + "/acc_" + base + ".txt";
-    std::string gyr_path = save_calib_dir + "/gyr_" + base + ".txt";
-    std::string extr_path = save_calib_dir + "/extr_" + base + ".txt";
+    std::string acc_path = save_calib_dir + "/acc_" + base + ".yaml";
+    std::string gyr_path = save_calib_dir + "/gyr_" + base + ".yaml";
+    std::string extr_path = save_calib_dir + "/extr_" + base + ".yaml";
 
     acc_calibs[idx].save(acc_path);
     gyro_calibs[idx].save(gyr_path);
+
+    // Fold accelerometer calibration: T_acc = S_after * M_after
+    {
+      Eigen::Matrix<double, 3, 3> T_acc =
+          acc_calibs[idx].getScaleMatrix() * acc_calibs[idx].getMisalignmentMatrix();
+      Eigen::Matrix<double, 3, 3> R_acc, S_acc, M_acc;
+      imu_tk::foldRotation(T_acc, R_acc, S_acc, M_acc);
+
+      // Verify reconstruction
+      Eigen::Matrix<double, 3, 3> T_acc_rec = R_acc * S_acc * M_acc;
+
+      // Append to accelerometer file as comments
+      std::ofstream af(acc_path.c_str(), std::ios::app);
+      if (af.is_open())
+      {
+        af << "\n# ---- Folded calibration (T = R * S * M) ----\n";
+        imu_tk::appendMatrixComment(af, "T (scale * misalignment):", T_acc);
+        imu_tk::appendMatrixComment(af, "R (rotation):", R_acc);
+        imu_tk::appendMatrixComment(af, "S (folded scale):", S_acc);
+        imu_tk::appendMatrixComment(af, "M (folded misalignment):", M_acc);
+        imu_tk::appendMatrixComment(af, "T reconstructed (R * S * M):", T_acc_rec);
+        af << "# Recon error: " << (T_acc - T_acc_rec).norm() << "\n";
+      }
+    }
+
+    // Fold gyroscope calibration: T_gyr = S_after * M_after
+    {
+      Eigen::Matrix<double, 3, 3> T_gyr =
+          gyro_calibs[idx].getScaleMatrix() * gyro_calibs[idx].getMisalignmentMatrix();
+      Eigen::Matrix<double, 3, 3> R_gyr, S_gyr, M_gyr;
+      imu_tk::foldRotation(T_gyr, R_gyr, S_gyr, M_gyr);
+
+      // Verify reconstruction
+      Eigen::Matrix<double, 3, 3> T_gyr_rec = R_gyr * S_gyr * M_gyr;
+
+      // Append to gyroscope file as comments
+      std::ofstream gf(gyr_path.c_str(), std::ios::app);
+      if (gf.is_open())
+      {
+        gf << "\n# ---- Folded calibration (T = R * S * M) ----\n";
+        imu_tk::appendMatrixComment(gf, "T (scale * misalignment):", T_gyr);
+        imu_tk::appendMatrixComment(gf, "R (rotation):", R_gyr);
+        imu_tk::appendMatrixComment(gf, "S (folded scale):", S_gyr);
+        imu_tk::appendMatrixComment(gf, "M (folded misalignment):", M_gyr);
+        imu_tk::appendMatrixComment(gf, "T reconstructed (R * S * M):", T_gyr_rec);
+        gf << "# Recon error: " << (T_gyr - T_gyr_rec).norm() << "\n";
+      }
+    }
 
     if (calibrate_extrinsic)
     {
@@ -195,6 +243,14 @@ int main(int argc, char **argv)
       {
         std::cerr << "Failed to open extrinsic output file: " << extr_path << std::endl;
       }
+    }
+
+    std::cout << "Saved calibration for topic " << imu_topics[idx] << " to:\n"
+              << "  Acc: " << acc_path << "\n"
+              << "  Gyr: " << gyr_path << std::endl;
+    if (calibrate_extrinsic)
+    {
+      std::cout << "  Extrinsic: " << extr_path << std::endl;
     }
   }
 

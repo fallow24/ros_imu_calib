@@ -29,6 +29,10 @@
 #pragma once
 
 #include <vector>
+#include <sstream>
+#include <iomanip>
+#include <ostream> 
+#include <fstream>
 
 #include "imu_tk/base.h"
 
@@ -66,4 +70,25 @@ template <typename _T>
                         std::vector< TriadData_<_T> > &samples2, 
                         TimestampUnit unit = TIMESTAMP_UNIT_USEC,
                         DatasetType type = DATASET_SPACE_SEPARATED ); 
+                    
+                        // Write a matrix as YAML-safe comments (each row prefixed with "# ")
+template <typename Derived>
+static void appendMatrixComment(std::ofstream &os, const std::string &header,
+                                const Eigen::MatrixBase<Derived> &M)
+{
+  os << "# " << header << "\n";
+  std::ostringstream row;
+  for (int r = 0; r < M.rows(); ++r)
+  {
+    row.str("");
+    row.clear();
+    row << "# ";
+    for (int c = 0; c < M.cols(); ++c)
+    {
+      row << std::setw(12) << std::setprecision(8) << std::fixed << M(r, c);
+      if (c + 1 < M.cols()) row << " ";
+    }
+    os << row.str() << "\n";
+  }
+}
 }
