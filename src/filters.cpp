@@ -47,6 +47,7 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
   {
     U.col(2) *= _T(-1);
   }
+  R = U;
 
   // Extract pure diagonal scaling from singular values
   S = Eigen::Matrix<_T, 3, 3>::Zero();
@@ -74,7 +75,6 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
   S(1, 1) *= diag_m1;
   S(2, 2) *= diag_m2;
 
-  R = U;
 
   // Iterative refinement to reduce numerical errors
   // We want to minimize ||T - R * S * M|| while keeping constraints

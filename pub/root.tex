@@ -1,0 +1,263 @@
+\documentclass[journal]{IEEEtran}
+\usepackage{amsmath,amsfonts}
+\usepackage{mathtools}
+%\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{array}
+\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{textcomp}
+\usepackage{stfloats}
+\usepackage{url}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{cite}
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+% updated with editorial comments 8/9/2021
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+% Declare argmin and argmax operator
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\begin{document}
+
+
+%\title{Compensation of Motion Acceleration \\for Inertial Sensing in Attitude Estimation Filters}
+
+% % BETTER! (?):
+\title{Calibration of Motion Acceleration and Redundant IMU \\without External Equipment for Attitude Estimation Filters }
+
+\author{Fabian Arzberger and Andreas N{\"u}chter
+        % <-this % stops a space
+\thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2021; revised August 16, 2021.}}
+
+% The paper headers
+% \markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2021}%
+% {Shell \MakeLowercase{\textit{et al.}}: A Sample Article Using IEEEtran.cls for IEEE Journals}
+
+% \IEEEpubid{0000--0000/00\$00.00~\copyright~2021 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+\maketitle
+
+\begin{abstract}
+Attitude estimation based on inertial sensing requires measurements of local angular velocities and local gravity via gyroscopes and accelerometers.
+However, during the motion of a mobile system the inertial measurement unit (IMU) will be subject to additional accelerations which skews the measurement of local gravity.
+This effect gets amplified the further away the IMU is from the base of the system.
+Many attitude estimation filters account for this by relying more on gyroscope integration for periods of high angular velocity.
+However, this approach is prone to accumulate long term error especially around the gravity vector (yaw axis).
+In this work we utilize the gyroscope measurements to compensate the additional accelerations induced by the motion of the system, i.e., centripetal- and tangential-accelerations.
+We study the effects on the most popular attitude filters (Complementary, Madgwick, Mahony, Extended Kalman Filter). 
+Additionally, we introduce a calibration method that estimates intrinsic IMU parameters (axes misalignment, bias, scale), as well as the extrinsic base-to-IMU vector without the necessity for additional external equipment.  
+Our evaluation in simulation as well as in the real-world shows that this method improves any attitude filter that relies on the direction of gravity.
+Furthermore we demonstrate the effectivenes on highly dynamic systems or systems that can not center the IMU on the base, using our real-world spherical mobile mapping system.
+
+\end{abstract}
+
+\begin{IEEEkeywords}
+Attitude Estimation, IMU Filter, Inertial Sensing, Motion Compensation, Accelerometer, Gyroscope
+\end{IEEEkeywords}
+
+\section{Introduction}
+Here will be the introduction.
+Motivation:
+(1) Reiterate the problem presented in the abstract.
+(2) Maybe talk about spherical mobile mapping systems and their advantages and limitations.
+(3) No use of magnetometer due to extraterestrial exploration.
+
+Our contributions are:
+\begin{itemize}
+  \item Detailed Derivation of the method 
+  \item Evaluation of the method using state-of-the-art filters 
+  \item Calibration method without the need for external equipment
+\end{itemize}
+
+\section{Related Works}
+Here will be some related works.
+Maybe spend a few words first on spherical mobile mapping?
+\subsection{Attitude Estimation}
+Here will be some IMU filters, e.g., Complementary, Madgwick, Mahony, Extended Kalman Filter, etc...
+\subsection{Motion Compensation}
+Here will be some references (if I can find any) that use motion compensation.
+Most of these approaches will just state the formula without further investigating.
+\subsection{Multi-Position IMU Calibration}
+Here will be some references about offline and online IMU calibration.
+None of these calibrate the extrinsic base-to-IMU vector.
+
+\section{Method}
+Here will be the description of the method
+\subsection{Derivation of the Model}\label{ssec:derivation}
+This will be the full derivation of the model including some math.
+\begin{equation}
+  \vec{a}_g = \vec{\omega} \times \vec{\omega} \times \vec{r} \, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, \vec{a}
+\end{equation}
+\subsection{Developing the Model for Spherical Systems}
+The previous Section~\ref{ssec:derivation} only considers the accelerations due to rotation of the system.
+This Section will develop the model including the linear motion of the platform as well, using the example of a spherical mobile mapping system with radius $R$ that rolls without slippage on a surface with normal vector $\vec{n}$.
+\begin{equation}
+  \vec{a}_g = \vec{\omega} \times \vec{\omega} \times \vec{r} \, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, R \cdot \dot{\vec{\omega}} \times \vec{n} \, - \, \vec{a} 
+\end{equation}
+\subsection{Intrinsic and Extrinsic IMU calibration}\label{ssec:imucalib}
+This section will develop the method for extrinsic calibration after introducing briefly the intrinsic calibration, based on imutk 2014.
+The cost function that implements the error $E$ based on $K$ measurments is:
+\begin{align}
+  E(\vec{a}, \vec{\omega}, \vec{r}\,) &= \sum_{k=0}^{K} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_k \times \vec{\omega}_k \times \vec{r} + \dot{\vec{\omega}}_k \times \vec{r} - \vec{a}_k}^2}^2\\ 
+  \vec{r}_{extr} &= \argmin_{\vec{r}} \left( E(\vec{a}, \vec{\omega}, \vec{r}\,) \right)
+\end{align}
+\subsection{Implementation of Discrete Derivative}
+Here we will implement the derivative of a discrete, noisy signal which is needed for the derivative of the angular velocity.
+Illustrate the problem with naive numerical derivative and introduce Derivative of Gaussian (DoG) filter.
+Tradeoff between time-lag and smoothness. 
+Maybe also compare with Savgol and moving exponential weighted average.  
+\subsection{Multi-IMU calibration}\label{ssec:multicalib}
+After the intrinsic and extrinsic parameters for each individual IMU have been found according to Section~\ref{ssec:imucalib}, we now want all IMUs to provide measurements in the same coordinate system. 
+Thus, in this subsection we will derive an approach to calibrate multiple IMUs to one reference IMU, without using external reference sensors such as LiDAR or cameras.
+That is, for each individual IMU, we want to find the extrinsic rotation paramters that transform their measurements into the coordinate system of the reference IMU.
+However, there is now additional information available from the reference IMU that we want to utilize in the intrinsic calibration of the individual IMUs, specifically in the misalignment matrix $\mathbf{M}$ and scale matrix $\mathbf{K}$.
+In contrast, we assume that the estimation of the bias $\vec{b}$ is sufficient from the intrinsic calibration, i.e., we exclude it from the following optimization problem.
+This means that the result of the calibration method presented is a transformation matrix $\mathbf{T}~\in~\mathbb{R}^{3\times3}$ which we will decompose into a rotation~$\mathbf{R}~\in~SO(3)$, misalignment~$\mathbf{M}~\in~\mathbb{R}^{3\times3},~\text{diag}(\mathbf{M}) = \vec{1}$, and scale $\mathbf{S} = \text{diag}(s_1,s_2,s_3)$.
+
+\subsubsection{Optimization problem}
+
+To this end, let $\vec{v}_{i} \in \mathbf{V}_i$ be a calibrated measurement of the $i$-th IMU, and let $\vec{v}_{ref} \in \mathbf{V}_{ref}$ be the corresponding calibrated measurement of the reference IMU, such that the total number of measurements for each IMU is $K = \abs{\mathbf{V}_i} = \abs{\mathbf{V}_{ref}}$.
+We rewrite the calibrated non-reference measurement in terms of a transformation matrix $\mathbf{T}$, previously calibrated bias $\vec{b}$, and raw measurement $\vec{\widetilde{v}}_i$ similar to imutk2014, as 
+\begin{align}
+  \vec{v}_i = \mathbf{T} \cdot \left( \vec{\widetilde{v}}_i - \vec{b} \right)\label{eq:raw}
+\end{align}
+We initialize the transformation $\mathbf{T}$ using the misalignment $\mathbf{M}$ and scale $\mathbf{S}$ available from the previous intrinsic calibration, as $\mathbf{T} = \mathbf{M} \cdot \mathbf{S}$. 
+Then we construct the optimization problem, minimizing the error $E$ between the $i$-th IMU's measurements $\mathbf{V}_{i}$ and the reference measurements $\mathbf{V}_{ref}$, as  
+\begin{align}
+  E\left(\mathbf{V}_i, \mathbf{V}_{ref}\right) &= \sum_{k=0}^{K} \norm{\vec{v}_{i,k} - \vec{v}_{ref,k}}^2\\
+  &= \sum_{k=0}^{K} \norm{\mathbf{T} \cdot \left( \vec{\widetilde{v}}_i - \vec{b} \right) - \vec{v}_{ref,k}}^2\\
+  \mathbf{T}_{opt} &= \argmin_{\mathbf{T}} E\left(\mathbf{V}_i, \mathbf{V}_{ref}\right) 
+\end{align}
+The resulting transformation matrix can be used as is, i.e., we could directly multiply $\mathbf{T}_{opt}$ with the raw (bias removed) measurements according to Equation~\eqref{eq:raw}, to obtain the calibrated result.
+However, many applications require explicit knowledge about the intrinsic and extrinsic parameters seperatley.
+Thus, in the next section we decompose $\mathbf{T}_{opt} = \mathbf{R} \cdot \mathbf{M} \cdot \mathbf{S}$, with a polar decomposition using singular value decomposition (SVD).
+
+\subsubsection{Folding rotation with polar decomposition}
+
+Given a calibration transform $\mathbf{T}\in\mathbb{R}^{3\times 3}$, we compute its SVD
+\begin{align}
+\mathbf{T}=\mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top,\quad
+\boldsymbol{\Sigma}=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),\quad \sigma_i>0.
+\end{align}
+The polar decomposition yields
+\begin{align}
+\mathbf{T}=\mathbf{R}\,\mathbf{P},
+\end{align}
+where $\mathbf{R}$ is orthogonal and $\mathbf{P}$ is symmetric positive definite.
+If the SVD of a matrix exists, the existence of a polar decomposition is directly implied, having the form:
+\begin{align}
+\mathbf{R}=\mathbf{U}\mathbf{V}^\top, \\
+\mathbf{P}=\mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top.
+\end{align}
+We seek the decomposition $\mathbf{T}=\mathbf{R}\,\mathbf{S}\,\mathbf{M}$ subject to:
+\begin{align}
+\mathbf{R}\in SO(3), \quad \mathbf{S}=\mathrm{diag}(s_1,s_2,s_3), \quad \mathrm{diag}(\mathbf{M})=\vec{1}.
+\end{align}
+Since $\mathbf{T}=\mathbf{R}\mathbf{P}$ with $\mathbf{R}$ already being orthogonal, we must extract $\mathbf{M}$ and $\mathbf{S}$ from $\mathbf{P}$. 
+Thus, we initialize the diagonal scaling from the singular values
+\begin{align}
+\mathbf{S}_0=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),
+\end{align}
+compute the misalignment matrix
+\begin{align}
+\mathbf{M}_0=\mathbf{S}_0^{-1}\,\mathbf{P},
+\end{align}
+extract the diagonal $\mathbf{D}=\mathrm{diag}(\mathbf{M}_0)$, and fold it into the scale, such that $\mathrm{diag}(\mathbf{M})=\vec{1}$:
+\begin{align}
+\mathbf{S}=\mathbf{S}_0\,\mathbf{D},\label{eq:ssd} \\
+\mathbf{M}=\mathbf{D}^{-1}\,\mathbf{M}_0.\label{eq:mdm}
+\end{align}
+Theoretically, we can now reconstruct $\mathbf{T}=\mathbf{R}\mathbf{S}\mathbf{M}$.
+However, to minimize numerical error accumulated through floating-point operations in the matrix factorization and inversion, we perform $n_{\mathrm{iter}}$ ($= 3$) iterations of constraint-preserving correction. 
+The residual to minimize is:
+\begin{align}
+\mathbf{E}=\mathbf{T}-\mathbf{R}\mathbf{S}\mathbf{M}.
+\end{align}
+Since $\mathbf{R}$ is fixed from the polar decomposition, we seek an incremental adjustment $\Delta\mathbf{M}$ applied to $\mathbf{M}$, which minimizes the residual.
+Treating the residual as a function of $\mathbf{M}$ and expanding it around the current $\mathbf{M}$ yields:
+\begin{align}
+\mathbf{E}(\mathbf{M}+\Delta\mathbf{M}) &= \mathbf{E}(\mathbf{M}) - \mathbf{R}\mathbf{S}\,\Delta\mathbf{M}.\label{eq:expansion}
+\end{align}
+The residual should vanish, so we set Equation~\eqref{eq:expansion} to zero:
+\begin{align}
+\mathbf{E}(\mathbf{M}) - \mathbf{R}\mathbf{S}\,\Delta\mathbf{M} &\overset{!}{=} \mathbf{0}.
+\end{align}
+Since $\mathbf{R}$ is orthogonal, we can solve for $\Delta\mathbf{M}$ by left-multiplying with $(\mathbf{R}\mathbf{S})^{-1} = \mathbf{S}^{-1}\mathbf{R}^\top$:
+\begin{align}
+\Delta\mathbf{M}= \mathbf{S}^{-1}\mathbf{R}^\top \mathbf{E}.
+\end{align}
+We can then apply the correction:
+\begin{align}
+\mathbf{M}\leftarrow \mathbf{M}+\Delta\mathbf{M}.\label{eq:update}
+\end{align}
+To ensure that the constraint $\mathrm{diag}(\mathbf{M})=\vec{1}$ is still true after applying Equation~\eqref{eq:update}, we need to re-apply Equations~\eqref{eq:ssd} and~\eqref{eq:mdm}:
+\begin{align}
+\mathbf{D}=\mathrm{diag}(\mathbf{M}), \\
+\mathbf{S}\leftarrow \mathbf{S}\mathbf{D}, \\
+\mathbf{M}\leftarrow \mathbf{D}^{-1}\mathbf{M}.
+\end{align}
+The complete description is given in Algorithm~\ref{alg:folding}.
+\begin{algorithm}
+\caption{Folding into rotation, misalignment, and scale}
+\label{alg:folding}
+\begin{algorithmic}  
+\State \textbf{Input:} Transformation matrix $\mathbf{T} \in \mathbb{R}^{3 \times 3}$
+\State Compute SVD: $\mathbf{T} = \mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
+\State $\mathbf{R} \gets \mathbf{U}\mathbf{V}^\top$
+\If{$\det(\mathbf{R}) < 0$}
+  \State Flip sign of third column of $\mathbf{R}$
+\EndIf
+\State $\mathbf{P} \gets \mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
+\State $\mathbf{S} \gets \mathrm{diag}(\sigma_1,\sigma_2,\sigma_3)$
+\State $\mathbf{M} \gets \mathbf{S}^{-1}\,\mathbf{P}$
+\For{$i = 1$ to $n_{\mathrm{iter}}$}
+  \State $\mathbf{E} \gets \mathbf{T} - \mathbf{R}\mathbf{S}\mathbf{M}$
+  \State $\Delta\mathbf{M} \gets \mathbf{S}^{-1}\mathbf{R}^\top\mathbf{E}$
+  \State $\mathbf{M} \gets \mathbf{M} + \Delta\mathbf{M}$
+  \State $\mathbf{D} \gets \mathrm{diag}(\mathbf{M})$
+  \State $\mathbf{S} \gets \mathbf{S}\,\mathbf{D}$
+  \State $\mathbf{M} \gets \mathbf{D}^{-1}\,\mathbf{M}$
+\EndFor
+\State \Return $\mathbf{R}, \mathbf{M}, \mathbf{S}$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experiments and Evaluation}
+Here we will show some experiments and evaluate them.
+Ther will be a lot of figures.
+\subsection{Simulation}
+Introduce the simulation model, e.g. noise, random walk, bias, scale, etc...
+\subsection{Real-World}
+Introduce the spherical mobile mapping system.
+Show the real-world results based on motion compensation (single IMU).
+Show the real-world results based on using redundant IMUs (no motion compensation).
+Show the real-world results based on using reduntant IMUs (with motion compensation).
+Maybe even add subsubsections for them.
+% \subsubsection{Motion Compensation}
+% \subsubsection{Redundant IMUs}
+% \subsubsection{Redundant IMUs with Motion Compensation}
+
+\section{Conclusions}
+Some conclusions.
+Obviously the method is very good.
+Every attitude filter should use it.
+
+\end{document}
+
+
