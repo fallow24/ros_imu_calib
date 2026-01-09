@@ -34,8 +34,8 @@ using namespace Eigen;
 template <typename _T>
 void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
                           Eigen::Matrix<_T, 3, 3> &R,
-                          Eigen::Matrix<_T, 3, 3> &S,
-                          Eigen::Matrix<_T, 3, 3> &M)
+                          Eigen::Matrix<_T, 3, 3> &M,
+                          Eigen::Matrix<_T, 3, 3> &S)
 {
   // Perform polar decomposition: T = U * P where U is orthogonal, P is symmetric positive-definite
   Eigen::JacobiSVD<Eigen::Matrix<_T, 3, 3>> svd(T, Eigen::ComputeFullU | Eigen::ComputeFullV);

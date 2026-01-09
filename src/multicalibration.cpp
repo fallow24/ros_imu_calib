@@ -221,8 +221,8 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
                 T_opt(row, col) = static_cast<_T>(params[row * 3 + col]);
         
         // Use foldRotation to decompose T = R * M * S (scale applied first)
-        Eigen::Matrix<_T, 3, 3> R_opt, S_opt, M_opt;
-        imu_tk::foldRotation(T_opt, R_opt, S_opt, M_opt);
+        Eigen::Matrix<_T, 3, 3> R_opt, M_opt, S_opt;
+        imu_tk::foldRotation(T_opt, R_opt, M_opt, S_opt);
         
         // Apply rotation as additional transformation: final_mis = R * M
         // Store as (R*M) * S with proper misalignment and scale
@@ -341,8 +341,8 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
                 T_opt(row, col) = static_cast<_T>(params[row * 3 + col]);
         
         // Use foldRotation to decompose T = R * M * S (scale applied first)
-        Eigen::Matrix<_T, 3, 3> R_opt, S_opt, M_opt;
-        imu_tk::foldRotation(T_opt, R_opt, S_opt, M_opt);
+        Eigen::Matrix<_T, 3, 3> R_opt, M_opt, S_opt;
+        imu_tk::foldRotation(T_opt, R_opt, M_opt, S_opt);
         
         // Apply rotation as additional transformation: final_mis = R * M
         // Store as (R*M) * S with proper misalignment and scale

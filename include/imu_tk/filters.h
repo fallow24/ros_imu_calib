@@ -74,8 +74,8 @@ namespace imu_tk
     template <typename _T>
     void foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
                       Eigen::Matrix<_T, 3, 3> &R,
-                      Eigen::Matrix<_T, 3, 3> &S,
-                      Eigen::Matrix<_T, 3, 3> &M);
+                      Eigen::Matrix<_T, 3, 3> &M,
+                      Eigen::Matrix<_T, 3, 3> &S);
 
     // Compute smoothed derivative of a 3D signal using centered derivative-of-Gaussian convolution.
     // Compatible with Eigen matrices and Ceres Jet types.

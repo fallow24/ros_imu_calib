@@ -219,8 +219,8 @@ int main(int argc, char **argv)
     {
       Eigen::Matrix<double, 3, 3> T_acc =
           acc_calibs[idx].getMisalignmentMatrix() * acc_calibs[idx].getScaleMatrix();
-      Eigen::Matrix<double, 3, 3> R_acc, S_acc, M_acc;
-      imu_tk::foldRotation(T_acc, R_acc, S_acc, M_acc);
+      Eigen::Matrix<double, 3, 3> R_acc, M_acc, S_acc;
+      imu_tk::foldRotation(T_acc, R_acc, M_acc, S_acc);
 
       // Verify reconstruction
       Eigen::Matrix<double, 3, 3> T_acc_rec = R_acc * M_acc * S_acc;
@@ -243,8 +243,8 @@ int main(int argc, char **argv)
     {
       Eigen::Matrix<double, 3, 3> T_gyr =
           gyro_calibs[idx].getMisalignmentMatrix() * gyro_calibs[idx].getScaleMatrix();
-      Eigen::Matrix<double, 3, 3> R_gyr, S_gyr, M_gyr;
-      imu_tk::foldRotation(T_gyr, R_gyr, S_gyr, M_gyr);
+      Eigen::Matrix<double, 3, 3> R_gyr, M_gyr, S_gyr;
+      imu_tk::foldRotation(T_gyr, R_gyr, M_gyr, S_gyr);
 
       // Verify reconstruction
       Eigen::Matrix<double, 3, 3> T_gyr_rec = R_gyr * M_gyr * S_gyr;
