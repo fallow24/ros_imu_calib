@@ -10,21 +10,6 @@ using namespace Eigen;
 
 namespace
 {
-
-    template <typename _T>
-    Eigen::Matrix<_T, 3, 3> nearestRotation(const Eigen::Matrix<_T, 3, 3> &M)
-    {
-        Eigen::JacobiSVD<Eigen::Matrix<_T, 3, 3>> svd(M, Eigen::ComputeFullU | Eigen::ComputeFullV);
-        Eigen::Matrix<_T, 3, 3> R = svd.matrixU() * svd.matrixV().transpose();
-        if (R.determinant() < _T(0))
-        {
-            Eigen::Matrix<_T, 3, 3> U = svd.matrixU();
-            U.col(2) *= _T(-1);
-            R = U * svd.matrixV().transpose();
-        }
-        return R;
-    }
-
     // Align accelerometer of sensor j to reference (already calibrated) on paired samples
     template <typename _T1>
     struct MultiSensorAccAlignResidual
