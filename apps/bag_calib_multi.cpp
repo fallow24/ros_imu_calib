@@ -1,13 +1,15 @@
 #include <iostream>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
-#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS // suppress deprecation warning from bag header
 #include <rosbag/bag.h>
 #include <rosbag/view.h>
 #include <sensor_msgs/Imu.h>
-#include <boost/foreach.hpp>
 #include <algorithm>
 #include <unordered_map>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 
 #include "imu_tk/io_utils.h"
 #include "imu_tk/calibration.h"
@@ -20,7 +22,21 @@ using namespace std;
 using namespace imu_tk;
 using namespace Eigen;
 
-#define foreach BOOST_FOREACH
+// Directory utility functions
+bool dirExists(const std::string& path) {
+  struct stat info;
+  if (stat(path.c_str(), &info) != 0) {
+    return false;
+  }
+  return (info.st_mode & S_IFDIR) != 0;
+}
+
+bool createDir(const std::string& path) {
+  if (mkdir(path.c_str(), 0755) == 0) {
+    return true;
+  }
+  return errno == EEXIST;
+}
 
 int main(int argc, char **argv)
 {
@@ -45,11 +61,11 @@ int main(int argc, char **argv)
   int th_variance_min = config["th_variance_min"].as<int>();
   int th_variance_max = config["th_variance_max"].as<int>();
   double initial_static_interval = config["initial_static_interval"].as<double>();
-  double gravity_magnitude      = config["gravity_magnitude"].as<double>();
-  bool use_acc_means            = config["use_acc_means"].as<bool>();
-  double lowpass_hz             = config["lowpass_hz"].as<double>();
-  std::string save_calib_dir    = config["save_calib_dir"].as<std::string>();
-  bool calibrate_extrinsic      = config["calibrate_extrinsic"] ? config["calibrate_extrinsic"].as<bool>() : true;
+  double gravity_magnitude = config["gravity_magnitude"].as<double>();
+  bool use_acc_means = config["use_acc_means"].as<bool>();
+  double lowpass_hz = config["lowpass_hz"].as<double>();
+  std::string save_calib_dir = config["save_calib_dir"].as<std::string>();
+  bool calibrate_extrinsic = config["calibrate_extrinsic"] ? config["calibrate_extrinsic"].as<bool>() : true;
 
   // Validate ref topic
   if (std::find(imu_topics.begin(), imu_topics.end(), imu_ref_topic) == imu_topics.end())
@@ -69,6 +85,24 @@ int main(int argc, char **argv)
     topic_to_idx[imu_topics[idx]] = idx;
   }
 
+  // Check if the save directory exists, if not attempt to create it, if fails exit
+  if (!save_calib_dir.empty())
+  {
+    if (!dirExists(save_calib_dir))
+    {
+      std::cout << "Save directory " << save_calib_dir << " does not exist. Attempting to create it..." << std::endl;
+      if (!createDir(save_calib_dir))
+      {
+        std::cerr << "Failed to create directory " << save_calib_dir << ". Exiting." << std::endl;
+        return -1;
+      }
+      else
+      {
+        std::cout << "Successfully created directory " << save_calib_dir << std::endl;
+      }
+    }
+  }
+
   cout << "Reading the bagfile";
   cout.flush();
   rosbag::Bag bag;
@@ -77,7 +111,7 @@ int main(int argc, char **argv)
   std::vector<std::string> topics = imu_topics;
   int i = 0;
   rosbag::View view(bag, rosbag::TopicQuery(topics));
-  foreach (rosbag::MessageInstance const m, view)
+  for (const rosbag::MessageInstance& m : view)
   {
     // Route data to the correct topic dataset
     auto it = topic_to_idx.find(m.getTopic());
@@ -181,50 +215,50 @@ int main(int argc, char **argv)
     acc_calibs[idx].save(acc_path);
     gyro_calibs[idx].save(gyr_path);
 
-    // Fold accelerometer calibration: T_acc = S_after * M_after
+    // Fold accelerometer calibration: T_acc = M_after * S_after
     {
       Eigen::Matrix<double, 3, 3> T_acc =
-          acc_calibs[idx].getScaleMatrix() * acc_calibs[idx].getMisalignmentMatrix();
+          acc_calibs[idx].getMisalignmentMatrix() * acc_calibs[idx].getScaleMatrix();
       Eigen::Matrix<double, 3, 3> R_acc, S_acc, M_acc;
       imu_tk::foldRotation(T_acc, R_acc, S_acc, M_acc);
 
       // Verify reconstruction
-      Eigen::Matrix<double, 3, 3> T_acc_rec = R_acc * S_acc * M_acc;
+      Eigen::Matrix<double, 3, 3> T_acc_rec = R_acc * M_acc * S_acc;
 
       // Append to accelerometer file as comments
       std::ofstream af(acc_path.c_str(), std::ios::app);
       if (af.is_open())
       {
-        af << "\n# ---- Folded calibration (T = R * S * M) ----\n";
-        imu_tk::appendMatrixComment(af, "T (scale * misalignment):", T_acc);
+        af << "\n# ---- Folded calibration (T = R * M * S) ----\n";
+        imu_tk::appendMatrixComment(af, "T (misalignment * scale):", T_acc);
         imu_tk::appendMatrixComment(af, "R (rotation):", R_acc);
         imu_tk::appendMatrixComment(af, "S (folded scale):", S_acc);
         imu_tk::appendMatrixComment(af, "M (folded misalignment):", M_acc);
-        imu_tk::appendMatrixComment(af, "T reconstructed (R * S * M):", T_acc_rec);
+        imu_tk::appendMatrixComment(af, "T reconstructed (R * M * S):", T_acc_rec);
         af << "# Recon error: " << (T_acc - T_acc_rec).norm() << "\n";
       }
     }
 
-    // Fold gyroscope calibration: T_gyr = S_after * M_after
+    // Fold gyroscope calibration: T_gyr = M_after * S_after
     {
       Eigen::Matrix<double, 3, 3> T_gyr =
-          gyro_calibs[idx].getScaleMatrix() * gyro_calibs[idx].getMisalignmentMatrix();
+          gyro_calibs[idx].getMisalignmentMatrix() * gyro_calibs[idx].getScaleMatrix();
       Eigen::Matrix<double, 3, 3> R_gyr, S_gyr, M_gyr;
       imu_tk::foldRotation(T_gyr, R_gyr, S_gyr, M_gyr);
 
       // Verify reconstruction
-      Eigen::Matrix<double, 3, 3> T_gyr_rec = R_gyr * S_gyr * M_gyr;
+      Eigen::Matrix<double, 3, 3> T_gyr_rec = R_gyr * M_gyr * S_gyr;
 
       // Append to gyroscope file as comments
       std::ofstream gf(gyr_path.c_str(), std::ios::app);
       if (gf.is_open())
       {
-        gf << "\n# ---- Folded calibration (T = R * S * M) ----\n";
-        imu_tk::appendMatrixComment(gf, "T (scale * misalignment):", T_gyr);
+        gf << "\n# ---- Folded calibration (T = R * M * S) ----\n";
+        imu_tk::appendMatrixComment(gf, "T (misalignment * scale):", T_gyr);
         imu_tk::appendMatrixComment(gf, "R (rotation):", R_gyr);
         imu_tk::appendMatrixComment(gf, "S (folded scale):", S_gyr);
         imu_tk::appendMatrixComment(gf, "M (folded misalignment):", M_gyr);
-        imu_tk::appendMatrixComment(gf, "T reconstructed (R * S * M):", T_gyr_rec);
+        imu_tk::appendMatrixComment(gf, "T reconstructed (R * M * S):", T_gyr_rec);
         gf << "# Recon error: " << (T_gyr - T_gyr_rec).norm() << "\n";
       }
     }
@@ -238,16 +272,17 @@ int main(int argc, char **argv)
         ef << "extrinsic: [" << extr_all[idx][0] << ", "
            << extr_all[idx][1] << ", "
            << extr_all[idx][2] << "]" << std::endl;
+
+        std::cout << "Saved calibration for topic " << imu_topics[idx] << " to:\n"
+                  << "  Acc: " << acc_path << "\n"
+                  << "  Gyr: " << gyr_path << std::endl;
       }
       else
       {
         std::cerr << "Failed to open extrinsic output file: " << extr_path << std::endl;
+        std::cerr << "Does the folder exist? If not create it manually." << std::endl;
       }
     }
-
-    std::cout << "Saved calibration for topic " << imu_topics[idx] << " to:\n"
-              << "  Acc: " << acc_path << "\n"
-              << "  Gyr: " << gyr_path << std::endl;
     if (calibrate_extrinsic)
     {
       std::cout << "  Extrinsic: " << extr_path << std::endl;

@@ -165,7 +165,7 @@ If the SVD of a matrix exists, the existence of a polar decomposition is directl
 \mathbf{R}=\mathbf{U}\mathbf{V}^\top, \\
 \mathbf{P}=\mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top.
 \end{align}
-We seek the decomposition $\mathbf{T}=\mathbf{R}\,\mathbf{S}\,\mathbf{M}$ subject to:
+We seek the decomposition $\mathbf{T}=\mathbf{R}\,\mathbf{M}\,\mathbf{S}$ subject to:
 \begin{align}
 \mathbf{R}\in SO(3), \quad \mathbf{S}=\mathrm{diag}(s_1,s_2,s_3), \quad \mathrm{diag}(\mathbf{M})=\vec{1}.
 \end{align}
@@ -176,37 +176,37 @@ Thus, we initialize the diagonal scaling from the singular values
 \end{align}
 compute the misalignment matrix
 \begin{align}
-\mathbf{M}_0=\mathbf{S}_0^{-1}\,\mathbf{P},
+\mathbf{M}_0=\mathbf{P}\,\mathbf{S}_0^{-1},
 \end{align}
 extract the diagonal $\mathbf{D}=\mathrm{diag}(\mathbf{M}_0)$, and fold it into the scale, such that $\mathrm{diag}(\mathbf{M})=\vec{1}$:
 \begin{align}
 \mathbf{S}=\mathbf{S}_0\,\mathbf{D},\label{eq:ssd} \\
 \mathbf{M}=\mathbf{D}^{-1}\,\mathbf{M}_0.\label{eq:mdm}
 \end{align}
-Theoretically, we can now reconstruct $\mathbf{T}=\mathbf{R}\mathbf{S}\mathbf{M}$.
+Theoretically, we can now reconstruct $\mathbf{T}=\mathbf{R}\mathbf{M}\mathbf{S}$.
 However, to minimize numerical error accumulated through floating-point operations in the matrix factorization and inversion, we perform $n_{\mathrm{iter}}$ ($= 3$) iterations of constraint-preserving correction. 
 The residual to minimize is:
 \begin{align}
-\mathbf{E}=\mathbf{T}-\mathbf{R}\mathbf{S}\mathbf{M}.
+\mathbf{E}=\mathbf{T}-\mathbf{R}\mathbf{M}\mathbf{S}.
 \end{align}
 Since $\mathbf{R}$ is fixed from the polar decomposition, we seek an incremental adjustment $\Delta\mathbf{M}$ applied to $\mathbf{M}$, which minimizes the residual.
 Treating the residual as a function of $\mathbf{M}$ and expanding it around the current $\mathbf{M}$ yields:
 \begin{align}
-\mathbf{E}(\mathbf{M}+\Delta\mathbf{M}) &= \mathbf{E}(\mathbf{M}) - \mathbf{R}\mathbf{S}\,\Delta\mathbf{M}.\label{eq:expansion}
+\mathbf{E}(\mathbf{M}+\Delta\mathbf{M}) &= \mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S}.\label{eq:expansion}
 \end{align}
 The residual should vanish, so we set Equation~\eqref{eq:expansion} to zero:
 \begin{align}
-\mathbf{E}(\mathbf{M}) - \mathbf{R}\mathbf{S}\,\Delta\mathbf{M} &\overset{!}{=} \mathbf{0}.
+\mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S} &\overset{!}{=} \mathbf{0}.
 \end{align}
-Since $\mathbf{R}$ is orthogonal, we can solve for $\Delta\mathbf{M}$ by left-multiplying with $(\mathbf{R}\mathbf{S})^{-1} = \mathbf{S}^{-1}\mathbf{R}^\top$:
+Since $\mathbf{R}$ is orthogonal, we can solve for $\Delta\mathbf{M}$ by left-multiplying with $\mathbf{R}^\top$ and right-multiplying with $\mathbf{S}^{-1}$:
 \begin{align}
-\Delta\mathbf{M}= \mathbf{S}^{-1}\mathbf{R}^\top \mathbf{E}.
+\Delta\mathbf{M}= \mathbf{R}^\top \mathbf{E}\mathbf{S}^{-1}.
 \end{align}
 We can then apply the correction:
 \begin{align}
 \mathbf{M}\leftarrow \mathbf{M}+\Delta\mathbf{M}.\label{eq:update}
 \end{align}
-To ensure that the constraint $\mathrm{diag}(\mathbf{M})=\vec{1}$ is still true after applying Equation~\eqref{eq:update}, we need to re-apply Equations~\eqref{eq:ssd} and~\eqref{eq:mdm}:
+To ensure that $\mathrm{diag}(\mathbf{M})=\vec{1}$ is satisfied after applying Equation~\eqref{eq:update}, we need to re-apply Equations~\eqref{eq:ssd} and~\eqref{eq:mdm}:
 \begin{align}
 \mathbf{D}=\mathrm{diag}(\mathbf{M}), \\
 \mathbf{S}\leftarrow \mathbf{S}\mathbf{D}, \\
@@ -225,10 +225,10 @@ The complete description is given in Algorithm~\ref{alg:folding}.
 \EndIf
 \State $\mathbf{P} \gets \mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
 \State $\mathbf{S} \gets \mathrm{diag}(\sigma_1,\sigma_2,\sigma_3)$
-\State $\mathbf{M} \gets \mathbf{S}^{-1}\,\mathbf{P}$
+\State $\mathbf{M} \gets \mathbf{P}\,\mathbf{S}^{-1}$
 \For{$i = 1$ to $n_{\mathrm{iter}}$}
-  \State $\mathbf{E} \gets \mathbf{T} - \mathbf{R}\mathbf{S}\mathbf{M}$
-  \State $\Delta\mathbf{M} \gets \mathbf{S}^{-1}\mathbf{R}^\top\mathbf{E}$
+  \State $\mathbf{E} \gets \mathbf{T} - \mathbf{R}\mathbf{M}\mathbf{S}$
+  \State $\Delta\mathbf{M} \gets \mathbf{R}^\top\mathbf{E}\mathbf{S}^{-1}$
   \State $\mathbf{M} \gets \mathbf{M} + \Delta\mathbf{M}$
   \State $\mathbf{D} \gets \mathrm{diag}(\mathbf{M})$
   \State $\mathbf{S} \gets \mathbf{S}\,\mathbf{D}$

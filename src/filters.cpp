@@ -55,9 +55,9 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
   S(1, 1) = svd.singularValues()(1);
   S(2, 2) = svd.singularValues()(2);
 
-  // We want: P = S * M_final
-  // So: M_final = S^{-1} * P
-  Eigen::Matrix<_T, 3, 3> M_temp = S.inverse() * P;
+  // We want: P = M_final * S (scale applied first)
+  // So: M_final = P * S^{-1}
+  Eigen::Matrix<_T, 3, 3> M_temp = P * S.inverse();
 
   // Extract diagonal from M_temp
   _T diag_m0 = M_temp(0, 0);
@@ -77,15 +77,15 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
 
 
   // Iterative refinement to reduce numerical errors
-  // We want to minimize ||T - R * S * M|| while keeping constraints
+  // We want to minimize ||T - R * M * S|| while keeping constraints
   for (int iter = 0; iter < 3; ++iter)
   {
-    Eigen::Matrix<_T, 3, 3> T_approx = R * S * M;
+    Eigen::Matrix<_T, 3, 3> T_approx = R * M * S;
     Eigen::Matrix<_T, 3, 3> error_matrix = T - T_approx;
 
     // Correct M: fold off-diagonal errors back
-    // M_corrected = M + S^{-1} * R^T * error_matrix
-    Eigen::Matrix<_T, 3, 3> correction = S.inverse() * R.transpose() * error_matrix;
+    // M_corrected = M + R^T * error_matrix * S^{-1}
+    Eigen::Matrix<_T, 3, 3> correction = R.transpose() * error_matrix * S.inverse();
     M += correction;
 
     // Re-normalize M diagonal to 1

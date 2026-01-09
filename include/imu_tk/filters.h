@@ -67,9 +67,10 @@ namespace imu_tk
                                  int win_size = 202);
 
     // Decompose transformation T = R * S * M where:
+    // Decompose T = R * M * S where:
     // - R is a proper rotation matrix (orthogonal, det = +1)
-    // - S is a diagonal scaling matrix
     // - M is a misalignment matrix with 1's on the diagonal
+    // - S is a diagonal scaling matrix (applied first to measurements)
     template <typename _T>
     void foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
                       Eigen::Matrix<_T, 3, 3> &R,

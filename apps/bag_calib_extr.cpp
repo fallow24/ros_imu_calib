@@ -1,6 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 
 #define BOOST_BIND_GLOBAL_PLACEHOLDERS
 #include <rosbag/bag.h>
@@ -19,6 +22,37 @@ using namespace imu_tk;
 using namespace Eigen;
 
 #define foreach BOOST_FOREACH
+
+// Directory utility functions
+bool dirExists(const std::string& path) {
+  struct stat info;
+  if (stat(path.c_str(), &info) != 0) {
+    return false;
+  }
+  return (info.st_mode & S_IFDIR) != 0;
+}
+
+bool createDir(const std::string& path) {
+  if (mkdir(path.c_str(), 0755) == 0) {
+    return true;
+  }
+  return errno == EEXIST;
+}
+
+bool checkPathAndCreateDir(const std::string& filepath) {
+  size_t found = filepath.find_last_of("/\\");
+  if (found != string::npos) {
+    string dir = filepath.substr(0, found);
+    if (!dirExists(dir)) {
+      cout << "Creating directory: " << dir << endl;
+      if (!createDir(dir)) {
+        cerr << "Failed to create directory: " << dir << endl;
+        return false;
+      }
+    }
+  }
+  return true;
+}
 
 int main(int argc, char** argv)
 {
@@ -48,6 +82,11 @@ int main(int argc, char** argv)
   string save_extr_calib        = config["save_extr_calib"].as<string>();
   std::vector<double> extr_init = config["extr_initial_guess"].as<std::vector<double> >();
   double lowpass_hz             = config["lowpass_hz"].as<double>();
+
+  // Check if save directories exist
+  checkPathAndCreateDir(save_acc_calib);
+  checkPathAndCreateDir(save_gyr_calib);
+  checkPathAndCreateDir(save_extr_calib);
 
   vector< TriadData > acc_data, gyro_data;
   
