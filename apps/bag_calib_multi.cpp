@@ -64,6 +64,7 @@ int main(int argc, char **argv)
   double gravity_magnitude = config["gravity_magnitude"].as<double>();
   bool use_acc_means = config["use_acc_means"].as<bool>();
   double lowpass_hz = config["lowpass_hz"].as<double>();
+  bool plot_inspect_static_intervals = config["plot_inspect_static_intervals"] ? config["plot_inspect_static_intervals"].as<bool>() : true;
   std::string save_calib_dir = config["save_calib_dir"].as<std::string>();
   bool calibrate_extrinsic = config["calibrate_extrinsic"] ? config["calibrate_extrinsic"].as<bool>() : true;
 
@@ -155,6 +156,7 @@ int main(int argc, char **argv)
   MultiPosRedundantCalibration mpr_calib;
   // Verbose similar to calibration class
   mpr_calib.enableVerboseOutput(true);
+  mpr_calib.enablePlotting(plot_inspect_static_intervals);
   mpr_calib.setGravityMagnitude(gravity_magnitude);
   mpr_calib.setInitStaticIntervalDuration(initial_static_interval);
   mpr_calib.setIntarvalsNumSamples(num_samples_per_interval);

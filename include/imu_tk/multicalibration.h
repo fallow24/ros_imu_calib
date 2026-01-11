@@ -40,6 +40,7 @@ namespace imu_tk
                 win_size_ += 1;
         }
         void enableVerboseOutput(bool enabled) { verbose_output_ = enabled; }
+        void enablePlotting(bool enabled) { plot_enabled_ = enabled; }
 
         // Multi-topic calibration
         bool calibrateAcc(const std::vector<std::vector<TriadData_<_T>>> &acc_samples_all,
@@ -86,6 +87,7 @@ namespace imu_tk
         _T sigma_;
         int win_size_;
         bool verbose_output_;
+        bool plot_enabled_;
 
         // Persistent per-topic intrinsic calibrators to reuse caches (pre alignment!)
         std::vector<MultiPosCalibration_<_T>> per_topic_calibs_;

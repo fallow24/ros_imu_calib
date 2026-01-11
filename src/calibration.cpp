@@ -204,6 +204,7 @@ template <typename _T>
   gyro_dt_(-1.0),
   optimize_gyro_bias_(false),
   verbose_output_(false),
+  plot_enabled_(true),
   cached_acc_(false),
   cached_gyr_(false),
   cached_extr_(false)
@@ -328,18 +329,31 @@ template <typename _T>
   
   if(verbose_output_) 
   {
-    Plot plot;
-    plot.plotIntervals( calib_acc_samples_, min_cost_static_intervals_);
-    
-    cout<<"Accelerometers calibration: Better calibration obtained using threshold multiplier "<<min_cost_th
-        <<" with residual "<<min_cost<<endl
-        <<acc_calib_<<endl
-        <<"Accelerometers calibration: inverse scale factors:"<<endl
-        <<1.0/acc_calib_.scaleX()<<endl
-        <<1.0/acc_calib_.scaleY()<<endl
-        <<1.0/acc_calib_.scaleZ()<<endl;
-        
-    waitForKey();
+    if(plot_enabled_)
+    {
+      Plot plot;
+      plot.plotIntervals( calib_acc_samples_, min_cost_static_intervals_);
+      
+      cout<<"Accelerometers calibration: Better calibration obtained using threshold multiplier "<<min_cost_th
+          <<" with residual "<<min_cost<<endl
+          <<acc_calib_<<endl
+          <<"Accelerometers calibration: inverse scale factors:"<<endl
+          <<1.0/acc_calib_.scaleX()<<endl
+          <<1.0/acc_calib_.scaleY()<<endl
+          <<1.0/acc_calib_.scaleZ()<<endl;
+      
+      waitForKey();
+    }
+    else
+    {
+      cout<<"Accelerometers calibration: Better calibration obtained using threshold multiplier "<<min_cost_th
+          <<" with residual "<<min_cost<<endl
+          <<acc_calib_<<endl
+          <<"Accelerometers calibration: inverse scale factors:"<<endl
+          <<1.0/acc_calib_.scaleX()<<endl
+          <<1.0/acc_calib_.scaleY()<<endl
+          <<1.0/acc_calib_.scaleZ()<<endl;
+    }
   }
   cached_acc_ = true; // mark accelerometer calibration as cached
   return true;

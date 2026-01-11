@@ -14,5 +14,6 @@ initial_static_interval: 60.0     # duration (in s) of the initial static interv
 gravity_magnitude: 9.814          # magnitude of the local gravity vector
 use_acc_means: true               # use mean accelerometer values for gyro calibration 
 lowpass_hz : 2                    # lowpass filter frequency cutoff for (noisy) derivative
+plot_inspect_static_intervals: false   # enable plotting and manual inspection of static intervals
 calibrate_extrinsic: true         # enable extrinsic calibration (will create extr_<TOPICNAME>.txt)
 save_calib_dir: "/home/fabi/catkin_ws/src/ros_imu_calib/data/redundant_imu"

@@ -10,6 +10,7 @@ initial_static_interval: 60.0     # duration (in s) of the initial static interv
 gravity_magnitude: 9.814          # magnitude of the local gravity vector
 use_acc_means: true               # use mean accelerometer values for gyro calibration 
 lowpass_hz : 2                    # lowpass filter frequency cutoff for (noisy) derivative
+plot_inspect_static_intervals: true   # enable plotting and manual inspection of static intervals
 extr_initial_guess : [0.0, 0.0, 0.0]    # initial guess of the extrinsic offset to robot base 
 save_acc_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/acc_calib0.txt"
 save_gyr_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/gyr_calib0.txt"

@@ -43,6 +43,7 @@ int main(int argc, char** argv)
   double initial_static_interval = config["initial_static_interval"].as<double>();
   double gravity_magnitude      = config["gravity_magnitude"].as<double>();
   bool use_acc_means            = config["use_acc_means"].as<bool>();
+  bool plot_inspect_static_intervals = config["plot_inspect_static_intervals"] ? config["plot_inspect_static_intervals"].as<bool>() : true;
   string save_acc_calib         = config["save_acc_calib"].as<string>();
   string save_gyr_calib         = config["save_gyr_calib"].as<string>();
 
@@ -97,6 +98,7 @@ int main(int argc, char** argv)
   mp_calib.setInitGyroCalibration( init_gyro_calib );
   mp_calib.setGravityMagnitude(gravity_magnitude);
   mp_calib.enableVerboseOutput(true);
+  mp_calib.enablePlotting(plot_inspect_static_intervals);
   mp_calib.enableAccUseMeans(use_acc_means);
   mp_calib.setGyroDataPeriod(1.0 / imu_frequency_hz);
   mp_calib.calibrateAccGyro(acc_data, gyro_data, 

@@ -333,6 +333,9 @@ public:
   /** @brief If the parameter enabled is true, verbose output is activeted  */   
   void enableVerboseOutput( bool enabled ){ verbose_output_ = enabled; };
   
+  /** @brief If the parameter enabled is true, plotting and user inspection is activated  */   
+  void enablePlotting( bool enabled ){ plot_enabled_ = enabled; };
+  
   /** @brief Estimate the calibration parameters for the acceleremoters triad 
    *         (see CalibratedTriad_) using the multi-position calibration method
    * 
@@ -433,6 +436,7 @@ private:
   _T sigma_;
   int win_size_;
   bool verbose_output_;
+  bool plot_enabled_;
 
   // Caching flags to avoid recomputing if results already available
   bool cached_acc_;

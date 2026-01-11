@@ -119,7 +119,8 @@ MultiPosRedundantCalibration_<_T>::MultiPosRedundantCalibration_()
       lowpass_frequency_cut_(2),
       sigma_(_T(0)),
       win_size_(5),
-      verbose_output_(false)
+      verbose_output_(false),
+      plot_enabled_(true)
 {
 }
 
@@ -152,6 +153,7 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
         calib_single.setIntarvalsNumSamples(interval_n_samples_);
         calib_single.enableAccUseMeans(acc_use_means_);
         calib_single.enableVerboseOutput(verbose_output_);
+        calib_single.enablePlotting(plot_enabled_);
 
         if (!calib_single.isAccCached())
         {
@@ -270,6 +272,7 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         if (lowpass_frequency_cut_ > 0)
             calib_single.setLowpassFreq(lowpass_frequency_cut_);
         calib_single.enableVerboseOutput(verbose_output_);
+        calib_single.enablePlotting(plot_enabled_);
 
         if (!calib_single.isGyroCached())
         {
@@ -405,22 +408,15 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyroExtrinsic(
         }
         else
         {
-            // For non-reference sensors, decompose the after calibration directly
-            // T = M_after * S_after = Rotation * M_fold * S_fold 
-
+            // use foldRotation to get the rotation part to ref
             const auto &after = gyro_calibs_[i];
-            const auto &before = per_topic_calibs_[i].getGyroCalib();
+            Eigen::Matrix<_T, 3, 3> R, M, S;
+            Eigen::Matrix<_T, 3, 3> T_gyro = after.getMisalignmentMatrix() * after.getScaleMatrix();
 
-            Eigen::Matrix<_T, 3, 3> M_after = after.getMisalignmentMatrix();
-            Eigen::Matrix<_T, 3, 3> S_after = after.getScaleMatrix();
-            Eigen::Matrix<_T, 3, 3> M_before = before.getMisalignmentMatrix();
-            Eigen::Matrix<_T, 3, 3> S_before = before.getScaleMatrix();
+            imu_tk::foldRotation(T_gyro, R, M, S);
 
-            // Diff transform from before to after (applies to extrinsic vector)
-            Eigen::Matrix<_T, 3, 3> T_diff = (M_after * S_after) * (M_before * S_before).inverse();
-
-            // Apply transformation to the extrinsic vector
-            Eigen::Matrix<_T, 3, 1> extr_i_aligned = T_diff * extr_i_local;
+            // Apply rotation to the extrinsic vector
+            Eigen::Matrix<_T, 3, 1> extr_i_aligned = R * extr_i_local;
 
             extrinsic_vectors_[i] = {
                 extr_i_aligned(0),

@@ -10,5 +10,6 @@ initial_static_interval: 60.0     # duration (in s) of the initial static interv
 gravity_magnitude: 1.0            # magnitude of the gravity vector
 use_acc_means: true               # use mean accelerometer values for gyro calibration 
 lowpass_hz : 5                    # lowpass filter frequency cutoff for (noisy) derivative
+plot_inspect_static_intervals: true   # enable plotting and manual inspection of static intervals
 save_acc_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/acc_calib1.txt"
 save_gyr_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/gyr_calib1.txt"
