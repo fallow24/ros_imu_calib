@@ -1,4 +1,4 @@
-bag_file: "/home/fabi/Documents/Bagfiles/2025-10-06-14-34-10.bag"
+bag_file: "~/Documents/Bagfiles/calib_imus_final.bag"
 imu_topics:
   - "/imu/0/raw"
   - "/imu/1/raw"

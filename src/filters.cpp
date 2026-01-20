@@ -114,6 +114,15 @@ void imu_tk::foldRotation(const Eigen::Matrix<_T, 3, 3> &T,
               << ", Determinant: " << det_R << std::endl;
   }
 
+  // Check reconstruction error
+  Eigen::Matrix<_T, 3, 3> T_reconstructed = R * M * S;
+  _T reconstruction_error = (T - T_reconstructed).norm();
+  if (reconstruction_error > _T(1e-5))
+  {
+    std::cerr << "Warning: High reconstruction error in foldRotation: "
+              << reconstruction_error << std::endl;
+  }
+
 }
 
 template <typename _T>

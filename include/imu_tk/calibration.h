@@ -416,6 +416,15 @@ public:
    *         calibrateAccGyro() ) */
   const std::vector< TriadData_<_T> >& getCalibGyroSamples() const { return calib_gyro_samples_; };
   
+  /** @brief Provide the static intervals detected during accelerometer calibration.
+   *         If not yet computed, they will be calculated on demand. */
+  const std::vector< DataInterval >& getStaticIntervals(const std::vector< TriadData_<_T> >& acc_samples,
+                                                        int variance_win_size = 202,
+                                                        int th_mult = 5);
+
+  /** @brief Provide the static samples extracted during accelerometer calibration.
+   *         Should be called after calibrateAcc(). */
+  const std::vector< TriadData_<_T> >& getStaticSamples() const { return min_cost_static_samples_; };
 
 private:
   
@@ -427,6 +436,7 @@ private:
   _T gyro_dt_;
   bool optimize_gyro_bias_;
   std::vector< DataInterval > min_cost_static_intervals_;
+  std::vector< TriadData_<_T> > min_cost_static_samples_;
   CalibratedTriad_<_T> init_acc_calib_, init_gyro_calib_;
   CalibratedTriad_<_T> acc_calib_, gyro_calib_;
   std::vector< TriadData_<_T> > calib_acc_samples_, calib_gyro_samples_;

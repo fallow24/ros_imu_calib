@@ -8,105 +8,50 @@
 using namespace imu_tk;
 using namespace Eigen;
 
-namespace
+// Gyro-only rotation alignment residual
+// Optimizes rotation R (3 params: axis-angle on SO(3) manifold)
+// T = R * M * S where M and S are fixed from intrinsic calibration
+// Gyro provides full 3-DOF rotation observability
+// The resulting R is then applied to both gyro and acc (same chip)
+template <typename _T1>
+struct GyroRotationAlignResidual
 {
-    // Align accelerometer of sensor j to reference (already calibrated) on paired samples
-    template <typename _T1>
-    struct MultiSensorAccAlignResidual
+    GyroRotationAlignResidual(
+        const TriadData_<_T1> &ref_gyr,        // Reference calibrated gyro
+        const TriadData_<_T1> &other_gyr_raw,  // Other raw gyro
+        const Eigen::Matrix<_T1, 3, 3> &M_gyr, // Fixed gyro misalignment
+        const Eigen::Matrix<_T1, 3, 3> &S_gyr, // Fixed gyro scale
+        const Eigen::Matrix<_T1, 3, 1> &B_gyr) // Fixed gyro bias
+        : ref_gyr_(ref_gyr), other_gyr_raw_(other_gyr_raw),
+          M_gyr_(M_gyr), S_gyr_(S_gyr), B_gyr_(B_gyr)
     {
-        MultiSensorAccAlignResidual(const TriadData_<_T1> &ref,
-                                    const TriadData_<_T1> &other,
-                                    const Eigen::Matrix<_T1, 3, 1> &other_bias)
-            : ref_(ref), other_(other), other_bias_(other_bias) {}
-        template <typename _T2>
-        bool operator()(const _T2 *const params, _T2 *residuals) const
-        {
-            // params: 9 elements of unconstrained 3x3 transformation matrix (row-major)
-            Eigen::Map<const Eigen::Matrix<_T2, 3, 3, Eigen::RowMajor>> T(params);
+    }
 
-            // Apply transformation: T * (raw - bias)
-            Eigen::Matrix<_T2, 3, 1> v_oth0 = other_.data().template cast<_T2>() - other_bias_.template cast<_T2>();
-            Eigen::Matrix<_T2, 3, 1> v_other = T * v_oth0;
-            // Reference data should be already calibrated
-            Eigen::Matrix<_T2, 3, 1> v_ref = ref_.data().template cast<_T2>();
-            // Residual is mere difference
-            Eigen::Matrix<_T2, 3, 1> diff = v_other - v_ref;
-            residuals[0] = diff(0);
-            residuals[1] = diff(1);
-            residuals[2] = diff(2);
-            return true;
-        }
-        const TriadData_<_T1> ref_, other_;
-        const Eigen::Matrix<_T1, 3, 1> other_bias_;
-    };
-
-    // Align gyro of sensor j to reference (already calibrated) on paired samples
-    template <typename _T1>
-    struct MultiSensorGyroAlignResidual
+    template <typename _T2>
+    bool operator()(const _T2 *const axis_angle, _T2 *residuals) const
     {
-        MultiSensorGyroAlignResidual(const TriadData_<_T1> &ref,
-                                     const TriadData_<_T1> &other,
-                                     const Eigen::Matrix<_T1, 3, 1> &other_bias)
-            : ref_(ref), other_(other), other_bias_(other_bias) {}
-        template <typename _T2>
-        bool operator()(const _T2 *const params, _T2 *residuals) const
-        {
-            // params: 9 elements of unconstrained 3x3 transformation matrix (row-major)
-            Eigen::Map<const Eigen::Matrix<_T2, 3, 3, Eigen::RowMajor>> T(params);
+        // Convert axis-angle to rotation matrix using Ceres helper
+        _T2 R_data[9];
+        ceres::AngleAxisToRotationMatrix(axis_angle, R_data);
+        Eigen::Map<const Eigen::Matrix<_T2, 3, 3, Eigen::ColMajor>> R(R_data);
 
-            // Apply transformation: T * (raw - bias)
-            Eigen::Matrix<_T2, 3, 1> v_oth0 = other_.data().template cast<_T2>() - other_bias_.template cast<_T2>();
-            Eigen::Matrix<_T2, 3, 1> v_other = T * v_oth0;
-            // Reference data should be already calibrated
-            Eigen::Matrix<_T2, 3, 1> v_ref = ref_.data().template cast<_T2>();
-            // Residual is mere difference
-            Eigen::Matrix<_T2, 3, 1> diff = v_other - v_ref;
-            residuals[0] = diff(0);
-            residuals[1] = diff(1);
-            residuals[2] = diff(2);
-            return true;
-        }
-        const TriadData_<_T1> ref_, other_;
-        const Eigen::Matrix<_T1, 3, 1> other_bias_;
-    };
+        // T_gyr = R * M_gyr * S_gyr
+        Eigen::Matrix<_T2, 3, 3> T_gyr = R * M_gyr_.template cast<_T2>() * S_gyr_.template cast<_T2>();
+        Eigen::Matrix<_T2, 3, 1> v_gyr_raw = other_gyr_raw_.data().template cast<_T2>() - B_gyr_.template cast<_T2>();
+        Eigen::Matrix<_T2, 3, 1> v_gyr = T_gyr * v_gyr_raw;
+        Eigen::Matrix<_T2, 3, 1> diff = v_gyr - ref_gyr_.data().template cast<_T2>();
 
-    // Simple extrinsic residual aligning centrifugal correction between ref and other
-    template <typename _T1>
-    struct MultiSensorExtrinsicResidual
-    {
-        MultiSensorExtrinsicResidual(const TriadData_<_T1> &ref_acc,
-                                     const TriadData_<_T1> &ref_gyr,
-                                     const TriadData_<_T1> &ref_dw,
-                                     const TriadData_<_T1> &acc,
-                                     const TriadData_<_T1> &gyr,
-                                     const TriadData_<_T1> &dw,
-                                     _T1 g_mag)
-            : ref_acc_(ref_acc), ref_gyr_(ref_gyr), ref_dw_(ref_dw),
-              acc_(acc), gyr_(gyr), dw_(dw), g_mag_(g_mag) {}
-        template <typename _T2>
-        bool operator()(const _T2 *const params, _T2 *residuals) const
-        {
-            Eigen::Matrix<_T2, 3, 1> extr(params[0], params[1], params[2]);
-            auto comp = [&](const TriadData_<_T1> &a, const TriadData_<_T1> &g, const TriadData_<_T1> &d)
-            {
-                Eigen::Matrix<_T2, 3, 1> acc = a.data().template cast<_T2>();
-                Eigen::Matrix<_T2, 3, 1> w = g.data().template cast<_T2>();
-                Eigen::Matrix<_T2, 3, 1> dw = d.data().template cast<_T2>();
-                return acc - dw.cross(extr) - w.cross(w.cross(extr));
-            };
-            Eigen::Matrix<_T2, 3, 1> ref_corr = comp(ref_acc_, ref_gyr_, ref_dw_);
-            Eigen::Matrix<_T2, 3, 1> oth_corr = comp(acc_, gyr_, dw_);
-            Eigen::Matrix<_T2, 3, 1> diff = oth_corr - ref_corr;
-            residuals[0] = diff(0);
-            residuals[1] = diff(1);
-            residuals[2] = diff(2);
-            return true;
-        }
-        const TriadData_<_T1> ref_acc_, ref_gyr_, ref_dw_, acc_, gyr_, dw_;
-        const _T1 g_mag_;
-    };
+        residuals[0] = diff(0);
+        residuals[1] = diff(1);
+        residuals[2] = diff(2);
 
-} // namespace
+        return true;
+    }
+
+    const TriadData_<_T1> ref_gyr_, other_gyr_raw_;
+    const Eigen::Matrix<_T1, 3, 3> M_gyr_, S_gyr_;
+    const Eigen::Matrix<_T1, 3, 1> B_gyr_;
+};
 
 template <typename _T>
 MultiPosRedundantCalibration_<_T>::MultiPosRedundantCalibration_()
@@ -167,70 +112,9 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAcc(
         acc_calibs_[i] = calib_single.getAccCalib();
     }
 
-    // Align others to reference using residuals
-    std::cout << "-------------------- ALLIGNING ACCELEROMETERS TO REF ------------------------" << std::endl;
-    const auto &ref_samples = acc_samples_all[reference_index];
-    CalibratedTriad_<_T> ref_calib = acc_calibs_[reference_index];
-    for (size_t i = 0; i < acc_samples_all.size(); ++i)
-    {
-        if (i == reference_index)
-            continue;
-
-        // Use 9 parameters: unconstrained 3x3 transformation matrix (row-major)
-        std::vector<double> params(9);
-        // Initialize with current transformation T = M * S
-        Eigen::Matrix<_T, 3, 3> T_init = acc_calibs_[i].getMisalignmentMatrix() * acc_calibs_[i].getScaleMatrix();
-        // Store in row-major order
-        for (int row = 0; row < 3; ++row)
-            for (int col = 0; col < 3; ++col)
-                params[row * 3 + col] = static_cast<double>(T_init(row, col));
-
-        const auto &before_acc = per_topic_calibs_[i].getAccCalib();
-        Eigen::Matrix<_T, 3, 1> other_bias_acc = before_acc.getBiasVector();
-
-        ceres::Problem problem;
-        size_t n = std::min(ref_samples.size(), acc_samples_all[i].size());
-        for (size_t k = 0; k < n; ++k)
-        {
-            ceres::CostFunction *cost_function =
-                new ceres::AutoDiffCostFunction<MultiSensorAccAlignResidual<_T>, 3, 9>(
-                    new MultiSensorAccAlignResidual<_T>(ref_calib.unbiasNormalize(ref_samples[k]),
-                                                        acc_samples_all[i][k],
-                                                        other_bias_acc));
-            problem.AddResidualBlock(cost_function, nullptr, params.data());
-        }
-        ceres::Solver::Options options;
-        // options.linear_solver_type = ceres::DENSE_QR;
-        // options.max_num_iterations = 200;
-        // options.minimizer_progress_to_stdout = verbose_output_;
-
-        // Rather use overkill
-        options.max_num_iterations = 5000;
-        options.function_tolerance = 1e-24;
-        options.gradient_tolerance = 1e-28;
-        options.parameter_tolerance = 1e-26;
-        options.max_linear_solver_iterations = 10000;
-        options.linear_solver_type = ceres::DENSE_QR;
-        options.minimizer_progress_to_stdout = verbose_output_;
-        ceres::Solver::Summary summary;
-        ceres::Solve(options, &problem, &summary);
-
-        // Rebuild triad from optimized 3x3 matrix, use foldRotation to extract R, M, S
-        Eigen::Matrix<_T, 3, 1> B_before_acc = before_acc.getBiasVector();
-        Eigen::Matrix<_T, 3, 3> T_opt;
-        for (int row = 0; row < 3; ++row)
-            for (int col = 0; col < 3; ++col)
-                T_opt(row, col) = static_cast<_T>(params[row * 3 + col]);
-        
-        // Use foldRotation to decompose T = R * M * S (scale applied first)
-        Eigen::Matrix<_T, 3, 3> R_opt, M_opt, S_opt;
-        imu_tk::foldRotation(T_opt, R_opt, M_opt, S_opt);
-        
-        // Apply rotation as additional transformation: final_mis = R * M
-        // Store as (R*M) * S with proper misalignment and scale
-        Eigen::Matrix<_T, 3, 3> final_mis = R_opt * M_opt;
-        acc_calibs_[i] = CalibratedTriad_<_T>(final_mis, S_opt, B_before_acc);
-    }
+    // NOTE: Accelerometer alignment is deferred to calibrateAccGyroExtrinsic
+    // where we have gyro data and extrinsic vectors for motion compensation.
+    // At this stage we only have intrinsic calibration per sensor.
     return true;
 }
 
@@ -286,45 +170,55 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         gyro_calibs_[i] = calib_single.getGyroCalib();
     }
 
-    // Align gyros to reference
-    std::cout << "---------------------- ALIGNING GYROS TO REF ------------------------" << std::endl;
-    const auto &ref_samples = gyro_samples_all[reference_index];
-    CalibratedTriad_<_T> ref_calib = gyro_calibs_[reference_index];
+    // -------------------------------------------------------------------------
+    // Gyro-only rotation alignment on SO(3) manifold (axis-angle)
+    // M and S are fixed from intrinsic calibration
+    // The resulting R is applied to both gyro and acc (same chip)
+    // -------------------------------------------------------------------------
+    std::cout << "---------------------- ALIGNING GYRO TO REF (SO(3)) ------------------------" << std::endl;
+
+    // Reference calibrated samples
+    const auto &ref_gyr_calib = per_topic_calibs_[reference_index].getCalibGyroSamples();
+
     for (size_t i = 0; i < gyro_samples_all.size(); ++i)
     {
         if (i == reference_index)
             continue;
 
-        // Use 9 parameters: unconstrained 3x3 transformation matrix (row-major)
-        std::vector<double> params(9);
-        // Initialize with current transformation T = M * S
-        Eigen::Matrix<_T, 3, 3> T_init = gyro_calibs_[i].getMisalignmentMatrix() * gyro_calibs_[i].getScaleMatrix();
-        // Store in row-major order
-        for (int row = 0; row < 3; ++row)
-            for (int col = 0; col < 3; ++col)
-                params[row * 3 + col] = static_cast<double>(T_init(row, col));
+        std::cout << "Aligning sensor " << i << " to reference " << reference_index << std::endl;
 
-        const auto &before_gyr = per_topic_calibs_[i].getGyroCalib();
-        Eigen::Matrix<_T, 3, 1> other_bias_gyr = before_gyr.getBiasVector();
+        // Get intrinsic calibrations (M, S, B) for this sensor
+        const auto &gyr_calib = per_topic_calibs_[i].getGyroCalib();
+        const auto &acc_calib = per_topic_calibs_[i].getAccCalib();
+
+        Eigen::Matrix<_T, 3, 3> M_gyr = gyr_calib.getMisalignmentMatrix();
+        Eigen::Matrix<_T, 3, 3> S_gyr = gyr_calib.getScaleMatrix();
+        Eigen::Matrix<_T, 3, 1> B_gyr = gyr_calib.getBiasVector();
+
+        Eigen::Matrix<_T, 3, 3> M_acc = acc_calib.getMisalignmentMatrix();
+        Eigen::Matrix<_T, 3, 3> S_acc = acc_calib.getScaleMatrix();
+        Eigen::Matrix<_T, 3, 1> B_acc = acc_calib.getBiasVector();
+
+        // Initialize rotation from identity (axis-angle = [0,0,0])
+        std::vector<double> axis_angle(3, 0.0);
 
         ceres::Problem problem;
-        size_t n = std::min(ref_samples.size(), gyro_samples_all[i].size());
+
+        // Use gyro samples only for rotation optimization
+        size_t n = std::min(ref_gyr_calib.size(), gyro_samples_all[i].size());
+
         for (size_t k = 0; k < n; ++k)
         {
             ceres::CostFunction *cost_function =
-                new ceres::AutoDiffCostFunction<MultiSensorGyroAlignResidual<_T>, 3, 9>(
-                    new MultiSensorGyroAlignResidual<_T>(ref_calib.unbiasNormalize(ref_samples[k]),
-                                                         gyro_samples_all[i][k],
-                                                         other_bias_gyr));
-            problem.AddResidualBlock(cost_function, nullptr, params.data());
+                new ceres::AutoDiffCostFunction<GyroRotationAlignResidual<_T>, 3, 3>(
+                    new GyroRotationAlignResidual<_T>(
+                        ref_gyr_calib[k],       // Reference calibrated gyro
+                        gyro_samples_all[i][k], // Other raw gyro
+                        M_gyr, S_gyr, B_gyr));  // Fixed gyro intrinsics
+            problem.AddResidualBlock(cost_function, nullptr, axis_angle.data());
         }
+
         ceres::Solver::Options options;
-
-        // options.linear_solver_type = ceres::DENSE_QR;
-        // options.max_num_iterations = 200;
-        // options.minimizer_progress_to_stdout = verbose_output_;
-
-        // Use overkill options instead:
         options.max_num_iterations = 5000;
         options.function_tolerance = 1e-24;
         options.gradient_tolerance = 1e-28;
@@ -336,21 +230,30 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyro(
         ceres::Solver::Summary summary;
         ceres::Solve(options, &problem, &summary);
 
-        // Rebuild triad from optimized 3x3 matrix, use foldRotation to extract R, M, S
-        Eigen::Matrix<_T, 3, 1> B_before_gyr = before_gyr.getBiasVector();
-        Eigen::Matrix<_T, 3, 3> T_opt;
-        for (int row = 0; row < 3; ++row)
-            for (int col = 0; col < 3; ++col)
-                T_opt(row, col) = static_cast<_T>(params[row * 3 + col]);
-        
-        // Use foldRotation to decompose T = R * M * S (scale applied first)
-        Eigen::Matrix<_T, 3, 3> R_opt, M_opt, S_opt;
-        imu_tk::foldRotation(T_opt, R_opt, M_opt, S_opt);
-        
-        // Apply rotation as additional transformation: final_mis = R * M
-        // Store as (R*M) * S with proper misalignment and scale
-        Eigen::Matrix<_T, 3, 3> final_mis = R_opt * M_opt;
-        gyro_calibs_[i] = CalibratedTriad_<_T>(final_mis, S_opt, B_before_gyr);
+        if (verbose_output_)
+            std::cout << summary.BriefReport() << std::endl;
+
+        // Convert optimized axis-angle to rotation matrix
+        double R_data[9];
+        ceres::AngleAxisToRotationMatrix(axis_angle.data(), R_data);
+        Eigen::Map<Eigen::Matrix<double, 3, 3, Eigen::ColMajor>> R_opt_d(R_data);
+        Eigen::Matrix<_T, 3, 3> R_opt = R_opt_d.template cast<_T>();
+
+        // Build final calibrations: T = R * M * S
+        // Store as combined misalignment (R*M) and scale S
+        Eigen::Matrix<_T, 3, 3> final_mis_gyr = R_opt * M_gyr;
+        Eigen::Matrix<_T, 3, 3> final_mis_acc = R_opt * M_acc;
+
+        gyro_calibs_[i] = CalibratedTriad_<_T>(final_mis_gyr, S_gyr, B_gyr);
+        acc_calibs_[i] = CalibratedTriad_<_T>(final_mis_acc, S_acc, B_acc);
+
+        // Print rotation info
+        double angle = std::sqrt(axis_angle[0] * axis_angle[0] +
+                                 axis_angle[1] * axis_angle[1] +
+                                 axis_angle[2] * axis_angle[2]);
+        std::cout << "  Optimized rotation: axis-angle=[" << axis_angle[0] << ", "
+                  << axis_angle[1] << ", " << axis_angle[2] << "], angle="
+                  << (angle * 180.0 / M_PI) << " deg" << std::endl;
     }
 
     return true;
@@ -432,6 +335,9 @@ bool MultiPosRedundantCalibration_<_T>::calibrateAccGyroExtrinsic(
             }
         }
     }
+
+    // Accelerometer alignment is now done in calibrateAccGyro() with combined SO(3) optimization
+    // No separate accelerometer alignment needed here
 
     return true;
 }

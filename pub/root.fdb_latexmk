@@ -1,11 +1,10 @@
 # Fdb version 4
-["dvipdf"] 1767974970.61297 "root.dvi" "root.pdf" "root" 1767974970.80563 0
-  "root.dvi" 1767974970.59208 17976 7c518dec2450635cde5320b1b18eea54 "latex"
+["dvipdf"] 1768922508.85471 "root.dvi" "root.pdf" "root" 1768922509.07924 0
+  "root.dvi" 1768922508.8326 34300 4f89bd59b5871ccd7deb216323fe4482 "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1767974970.32146 "./root.tex" "root.dvi" "root" 1767974970.80512 0
-  "./root.tex" 1767974966.58774 15256 bad3721741828e93ae7bcde30ec32b0b ""
+["latex"] 1768922508.56737 "root.tex" "root.dvi" "root" 1768922509.07863 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -65,8 +64,8 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/web2c/pdftex/latex.fmt" 1742823642 8212925 a0a949188b751869d33c8261e9198b86 ""
   "IEEEtran.cls" 1763646362.46884 288451 2ca944e3837f3f55e325ddfd2f1a2479 ""
-  "root.aux" 1767974970.59124 2628 dc102c6eb358a3e7cf01ce1e064ac99b "latex"
-  "root.tex" 1767974966.58774 15256 bad3721741828e93ae7bcde30ec32b0b ""
+  "root.aux" 1768922508.8316 4003 1ee3d0cb29fe59cda38da79821c7b1bd "latex"
+  "root.tex" 1768922507.41861 30843 1135a1928678d024241e0e5bb224af21 ""
   (generated)
   "root.aux"
   "root.dvi"

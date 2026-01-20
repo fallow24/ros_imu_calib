@@ -30,13 +30,21 @@
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
 
+\DeclareMathOperator{\atantwo}{atan2}
+\DeclareMathOperator{\asin}{asin}
+\DeclareMathOperator{\acos}{acos}
+\DeclareMathOperator{\QuatEuler}{Quat2Euler}
+\DeclareMathOperator{\EulerQuat}{Euler2Quat}
+\DeclareMathOperator{\QuatYaw}{Quat2Yaw}
+\DeclareMathOperator{\SLERP}{SLERP}
+
 \begin{document}
 
 
-%\title{Compensation of Motion Acceleration \\for Inertial Sensing in Attitude Estimation Filters}
+\title{Calibration of Motion Acceleration and Multi-IMU \\ without External Equipment for Attitude Estimation Filters}
 
 % % BETTER! (?):
-\title{Calibration of Motion Acceleration and Redundant IMU \\without External Equipment for Attitude Estimation Filters }
+%\title{Calibration of Motion Acceleration and Redundant IMU \\without External Equipment for Attitude Estimation Filters }
 
 \author{Fabian Arzberger and Andreas N{\"u}chter
         % <-this % stops a space
@@ -98,23 +106,68 @@ Here will be some references about offline and online IMU calibration.
 None of these calibrate the extrinsic base-to-IMU vector.
 
 \section{Method}
-Here will be the description of the method
+It is our goal to correct the accelerometer measurement, i.e., subtract the accelerations due to linear and angular motion, such that only the gravity component remains.
+This will benefit the downstream attitude estimation, which relies on the direction of gravity.
+The accelerometer
+
 \subsection{Derivation of the Model}\label{ssec:derivation}
-This will be the full derivation of the model including some math.
+In this Section we derive the model describing the centripetal and tangential forces acting on the sensor, resulting from a non-uniform circular motion.
+Let $\vec{r}$ be the offset of the sensor from the center of rotation and let $\vec{\omega}$ be its angular velocity.
+The linear velocity of the sensor following the circular trajectory is
+\begin{align}
+  \vec{v} = \dot{\vec{r}} = \vec{\omega} \times \vec{r} \, .
+\end{align}
+Taking the derviative with respect to time results in the linear acceleration: 
+\begin{align}
+  \vec{a} &= \dot{\vec{v}} \\
+  &= \dot{\vec{\omega}} \times \vec{r} \, + \, \vec{\omega} \times \dot{\vec{r}} \\
+  &= \dot{\vec{\omega}} \times \vec{r} \, + \, \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right) \label{eq:forces}
+\end{align}
+An accelerometer measures the gravity in negative direction, e.g., a sensor laying flat on a desk measures the upwards force from the desk pushing against gravity.
+Thus, we extend~\eqref{eq:forces} by subtracting gravity as measured by the accelerometer, $\vec{a}_g$.
+Rearranging for $\vec{a}_g$ yields
 \begin{equation}
-  \vec{a}_g = \vec{\omega} \times \vec{\omega} \times \vec{r} \, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, \vec{a}
+  \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right) \, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, \vec{a} \, ,
 \end{equation}
+where $\vec{a}$ is the measurement of the accelerometer.
 \subsection{Developing the Model for Spherical Systems}
 The previous Section~\ref{ssec:derivation} only considers the accelerations due to rotation of the system.
 This Section will develop the model including the linear motion of the platform as well, using the example of a spherical mobile mapping system with radius $R$ that rolls without slippage on a surface with normal vector $\vec{n}$.
+In that case, let $\vec{r}$ be the position of the sensor inside the rolling ball, composed of $\vec{r}_e$, pointing from the center of the ball to the sensor, and $\vec{r}_c$, the position of the balls center:
+\begin{align}
+  \vec{r} = \vec{r}_e + \vec{r}_c \,.
+\end{align}
+The same considerations from the previous Section~\ref{ssec:derivation} apply to $\vec{r_e}$, i.e.
+\begin{align}
+  \vec{v}_e &= \dot{\vec{r}}_e = \vec{\omega} \times \vec{r} \, ,\\
+  \vec{a}_e &= \dot{\vec{v}}_e = \dot{\vec{\omega}} \times \vec{r} \, + \, \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right) \, .
+\end{align}
+The linear velocity of the balls center, rolling without slippage, is
+\begin{align}
+  \vec{v}_c = \dot{\vec{r}}_c = \left( R \cdot \vec{\omega} \right) \times \vec{n} \,.
+\end{align}
+Taking the derivative with constant ball radius $R$ yields
+\begin{align}
+  \vec{a}_c = \dot{\vec{v}}_c = ( R \cdot \dot{\vec{\omega}} ) \times \vec{n} \, + \, \left( R \cdot \vec{\omega} \right) \times \dot{\vec{n}} \,.
+\end{align}
+We assume that the ground surface normal $\vec{n}$ is approximatley constant between short time steps, i.e., $\dot{\vec{n}} \approx 0$, thus 
+\begin{align}
+  \vec{a}_c = ( R \cdot \dot{\vec{\omega}} ) \times \vec{n} \,.
+\end{align}
+The combined acceleration of the sensor, excluding gravity, consequently is 
+\begin{align}
+  \vec{a} &= \ddot{\vec{r}} = \ddot{\vec{r}}_e + \ddot{\vec{r}}_c = \vec{a}_e + \vec{a}_c \\
+  &= \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right)\, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, R \cdot \dot{\vec{\omega}} \times \vec{n}\,.
+\end{align}
+Including the measured gravity $\vec{a}_g$ as done in Section~\ref{ssec:derivation} and rearranging yields
 \begin{equation}
-  \vec{a}_g = \vec{\omega} \times \vec{\omega} \times \vec{r} \, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, R \cdot \dot{\vec{\omega}} \times \vec{n} \, - \, \vec{a} 
+  \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right)\, + \, \dot{\vec{\omega}} \times \vec{r} \, - \, R \cdot \dot{\vec{\omega}} \times \vec{n} \, - \, \vec{a} \,.
 \end{equation}
-\subsection{Intrinsic and Extrinsic IMU calibration}\label{ssec:imucalib}
+\subsection{Calibration Method}\label{ssec:imucalib}
 This section will develop the method for extrinsic calibration after introducing briefly the intrinsic calibration, based on imutk 2014.
 The cost function that implements the error $E$ based on $K$ measurments is:
 \begin{align}
-  E(\vec{a}, \vec{\omega}, \vec{r}\,) &= \sum_{k=0}^{K} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_k \times \vec{\omega}_k \times \vec{r} + \dot{\vec{\omega}}_k \times \vec{r} - \vec{a}_k}^2}^2\\ 
+  E(\vec{a}, \vec{\omega}, \vec{r}\,) &= \sum_{k=0}^{K} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_k \times \left( \vec{\omega}_k \times \vec{r} \right) + \dot{\vec{\omega}}_k \times \vec{r} - \vec{a}_k}^2}^2\\ 
   \vec{r}_{extr} &= \argmin_{\vec{r}} \left( E(\vec{a}, \vec{\omega}, \vec{r}\,) \right)
 \end{align}
 \subsection{Implementation of Discrete Derivative}
@@ -122,7 +175,7 @@ Here we will implement the derivative of a discrete, noisy signal which is neede
 Illustrate the problem with naive numerical derivative and introduce Derivative of Gaussian (DoG) filter.
 Tradeoff between time-lag and smoothness. 
 Maybe also compare with Savgol and moving exponential weighted average.  
-\subsection{Multi-IMU calibration}\label{ssec:multicalib}
+\subsection{Multi-IMU Extrinsic Calibration}\label{ssec:multicalib}
 After the intrinsic and extrinsic parameters for each individual IMU have been found according to Section~\ref{ssec:imucalib}, we now want all IMUs to provide measurements in the same coordinate system. 
 Thus, in this subsection we will derive an approach to calibrate multiple IMUs to one reference IMU, without using external reference sensors such as LiDAR or cameras.
 That is, for each individual IMU, we want to find the extrinsic rotation paramters that transform their measurements into the coordinate system of the reference IMU.
@@ -130,7 +183,7 @@ However, there is now additional information available from the reference IMU th
 In contrast, we assume that the estimation of the bias $\vec{b}$ is sufficient from the intrinsic calibration, i.e., we exclude it from the following optimization problem.
 This means that the result of the calibration method presented is a transformation matrix $\mathbf{T}~\in~\mathbb{R}^{3\times3}$ which we will decompose into a rotation~$\mathbf{R}~\in~SO(3)$, misalignment~$\mathbf{M}~\in~\mathbb{R}^{3\times3},~\text{diag}(\mathbf{M}) = \vec{1}$, and scale $\mathbf{S} = \text{diag}(s_1,s_2,s_3)$.
 
-\subsubsection{Optimization problem}
+\subsubsection{Optimization Problem}
 
 To this end, let $\vec{v}_{i} \in \mathbf{V}_i$ be a calibrated measurement of the $i$-th IMU, and let $\vec{v}_{ref} \in \mathbf{V}_{ref}$ be the corresponding calibrated measurement of the reference IMU, such that the total number of measurements for each IMU is $K = \abs{\mathbf{V}_i} = \abs{\mathbf{V}_{ref}}$.
 We rewrite the calibrated non-reference measurement in terms of a transformation matrix $\mathbf{T}$, previously calibrated bias $\vec{b}$, and raw measurement $\vec{\widetilde{v}}_i$ similar to imutk2014, as 
@@ -148,99 +201,244 @@ The resulting transformation matrix can be used as is, i.e., we could directly m
 However, many applications require explicit knowledge about the intrinsic and extrinsic parameters seperatley.
 Thus, in the next section we decompose $\mathbf{T}_{opt} = \mathbf{R} \cdot \mathbf{M} \cdot \mathbf{S}$, with a polar decomposition using singular value decomposition (SVD).
 
-\subsubsection{Folding rotation with polar decomposition}
+% \subsubsection{Folding rotation with polar decomposition}
 
-Given a calibration transform $\mathbf{T}\in\mathbb{R}^{3\times 3}$, we compute its SVD
-\begin{align}
-\mathbf{T}=\mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top,\quad
-\boldsymbol{\Sigma}=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),\quad \sigma_i>0.
-\end{align}
-The polar decomposition yields
-\begin{align}
-\mathbf{T}=\mathbf{R}\,\mathbf{P},
-\end{align}
-where $\mathbf{R}$ is orthogonal and $\mathbf{P}$ is symmetric positive definite.
-If the SVD of a matrix exists, the existence of a polar decomposition is directly implied, having the form:
-\begin{align}
-\mathbf{R}=\mathbf{U}\mathbf{V}^\top, \\
-\mathbf{P}=\mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top.
-\end{align}
-We seek the decomposition $\mathbf{T}=\mathbf{R}\,\mathbf{M}\,\mathbf{S}$ subject to:
-\begin{align}
-\mathbf{R}\in SO(3), \quad \mathbf{S}=\mathrm{diag}(s_1,s_2,s_3), \quad \mathrm{diag}(\mathbf{M})=\vec{1}.
-\end{align}
-Since $\mathbf{T}=\mathbf{R}\mathbf{P}$ with $\mathbf{R}$ already being orthogonal, we must extract $\mathbf{M}$ and $\mathbf{S}$ from $\mathbf{P}$. 
-Thus, we initialize the diagonal scaling from the singular values
-\begin{align}
-\mathbf{S}_0=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),
-\end{align}
-compute the misalignment matrix
-\begin{align}
-\mathbf{M}_0=\mathbf{P}\,\mathbf{S}_0^{-1},
-\end{align}
-extract the diagonal $\mathbf{D}=\mathrm{diag}(\mathbf{M}_0)$, and fold it into the scale, such that $\mathrm{diag}(\mathbf{M})=\vec{1}$:
-\begin{align}
-\mathbf{S}=\mathbf{S}_0\,\mathbf{D},\label{eq:ssd} \\
-\mathbf{M}=\mathbf{D}^{-1}\,\mathbf{M}_0.\label{eq:mdm}
-\end{align}
-Theoretically, we can now reconstruct $\mathbf{T}=\mathbf{R}\mathbf{M}\mathbf{S}$.
-However, to minimize numerical error accumulated through floating-point operations in the matrix factorization and inversion, we perform $n_{\mathrm{iter}}$ ($= 3$) iterations of constraint-preserving correction. 
-The residual to minimize is:
-\begin{align}
-\mathbf{E}=\mathbf{T}-\mathbf{R}\mathbf{M}\mathbf{S}.
-\end{align}
-Since $\mathbf{R}$ is fixed from the polar decomposition, we seek an incremental adjustment $\Delta\mathbf{M}$ applied to $\mathbf{M}$, which minimizes the residual.
-Treating the residual as a function of $\mathbf{M}$ and expanding it around the current $\mathbf{M}$ yields:
-\begin{align}
-\mathbf{E}(\mathbf{M}+\Delta\mathbf{M}) &= \mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S}.\label{eq:expansion}
-\end{align}
-The residual should vanish, so we set Equation~\eqref{eq:expansion} to zero:
-\begin{align}
-\mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S} &\overset{!}{=} \mathbf{0}.
-\end{align}
-Since $\mathbf{R}$ is orthogonal, we can solve for $\Delta\mathbf{M}$ by left-multiplying with $\mathbf{R}^\top$ and right-multiplying with $\mathbf{S}^{-1}$:
-\begin{align}
-\Delta\mathbf{M}= \mathbf{R}^\top \mathbf{E}\mathbf{S}^{-1}.
-\end{align}
-We can then apply the correction:
-\begin{align}
-\mathbf{M}\leftarrow \mathbf{M}+\Delta\mathbf{M}.\label{eq:update}
-\end{align}
-To ensure that $\mathrm{diag}(\mathbf{M})=\vec{1}$ is satisfied after applying Equation~\eqref{eq:update}, we need to re-apply Equations~\eqref{eq:ssd} and~\eqref{eq:mdm}:
-\begin{align}
-\mathbf{D}=\mathrm{diag}(\mathbf{M}), \\
-\mathbf{S}\leftarrow \mathbf{S}\mathbf{D}, \\
-\mathbf{M}\leftarrow \mathbf{D}^{-1}\mathbf{M}.
-\end{align}
-The complete description is given in Algorithm~\ref{alg:folding}.
-\begin{algorithm}
-\caption{Folding into rotation, misalignment, and scale}
-\label{alg:folding}
-\begin{algorithmic}  
-\State \textbf{Input:} Transformation matrix $\mathbf{T} \in \mathbb{R}^{3 \times 3}$
-\State Compute SVD: $\mathbf{T} = \mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
-\State $\mathbf{R} \gets \mathbf{U}\mathbf{V}^\top$
-\If{$\det(\mathbf{R}) < 0$}
-  \State Flip sign of third column of $\mathbf{R}$
-\EndIf
-\State $\mathbf{P} \gets \mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
-\State $\mathbf{S} \gets \mathrm{diag}(\sigma_1,\sigma_2,\sigma_3)$
-\State $\mathbf{M} \gets \mathbf{P}\,\mathbf{S}^{-1}$
-\For{$i = 1$ to $n_{\mathrm{iter}}$}
-  \State $\mathbf{E} \gets \mathbf{T} - \mathbf{R}\mathbf{M}\mathbf{S}$
-  \State $\Delta\mathbf{M} \gets \mathbf{R}^\top\mathbf{E}\mathbf{S}^{-1}$
-  \State $\mathbf{M} \gets \mathbf{M} + \Delta\mathbf{M}$
-  \State $\mathbf{D} \gets \mathrm{diag}(\mathbf{M})$
-  \State $\mathbf{S} \gets \mathbf{S}\,\mathbf{D}$
-  \State $\mathbf{M} \gets \mathbf{D}^{-1}\,\mathbf{M}$
-\EndFor
-\State \Return $\mathbf{R}, \mathbf{M}, \mathbf{S}$
-\end{algorithmic}
-\end{algorithm}
+% Given a calibration transform $\mathbf{T}\in\mathbb{R}^{3\times 3}$, we compute its SVD
+% \begin{align}
+% \mathbf{T}=\mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top,\quad
+% \boldsymbol{\Sigma}=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),\quad \sigma_i>0.
+% \end{align}
+% The polar decomposition yields
+% \begin{align}
+% \mathbf{T}=\mathbf{R}\,\mathbf{P},
+% \end{align}
+% where $\mathbf{R}$ is orthogonal and $\mathbf{P}$ is symmetric positive definite.
+% If the SVD of a matrix exists, the existence of a polar decomposition is directly implied, having the form:
+% \begin{align}
+% \mathbf{R}=\mathbf{U}\mathbf{V}^\top, \\
+% \mathbf{P}=\mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top.
+% \end{align}
+% We seek the decomposition $\mathbf{T}=\mathbf{R}\,\mathbf{M}\,\mathbf{S}$ subject to:
+% \begin{align}
+% \mathbf{R}\in SO(3), \quad \mathbf{S}=\mathrm{diag}(s_1,s_2,s_3), \quad \mathrm{diag}(\mathbf{M})=\vec{1}.
+% \end{align}
+% Since $\mathbf{T}=\mathbf{R}\mathbf{P}$ with $\mathbf{R}$ already being orthogonal, we must extract $\mathbf{M}$ and $\mathbf{S}$ from $\mathbf{P}$. 
+% Thus, we initialize the diagonal scaling from the singular values
+% \begin{align}
+% \mathbf{S}_0=\mathrm{diag}(\sigma_1,\sigma_2,\sigma_3),
+% \end{align}
+% compute the misalignment matrix
+% \begin{align}
+% \mathbf{M}_0=\mathbf{P}\,\mathbf{S}_0^{-1},
+% \end{align}
+% extract the diagonal $\mathbf{D}=\mathrm{diag}(\mathbf{M}_0)$, and fold it into the scale, such that $\mathrm{diag}(\mathbf{M})=\vec{1}$:
+% \begin{align}
+% \mathbf{S}=\mathbf{S}_0\,\mathbf{D},\label{eq:ssd} \\
+% \mathbf{M}=\mathbf{D}^{-1}\,\mathbf{M}_0.\label{eq:mdm}
+% \end{align}
+% Theoretically, we can now reconstruct $\mathbf{T}=\mathbf{R}\mathbf{M}\mathbf{S}$.
+% However, to minimize numerical error accumulated through floating-point operations in the matrix factorization and inversion, we perform $n_{\mathrm{iter}}$ ($= 3$) iterations of constraint-preserving correction. 
+% The residual to minimize is:
+% \begin{align}
+% \mathbf{E}=\mathbf{T}-\mathbf{R}\mathbf{M}\mathbf{S}.
+% \end{align}
+% Since $\mathbf{R}$ is fixed from the polar decomposition, we seek an incremental adjustment $\Delta\mathbf{M}$ applied to $\mathbf{M}$, which minimizes the residual.
+% Treating the residual as a function of $\mathbf{M}$ and expanding it around the current $\mathbf{M}$ yields:
+% \begin{align}
+% \mathbf{E}(\mathbf{M}+\Delta\mathbf{M}) &= \mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S}.\label{eq:expansion}
+% \end{align}
+% The residual should vanish, so we set Equation~\eqref{eq:expansion} to zero:
+% \begin{align}
+% \mathbf{E}(\mathbf{M}) - \mathbf{R}\,\Delta\mathbf{M}\mathbf{S} &\overset{!}{=} \mathbf{0}.
+% \end{align}
+% Since $\mathbf{R}$ is orthogonal, we can solve for $\Delta\mathbf{M}$ by left-multiplying with $\mathbf{R}^\top$ and right-multiplying with $\mathbf{S}^{-1}$:
+% \begin{align}
+% \Delta\mathbf{M}= \mathbf{R}^\top \mathbf{E}\mathbf{S}^{-1}.
+% \end{align}
+% We can then apply the correction:
+% \begin{align}
+% \mathbf{M}\leftarrow \mathbf{M}+\Delta\mathbf{M}.\label{eq:update}
+% \end{align}
+% To ensure that $\mathrm{diag}(\mathbf{M})=\vec{1}$ is satisfied after applying Equation~\eqref{eq:update}, we need to re-apply Equations~\eqref{eq:ssd} and~\eqref{eq:mdm}:
+% \begin{align}
+% \mathbf{D}=\mathrm{diag}(\mathbf{M}), \\
+% \mathbf{S}\leftarrow \mathbf{S}\mathbf{D}, \\
+% \mathbf{M}\leftarrow \mathbf{D}^{-1}\mathbf{M}.
+% \end{align}
+% The complete description is given in Algorithm~\ref{alg:folding}.
+% \begin{algorithm}
+% \caption{Folding into rotation, misalignment, and scale}
+% \label{alg:folding}
+% \begin{algorithmic}  
+% \State \textbf{Input:} Transformation matrix $\mathbf{T} \in \mathbb{R}^{3 \times 3}$
+% \State Compute SVD: $\mathbf{T} = \mathbf{U}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
+% \State $\mathbf{R} \gets \mathbf{U}\mathbf{V}^\top$
+% \If{$\det(\mathbf{R}) < 0$}
+%   \State Flip sign of third column of $\mathbf{R}$
+% \EndIf
+% \State $\mathbf{P} \gets \mathbf{V}\,\boldsymbol{\Sigma}\,\mathbf{V}^\top$
+% \State $\mathbf{S} \gets \mathrm{diag}(\sigma_1,\sigma_2,\sigma_3)$
+% \State $\mathbf{M} \gets \mathbf{P}\,\mathbf{S}^{-1}$
+% \For{$i = 1$ to $n_{\mathrm{iter}}$}
+%   \State $\mathbf{E} \gets \mathbf{T} - \mathbf{R}\mathbf{M}\mathbf{S}$
+%   \State $\Delta\mathbf{M} \gets \mathbf{R}^\top\mathbf{E}\mathbf{S}^{-1}$
+%   \State $\mathbf{M} \gets \mathbf{M} + \Delta\mathbf{M}$
+%   \State $\mathbf{D} \gets \mathrm{diag}(\mathbf{M})$
+%   \State $\mathbf{S} \gets \mathbf{S}\,\mathbf{D}$
+%   \State $\mathbf{M} \gets \mathbf{D}^{-1}\,\mathbf{M}$
+% \EndFor
+% \State \Return $\mathbf{R}, \mathbf{M}, \mathbf{S}$
+% \end{algorithmic}
+% \end{algorithm}
 
 \section{Experiments and Evaluation}
 Here we will show some experiments and evaluate them.
 Ther will be a lot of figures.
+\subsection{Attitude Estimation Algorithms}\label{ssec:imufilters}
+The following sections briefly introduce the mathematical outline of the tested algorithms.
+For a more detailed derivation refer to the original papers. % TODO cite
+Some algorithms presented below employ quaternion propagation using the skew-symmetric matrix representation of angular velocity. 
+For a given angular velocity vector $\boldsymbol{\omega} = [\omega_x, \omega_y, \omega_z]^T$, this operation is defined as:
+\begin{equation}
+\boldsymbol{\Omega}(\boldsymbol{\omega}) = \begin{bmatrix} 0 & -\omega_x & -\omega_y & -\omega_z \\ \omega_x & 0 & \omega_z & -\omega_y \\ \omega_y & -\omega_z & 0 & \omega_x \\ \omega_z & \omega_y & -\omega_x & 0 \end{bmatrix}
+\label{eq:omega_matrix}
+\end{equation}
+
+Additionally, the algorithms employ several standard quaternion operations, such as ``$\QuatEuler$'' or ``$\EulerQuat$''. 
+The conversion from a quaternion $\mathbf{q} = [q_w, q_x, q_y, q_z]$ to Euler angles (roll $r$, pitch $p$, yaw $y$) is given by:
+\begin{align}
+r &= \atantwo\left(\,2(q_w q_x + q_y q_z),\, 1 - 2(q_x^2 + q_y^2)\,\right) \\
+p &= \asin\left(\,2(q_w q_y - q_z q_x)\,\right) \\
+y &= \atantwo\left(\,2(q_w q_z + q_x q_y),\, 1 - 2(q_y^2 + q_z^2)\,\right)
+\label{eq:quat2euler}
+\end{align}
+
+The inverse operation converting Euler angles to a quaternion is:
+\begin{equation}
+\mathbf{q} = \begin{bmatrix} \cos(\frac{r}{2})\cos(\frac{p}{2})\cos(\frac{y}{2}) + \sin(\frac{r}{2})\sin(\frac{p}{2})\sin(\frac{y}{2}) \\ \sin(\frac{r}{2})\cos(\frac{p}{2})\cos(\frac{y}{2}) - \cos(\frac{r}{2})\sin(\frac{p}{2})\sin(\frac{y}{2}) \\ \cos(\frac{r}{2})\sin(\frac{p}{2})\cos(\frac{y}{2}) + \sin(\frac{r}{2})\cos(\frac{p}{2})\sin(\frac{y}{2}) \\ \cos(\frac{r}{2})\cos(\frac{p}{2})\sin(\frac{y}{2}) - \sin(\frac{r}{2})\sin(\frac{p}{2})\cos(\frac{y}{2}) \end{bmatrix}
+\label{eq:euler2quat}
+\end{equation}
+
+Spherical linear interpolation (SLERP) between two quaternions $\mathbf{q}_1$ and $\mathbf{q}_2$ with interpolation parameter $t \in [0,1]$ is defined as:
+\begin{equation}
+\theta = \acos( \mathbf{q}_1 \cdot \mathbf{q}_2 )
+\label{eq:slerp_theta}
+\end{equation}
+\begin{equation}
+\text{SLERP}(\mathbf{q}_1, \mathbf{q}_2, t) = \frac{\sin((1-t)\theta)}{\sin(\theta)}\mathbf{q}_1 + \frac{\sin(t\theta)}{\sin(\theta)}\mathbf{q}_2
+\label{eq:slerp}
+\end{equation}
+
+\subsubsection{Complementary-Filter}
+The complementary filter fuses gyroscope and accelerometer measurements by blending them. 
+The quaternion is first propagated using gyroscope integration, then corrected using accelerometer measurements through Euler angle extraction and SLERP blending.
+As shown in Algorithm~\ref{alg:complementary}, the algorithm requires the current acceleration measurement $\mathbf{a}$, angular velocity $\boldsymbol{\omega}$, a blending weight $\alpha$ that controls the relative contribution of accelerometer corrections, a time step $dt$, and the previous quaternion estimate $\mathbf{q}_p$. It produces the updated quaternion estimate $\mathbf{q}_n$.
+\begin{algorithm}
+\caption{Complementary Filter}
+\label{alg:complementary}
+\begin{algorithmic}
+\Require{$\mathbf{a}$ (accelerometer), $\boldsymbol{\omega}$ (gyroscope), $\alpha$, $dt$, $\mathbf{q}_p$}
+\Ensure{$\mathbf{q}_n$}
+\State $\dot{\mathbf{q}}_{g} \gets \frac{1}{2}\mathbf{q}_p \otimes \boldsymbol{\omega}$
+\State $\mathbf{q}_{g} \gets \mathbf{q}_p + \dot{\mathbf{q}}_{g} \cdot dt$
+\State $\mathbf{a}_{c} \gets \mathbf{a} - \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) - \dot{\boldsymbol{\omega}} \times \mathbf{r}$
+\State $\mathbf{a}_{n} \gets \frac{\mathbf{a}_{c}}{\norm{\mathbf{a}_{c}}}$
+\State $r_a \gets \atantwo(a_{y,n}, a_{z,n})$
+\State $p_a \gets \atantwo(-a_{x,n}, \sqrt{a_{y,n}^2 + a_{z,n}^2})$
+\State $y \gets \QuatYaw(\mathbf{q}_{g})$
+\State $\mathbf{q}_{a} \gets \EulerQuat(r_a, p_a, y)$
+\State $\mathbf{q}_n \gets \SLERP(\mathbf{q}_{g}, \mathbf{q}_{a}, \alpha)$
+\State $\mathbf{q}_n \gets \frac{\mathbf{q}_n}{\norm{\mathbf{q}_n}}$
+\end{algorithmic}
+\end{algorithm}
+\subsubsection{Madgwick-Filter}
+The Madgwick filter combines gyroscope integration with gradient descent-based accelerometer correction. 
+The gradient direction is computed as the normalized error quaternion representing the rotation needed to align measured acceleration with expected gravity.
+Algorithm~\ref{alg:madgwick} shows that the algorithm requires the acceleration measurement $\mathbf{a}$, angular velocity $\boldsymbol{\omega}$, a proportional gain $\beta$ that controls the strength of accelerometer correction, the time step $dt$, and the previous quaternion $\mathbf{q}_p$. The output is the updated quaternion estimate $\mathbf{q}_n$.
+\begin{algorithm}
+\caption{Madgwick Filter}
+\label{alg:madgwick}
+\begin{algorithmic}
+\Require{$\mathbf{a}$, $\boldsymbol{\omega}$, $\beta$, $dt$, $\mathbf{q}_p$}
+\Ensure{$\mathbf{q}_n$}
+\State $\mathbf{a}_{c} \gets \mathbf{a} - \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) - \dot{\boldsymbol{\omega}} \times \mathbf{r}$
+\State $\mathbf{a}_{n} \gets \frac{\mathbf{a}_{c}}{\norm{\mathbf{a}_{c}}}$
+\State $\mathbf{e} \gets \mathbf{a}_{n} \times \mathbf{g}_{e}$
+\State $\dot{\mathbf{q}}_{c} \gets \beta \frac{\mathbf{e}_{q}}{\norm{\mathbf{e}_{q}}}$
+\State $\dot{\mathbf{q}} \gets \frac{1}{2}\mathbf{q}_p \otimes \boldsymbol{\omega} - \dot{\mathbf{q}}_{c}$
+\State $\mathbf{q}_n \gets \mathbf{q}_p + \dot{\mathbf{q}} \cdot dt$
+\State $\mathbf{q}_n \gets \frac{\mathbf{q}_n}{\norm{\mathbf{q}_n}}$
+\end{algorithmic}
+\end{algorithm}
+\subsubsection{Autogain-Filter}
+The Autogain filter is a hybrid approach combining Madgwick gradient descent with complementary filtering. 
+It adaptively adjusts both the Madgwick gain and complementary blending factor based on rotation rate magnitude, reducing accelerometer reliance during high-rate motion.
+According to Algorithm~\ref{alg:autogain}, the algorithm takes the acceleration measurement $\mathbf{a}$, angular velocity $\boldsymbol{\omega}$, base gain parameters $\beta_0$ and $\alpha_0$, the time step $dt$, and the previous quaternion $\mathbf{q}_p$. These are combined to compute adaptive gains that vary with motion intensity. The algorithm produces the updated quaternion estimate $\mathbf{q}_n$.
+\begin{algorithm}
+\caption{Autogain Filter}
+\label{alg:autogain}
+\begin{algorithmic}
+\Require{$\mathbf{a}$, $\boldsymbol{\omega}$, $\beta_0$, $\alpha_0$, $dt$, $\mathbf{q}_p$}
+\Ensure{$\mathbf{q}_n$}
+\State $f_i \gets \min((0.05 \cdot \omega_i)^2, 1)$ for $i \in \{x,y,z\}$
+\State $m \gets \max(f_x, f_y, f_z)$
+\State $\beta \gets \max(0.01 \cdot \beta_0 \cdot m, 0.1)$
+\State $\alpha \gets \alpha_0 \, (1 - m)$
+\State $\mathbf{a}_{c} \gets \mathbf{a} - \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) - \dot{\boldsymbol{\omega}} \times \mathbf{r}$
+\State $\mathbf{a}_{n} \gets \frac{\mathbf{a}_{c}}{\norm{\mathbf{a}_{c}}}$
+\State $r_a \gets \atantwo(a_{y,n}, a_{z,n})$
+\State $p_a \gets \atantwo(-a_{x,n}, \sqrt{a_{y,n}^2 + a_{z,n}^2})$
+\State $\mathbf{g}_{e} \gets 2\begin{bmatrix} q_x q_z - q_w q_y \\ q_y q_z + q_w q_x \\ \frac{1}{2} - q_x^2 - q_y^2 \end{bmatrix}$
+\State $\mathbf{e} \gets \mathbf{a}_{n} \times \mathbf{g}_{e}$
+\State $\dot{\mathbf{q}}_{m} \gets \frac{1}{2}\mathbf{q}_p \otimes \boldsymbol{\omega} - \beta \frac{\mathbf{e}_{q}}{\norm{\mathbf{e}_{q}}}$
+\State $\mathbf{q}_{m} \gets \frac{\mathbf{q}_p + \dot{\mathbf{q}}_{m} \cdot dt}{\norm{\mathbf{q}_p + \dot{\mathbf{q}}_{m} \cdot dt}}$
+\State $y \gets \QuatYaw(\mathbf{q}_{m})$
+\State $\mathbf{q}_{a} \gets \EulerQuat(r_a, p_a, y)$
+\State $\mathbf{q}_n \gets \SLERP(\mathbf{q}_{m}, \mathbf{q}_{a}, \alpha)$
+\State $\mathbf{q}_n \gets \frac{\mathbf{q}_n}{\norm{\mathbf{q}_n}}$
+\end{algorithmic}
+\end{algorithm}
+\subsubsection{Extended-Quaternion-Kalman-Filter}
+The Extended Quaternion Kalman Filter models orientation as a nonlinear state estimation problem. 
+The filter separates prediction using gyroscope integration and correction using accelerometer measurements. 
+Centripetal and tangential accelerations are compensated before measurement update.
+As presented in Algorithm~\ref{alg:ekf}, the algorithm requires the acceleration measurement $\mathbf{a}$, angular velocity $\boldsymbol{\omega}$, noise covariance parameters $\sigma_g$ for gyroscope and $\sigma_a$ for accelerometer, the time step $dt$, the lever-arm vector $\mathbf{r}$ from the rotation center to the sensor, the previous quaternion estimate $\mathbf{q}_p$, and the previous covariance matrix $\mathbf{P}_p$. Quaternion propagation uses the skew-symmetric matrix defined in Equation~\eqref{eq:omega_matrix}. It produces both the updated quaternion estimate $\mathbf{q}$ and the updated covariance matrix $\mathbf{P}$.
+\begin{algorithm}
+\caption{Extended Quaternion Kalman Filter}\label{alg:ekf}\begin{algorithmic}
+\Require{$\mathbf{a}$, $\boldsymbol{\omega}$, $\sigma_g$, $\sigma_a$, $dt$, $\mathbf{r}$, $\mathbf{q}_p$, $\mathbf{P}_p$}
+\Ensure{$\mathbf{q}$, $\mathbf{P}$}
+\State $\mathbf{a}_{c} \gets \mathbf{a} - \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) - \dot{\boldsymbol{\omega}} \times \mathbf{r}$
+\State $\Phi \gets \mathbf{I} + \frac{1}{2} \, dt \, \boldsymbol{\Omega}(\boldsymbol{\omega})$
+\State $\mathbf{q}_{p} \gets \frac{\Phi \, \mathbf{q}_p}{\norm{\Phi \, \mathbf{q}_p}}$
+\State $\mathbf{F} \gets \Phi$
+\State $\mathbf{P}_{p} \gets \mathbf{F} \mathbf{P}_p \mathbf{F}^T + (\sigma_g^2) \mathbf{W} \mathbf{W}^T$
+\State $\mathbf{z} \gets \frac{\mathbf{a}_{c}}{\norm{\mathbf{a}_{c}}}$
+\State $\mathbf{y}_{p} \gets 2\begin{bmatrix} q_x q_z - q_w q_y \\ q_y q_z + q_w q_x \\ \frac{1}{2} - q_x^2 - q_y^2 \end{bmatrix}$
+\State $\mathbf{H} \gets \nabla \mathbf{y}(\mathbf{q}_{p})$
+\State $\mathbf{S} \gets \mathbf{H} \mathbf{P}_{p} \mathbf{H}^T + (\sigma_a^2) \mathbf{I}$
+\State $\mathbf{K} \gets \mathbf{P}_{p} \mathbf{H}^T \mathbf{S}^{-1}$
+\State $\mathbf{q} \gets \frac{\mathbf{q}_{p} + \mathbf{K}(\mathbf{z} - \mathbf{y}_{p})}{\norm{\mathbf{q}_{p} + \mathbf{K}(\mathbf{z} - \mathbf{y}_{p})}}$
+\State $\mathbf{P} \gets (\mathbf{I} - \mathbf{K} \mathbf{H}) \mathbf{P}_{p}$
+\end{algorithmic}
+\end{algorithm}
+\subsubsection{Mahony-Filter}
+The Mahony filter uses a proportional-integral (PI) control scheme to correct gyroscope integration. 
+The accelerometer provides gravity reference, and centripetal/tangential corrections are subtracted from measurements before computing the error term.
+Algorithm~\ref{alg:mahony} outlines that the algorithm requires the acceleration measurement $\mathbf{a}$, angular velocity $\boldsymbol{\omega}$, proportional and integral gains $K_p$ and $K_i$ for the PI controller, the time step $dt$, the lever-arm vector $\mathbf{r}$, the previous quaternion estimate $\mathbf{q}_p$, and the previous gyroscope bias estimate $\mathbf{b}_p$. Quaternion integration is performed using the skew-symmetric matrix operation given in Equation~\eqref{eq:omega_matrix}. It produces the updated quaternion $\mathbf{q}$ and the updated gyroscope bias estimate $\mathbf{b}$.
+\begin{algorithm}
+\caption{Mahony Filter}\label{alg:mahony}\begin{algorithmic}
+\Require{$\mathbf{a}$, $\boldsymbol{\omega}$, $K_p$, $K_i$, $dt$, $\mathbf{r}$, $\mathbf{q}_p$, $\mathbf{b}_p$}
+\Ensure{$\mathbf{q}$, $\mathbf{b}$}
+\State $\mathbf{a}_{c} \gets \mathbf{a} - \boldsymbol{\omega} \times (\boldsymbol{\omega} \times \mathbf{r}) - \dot{\boldsymbol{\omega}} \times \mathbf{r}$
+\State $\mathbf{a}_{u} \gets \frac{\mathbf{a}_{c}}{\norm{\mathbf{a}_{c}}}$
+\State $\mathbf{g}_{e} \gets 2\begin{bmatrix} q_x q_z - q_w q_y \\ q_y q_z + q_w q_x \\ \frac{1}{2} - q_x^2 - q_y^2 \end{bmatrix}$
+\State $\mathbf{e} \gets \mathbf{a}_{u} \times \mathbf{g}_{e}$
+\State $\mathbf{b} \gets \mathbf{b}_p + K_i \, \mathbf{e} \, dt$
+\State $\boldsymbol{\omega}_{c} \gets \boldsymbol{\omega} + K_p \, \mathbf{e} - \mathbf{b}$
+\State $\Phi \gets \mathbf{I} + \frac{1}{2} \, dt \, \boldsymbol{\Omega}(\boldsymbol{\omega}_{c})$
+\State $\mathbf{q} \gets \frac{\Phi \, \mathbf{q}_p}{\norm{\Phi \, \mathbf{q}_p}}$
+\end{algorithmic}
+\end{algorithm}
 \subsection{Simulation}
 Introduce the simulation model, e.g. noise, random walk, bias, scale, etc...
 \subsection{Real-World}

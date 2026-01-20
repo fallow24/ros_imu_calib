@@ -220,6 +220,7 @@ template <typename _T>
   cout<<"Accelerometers calibration: calibrating..."<<endl;
   
   min_cost_static_intervals_.clear();
+  min_cost_static_samples_.clear();
   calib_acc_samples_.clear();
   calib_gyro_samples_.clear();
   
@@ -298,6 +299,7 @@ template <typename _T>
       min_cost = summary.final_cost;
       min_cost_th = th_mult;
       min_cost_static_intervals_ = extracted_intervals;
+      min_cost_static_samples_ = static_samples;
       min_cost_calib_params = acc_calib_params;
     }
     cout<<"residual "<<summary.final_cost<<endl;
@@ -603,6 +605,32 @@ template <typename _T>
   }
   cached_extr_ = true; // mark extrinsic calibration as cached
   return true;
+}
+
+template <typename _T>
+  const std::vector< DataInterval >& MultiPosCalibration_<_T>::getStaticIntervals(
+    const std::vector< TriadData_<_T> >& acc_samples,
+    int variance_win_size,
+    int th_mult)
+{
+  // If static intervals are already computed and cached, return them
+  if (!min_cost_static_intervals_.empty())
+  {
+    return min_cost_static_intervals_;
+  }
+  
+  // Otherwise, compute static intervals now
+  DataInterval init_static_interval = DataInterval::initialInterval(acc_samples, init_interval_duration_);
+  Eigen::Matrix<_T, 3, 1> acc_variance = dataVariance(acc_samples, init_static_interval);
+  _T norm_th = acc_variance.norm();
+  
+  std::vector< DataInterval > static_intervals;
+  staticIntervalsDetector(acc_samples, th_mult * norm_th, static_intervals, variance_win_size);
+  extractIntervalsSamples(acc_samples, static_intervals,
+                         calib_acc_samples_, min_cost_static_intervals_,
+                         interval_n_samples_, acc_use_means_);
+  
+  return min_cost_static_intervals_;
 }
 
 template class MultiPosCalibration_<double>;

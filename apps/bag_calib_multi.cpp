@@ -10,6 +10,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
+#include <cstdlib>
+#include <string>
 
 #include "imu_tk/io_utils.h"
 #include "imu_tk/calibration.h"
@@ -23,6 +25,60 @@ using namespace imu_tk;
 using namespace Eigen;
 
 // Directory utility functions
+static std::string trimTrailingSlashes(const std::string &path) {
+  if (path.empty()) return path;
+  size_t end = path.size();
+  while (end > 1 && path[end - 1] == '/') {
+    --end;
+  }
+  return path.substr(0, end);
+}
+
+static std::string expandEnvVars(const std::string &input) {
+  std::string out;
+  out.reserve(input.size());
+  for (size_t i = 0; i < input.size(); ++i) {
+    if (input[i] == '$') {
+      std::string var;
+      size_t j = i + 1;
+      if (j < input.size() && input[j] == '{') {
+        ++j;
+        while (j < input.size() && input[j] != '}') {
+          var.push_back(input[j++]);
+        }
+        if (j < input.size() && input[j] == '}') ++j;
+      } else {
+        while (j < input.size() && (std::isalnum(static_cast<unsigned char>(input[j])) || input[j] == '_')) {
+          var.push_back(input[j++]);
+        }
+      }
+      const char *val = std::getenv(var.c_str());
+      if (val) out.append(val);
+      i = j - 1;
+    } else {
+      out.push_back(input[i]);
+    }
+  }
+  return out;
+}
+
+static std::string expandUser(const std::string &path) {
+  if (path.empty()) return path;
+  if (path[0] == '~') {
+    const char *home = std::getenv("HOME");
+    if (!home) home = std::getenv("USERPROFILE");
+    if (home) {
+      if (path.size() == 1) return std::string(home);
+      if (path.size() >= 2 && path[1] == '/') return std::string(home) + path.substr(1);
+    }
+  }
+  return path;
+}
+
+static std::string expandPath(const std::string &path) {
+  return trimTrailingSlashes(expandUser(expandEnvVars(path)));
+}
+
 bool dirExists(const std::string& path) {
   struct stat info;
   if (stat(path.c_str(), &info) != 0) {
@@ -36,6 +92,34 @@ bool createDir(const std::string& path) {
     return true;
   }
   return errno == EEXIST;
+}
+
+bool createDirRecursive(const std::string &path) {
+  if (path.empty()) return false;
+  if (dirExists(path)) return true;
+
+  std::string current;
+  // Handle absolute paths
+  if (!path.empty() && path[0] == '/') {
+    current = "/";
+  }
+  size_t start = (current == "/") ? 1 : 0;
+  for (size_t i = start; i <= path.size(); ++i) {
+    if (i == path.size() || path[i] == '/') {
+      std::string part = path.substr(start, i - start);
+      if (!part.empty()) {
+        if (!current.empty() && current.back() != '/') current.push_back('/');
+        current += part;
+        if (!dirExists(current)) {
+          if (!createDir(current)) {
+            return false;
+          }
+        }
+      }
+      start = i + 1;
+    }
+  }
+  return true;
 }
 
 int main(int argc, char **argv)
@@ -68,6 +152,10 @@ int main(int argc, char **argv)
   std::string save_calib_dir = config["save_calib_dir"].as<std::string>();
   bool calibrate_extrinsic = config["calibrate_extrinsic"] ? config["calibrate_extrinsic"].as<bool>() : true;
 
+  // Expand paths (handle ~ and env vars) and normalize
+  bag_file = expandPath(bag_file);
+  save_calib_dir = expandPath(save_calib_dir);
+
   // Validate ref topic
   if (std::find(imu_topics.begin(), imu_topics.end(), imu_ref_topic) == imu_topics.end())
   {
@@ -92,7 +180,7 @@ int main(int argc, char **argv)
     if (!dirExists(save_calib_dir))
     {
       std::cout << "Save directory " << save_calib_dir << " does not exist. Attempting to create it..." << std::endl;
-      if (!createDir(save_calib_dir))
+      if (!createDirRecursive(save_calib_dir))
       {
         std::cerr << "Failed to create directory " << save_calib_dir << ". Exiting." << std::endl;
         return -1;
@@ -200,11 +288,7 @@ int main(int argc, char **argv)
   const auto &acc_calibs = mpr_calib.getAccCalib();
   const auto &gyro_calibs = mpr_calib.getGyroCalib();
 
-  // Strip tailing "/" from save dir if present
-  if (!save_calib_dir.empty() && save_calib_dir.back() == '/')
-  {
-    save_calib_dir.pop_back();
-  }
+  // save_calib_dir was normalized earlier
 
   // Save per-topic calibration files into save_calib_dir
   for (size_t idx = 0; idx < imu_topics.size(); ++idx)
@@ -238,6 +322,13 @@ int main(int argc, char **argv)
         imu_tk::appendMatrixComment(af, "M (folded misalignment):", M_acc);
         imu_tk::appendMatrixComment(af, "T reconstructed (R * M * S):", T_acc_rec);
         af << "# Recon error: " << (T_acc - T_acc_rec).norm() << "\n";
+        
+        // Extract and append Euler angles (ZYX convention)
+        Eigen::Vector3d euler_angles_acc = R_acc.eulerAngles(0, 1, 2);
+        af << "\n# Euler angles (ZYX convention) in radians [yaw, pitch, roll]:\n";
+        af << "# " << euler_angles_acc.reverse().transpose() << "\n";
+        af << "# Euler angles in degrees [yaw, pitch, roll]:\n";
+        af << "# " << (euler_angles_acc.reverse() * 180.0 / M_PI).transpose() << "\n";
       }
     }
 
@@ -262,6 +353,13 @@ int main(int argc, char **argv)
         imu_tk::appendMatrixComment(gf, "M (folded misalignment):", M_gyr);
         imu_tk::appendMatrixComment(gf, "T reconstructed (R * M * S):", T_gyr_rec);
         gf << "# Recon error: " << (T_gyr - T_gyr_rec).norm() << "\n";
+        
+        // Extract and append Euler angles (ZYX convention)
+        Eigen::Vector3d euler_angles_gyr = R_gyr.eulerAngles(0, 1, 2);
+        gf << "\n# Euler angles (ZYX convention) in radians [yaw, pitch, roll]:\n";
+        gf << "# " << euler_angles_gyr.reverse().transpose() << "\n";
+        gf << "# Euler angles in degrees [yaw, pitch, roll]:\n";
+        gf << "# " << (euler_angles_gyr.reverse() * 180.0 / M_PI).transpose() << "\n";
       }
     }
 
