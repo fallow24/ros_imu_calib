@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  21 JAN 2026 17:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  22 JAN 2026 17:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -251,7 +251,10 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 \ALG@tmplength=\skip60
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
-) (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
 Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
 \col@sep=\dimen183
 \ar@mcellbox=\box58
@@ -359,31 +362,32 @@ File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 41.
-LaTeX Font Info:    ... okay on input line 41.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
+LaTeX Font Info:    ... okay on input line 45.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 89.
+LaTeX Font Info:    Calculating math sizes for size <18> on input line 65.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 89.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -391,42 +395,21 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 
-] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 484--517
- \OT1/ptm/m/it/10 2) Extended-Quaternion-Kalman-Filter: [][] \OT1/ptm/m/n/10 Th
-e Ex-tended
- []
+] [2] (./root.bbl) [3
 
-
-Underfull \hbox (badness 3623) in paragraph at lines 484--517
-\OT1/ptm/m/n/10 com-pen-sated be-fore mea-sure-ment up-date. As pre-sented
- []
-
-
-Underfull \hbox (badness 1642) in paragraph at lines 484--517
-\OT1/ptm/m/n/10 in Al-go-rithm 2[], the al-go-rithm re-quires the ac-cel-er-a-t
-ion
- []
-
-
-Underfull \hbox (badness 5133) in paragraph at lines 484--517
-\OT1/ptm/m/n/10 mea-sure-ment $\OT1/cmr/bx/n/10 a$\OT1/ptm/m/n/10 , an-gu-lar v
-e-loc-ity $[]$, noise co-vari-ance
- []
-
-[3] [4] (./root.aux)
+] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 5207 strings out of 474223
- 90730 string characters out of 5748759
- 1967972 words of memory out of 5000000
- 27418 multiletter control sequences out of 15000+600000
- 580027 words of font info for 86 fonts, out of 8000000 for 9000
+ 5274 strings out of 474223
+ 91834 string characters out of 5748759
+ 1957972 words of memory out of 5000000
+ 27471 multiletter control sequences out of 15000+600000
+ 584663 words of font info for 104 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 57i,14n,65p,522b,321s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,17n,65p,490b,263s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (4 pages, 34604 bytes).
+Output written on root.dvi (3 pages, 20020 bytes).
