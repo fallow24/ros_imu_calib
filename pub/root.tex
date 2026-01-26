@@ -116,7 +116,14 @@ these calibrate the extrinsic base-to-IMU vector.
 It is our goal to correct the accelerometer measurement, i.e., subtract the
 accelerations due to linear and angular motion, such that only the gravity
 component remains. This will benefit the downstream attitude estimation, which
-relies on the direction of gravity. The accelerometer
+relies on the direction of gravity.
+The presented procedure uses the same data recording approach as in~\cite{imutk2014}, i.e., we need to collect measurements where the sensor is static for a short duration ($\approx 5~s$) and then rotated into a different orientation.
+This process is repeated around $36 - 50$ times. 
+Our approach additionally requires the IMUs to be rigidly mounted to the base of the system when collecting the data.
+Depending on the platform, a user moves the system in different orientations, or the system might do this itself. 
+The calibration procedure then recovers the SE$(3)$ transformation between all IMUs.
+Specifically, our method estimates the position vectors from the center of rotation towards the sensors, as well as the orientation between them.
+We see potential applications in wheeled rovers, unmanned aerial vehicles, robotic arms, and, most notably, spherical systems.
 
 \subsection{Derivation of the Model}\label{ssec:derivation}
 In this Section we derive the model describing the centripetal and tangential
@@ -214,10 +221,10 @@ We want to explore this further in future work.
     \draw[-{Stealth[length=1.5mm]},thin] (-0.5,2.2) arc (170:10:0.5) node[pos=0.5, above=0.1pt] {$\vec{\omega}$};
     
     % Centripetal acceleration (exactly toward center, half length of $\vec{r}_e$)
-    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \times (\vec{\omega} \times \vec{r})$};
+    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \times (\vec{\omega} \times \vec{r}_e)$};
     
     % Tangential acceleration
-    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \times \vec{r}$};
+    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e$};
     
     % Rolling direction indicator
     \draw[-{Stealth[length=2.5mm]}] (1.3,0.1) -- (2.3,0.1) node[midway,above] {$R\vec{\omega} \times \vec{n}$};
@@ -295,27 +302,18 @@ Considering the signal in discrete, variable time steps $\Delta t$, we implement
 h[k] &= -\frac{t_k}{\sigma^3 \sqrt{2\pi}} 
 \exp\!\left(-\frac{t_k^2}{2\sigma^2}\right),
 \quad t_k = k \, \Delta t.
-\end{align}
-When applying the convolution during calibration, we center the kernel with (odd) size $2K+1$, such that it is symmetric and non-causal:
+\end{align} 
+When applying the convolution during calibration, we use the kernel with (odd) size $2K+1$ centered at $k=0$, such that it is symmetric and non-causal:
 \begin{align}
 \frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h[k] \, x[n-k].\label{eq:kernelnoncausal}
 \end{align}
 This yields a zero-phase, zero-delay derivative.
-For the causal version, which runs online, we truncate the kernel such that it uses only present and past samples.
-Furthermore, we subtract the mean and apply L2 normalization to the kernel, such that the resulting derivatives after convolving with it have the correct scale:
+For the causal version, which runs online, we apply the same kernel but shifted by $K$ samples, such that it uses only present and past samples:
 \begin{align}
-h_{\text{c}}[k] &= h[-k] \\
-\bar h &= \frac{1}{2K+1} \sum_{k=0}^{2K} h_{\text{c}}[k] \\
-\tilde{h}[k] &= h_{\text{c}}[k] - \bar h, \\
-E &= \sqrt{ \sum_{k=0}^{2K} \tilde{h}[k]^2 }, \\
-\hat{h}_{\text{c}}[k] &= E^{-1}\tilde{h}[k]\,.
+  \frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h[k] \, x[n-k-K].
 \end{align}
-The causal kernel $\hat{h}_{\text{c}}$ applies to the signal in a similar way than in Equation~\eqref{eq:kernelnoncausal}, but shifted:
-\begin{align}
-  \frac{\partial x[n]}{\partial t} &= \sum_{k=0}^{2K} \hat{h}_{\text{c}}[k] \, x[n-k].
-\end{align}
-This enforces causality but leads to an inherent delay, introducing a tradoff:
-Choosing a larger kernel increases smoothing and delay, while a smaller kernel yields less delay but is noisier.
+This enforces causality but introduces an inherent delay of $K$ samples. The trade-off is:
+Choosing a larger kernel (larger $K$) increases smoothing and delay, while a smaller kernel yields less delay but is noisier.
 Thus, the DoG effectivley implements a lowpass filter with a cutoff frequency $f_{\text{cut}}$.
 We calculate the standard deviation of the Gaussian $\sigma$ as
 \begin{align}
@@ -326,6 +324,15 @@ Given the sampling frequency $f_s$ of the sensor, we calculate the kernel window
 N &= 2K+1 = \left\lceil 6 \,\sigma f_s\right\rceil,
 \end{align}
 corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $99.7\%$ coverage.
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{img/kernel_comparison}
+  \includegraphics[width=\linewidth]{img/derivative_comparison}
+  \caption{(Above:) Side-by-side comparison of causal and non-causal DoG kernels.
+  (Below:) Comparison of derivative of a sine wave... etc state params  
+  }\label{fig:derivatives}
+\end{figure}
+Figure~\ref{fig:derivatives} shows 
 
 \subsection{Multi-IMU Extrinsic Calibration}\label{ssec:multicalib}
 After the intrinsic and extrinsic parameters for each individual IMU have been

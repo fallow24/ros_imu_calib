@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  23 JAN 2026 18:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  26 JAN 2026 19:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -718,52 +718,55 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ]
-Overfull \hbox (2.54881pt too wide) detected at line 255
+Underfull \vbox (badness 1917) has occurred while \output is active []
+
+
+Overfull \hbox (2.54881pt too wide) detected at line 262
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
-Underfull \hbox (badness 1845) in paragraph at lines 260--260
+Underfull \hbox (badness 1845) in paragraph at lines 267--267
 \OT1/ptm/m/n/8 Fig. 2.  Mis-align-ment an-gles $\OML/cmm/m/it/8 ^^L$ \OT1/ptm/m
 /n/8 be-tween an or-thog-o-nal body frame
  []
 
 [2]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-LaTeX Font Info:    Trying to load font information for U+euf on input line 347
+File: img/kernel_comparison.eps Graphic file (type eps)
+ <img/kernel_comparison.eps>
+File: img/derivative_comparison.eps Graphic file (type eps)
+ <img/derivative_comparison.eps> [3]
+LaTeX Font Info:    Trying to load font information for U+euf on input line 354
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-) [3]
-Underfull \hbox (badness 1661) in paragraph at lines 357--360
+)
+Underfull \hbox (badness 1661) in paragraph at lines 364--367
 \OT1/ptm/m/n/10 er-a-tion com-pen-sa-tion. The full trans-for-ma-tions for each
 
  []
 
 
-Underfull \hbox (badness 1354) in paragraph at lines 357--360
+Underfull \hbox (badness 1354) in paragraph at lines 364--367
 \OT1/ptm/m/n/10 and ori-en-ta-tion with re-spect to the ref-er-ence sen-sor, is
 
  []
 
-(./root.bbl) [4
-
-] (./root.aux)
+(./root.bbl) [4] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 16927 strings out of 474223
- 350712 string characters out of 5748759
- 1959972 words of memory out of 5000000
- 38861 multiletter control sequences out of 15000+600000
+ 16944 strings out of 474223
+ 351237 string characters out of 5748759
+ 1960972 words of memory out of 5000000
+ 38876 multiletter control sequences out of 15000+600000
  591241 words of font info for 128 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,17n,93p,512b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (4 pages, 48832 bytes).
+Output written on root.dvi (4 pages, 49252 bytes).
