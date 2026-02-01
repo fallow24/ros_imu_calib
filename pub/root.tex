@@ -328,8 +328,11 @@ corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $
   \centering
   \includegraphics[width=\linewidth]{img/kernel_comparison}
   \includegraphics[width=\linewidth]{img/derivative_comparison}
-  \caption{(Above:) Side-by-side comparison of causal and non-causal DoG kernels.
-  (Below:) Comparison of derivative of a sine wave... etc state params  
+  \caption{(Above:) Side-by-side comparison of a causal and non-causal DoG kernel with sampling frequency $f_s=200$~Hz and cutoff frequency $f_{\text{cut}}=5$~Hz, 
+  resulting in a Gaussian standard deviation $\sigma\approx0.0318~$s and kernel window size $N=39$~samples.
+  The kernels have the same shape but the causal version is shifted $K=19$ samples into the past, corresponding to a delay of $K \cdot f_s^{-1}=0.095$~s.
+  (Below:) Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise adding $\pm10~\%$ to the amplitude.
+  The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives.   
   }\label{fig:derivatives}
 \end{figure}
 Figure~\ref{fig:derivatives} shows 
