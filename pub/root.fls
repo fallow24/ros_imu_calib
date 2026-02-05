@@ -296,9 +296,9 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmbsy8.tfm
 INPUT ./img/mis.eps
 INPUT ./img/mis.eps
 INPUT img/mis.eps
-INPUT ./img/kernel_comparison.eps
-INPUT ./img/kernel_comparison.eps
-INPUT img/kernel_comparison.eps
+INPUT ./img/bode.eps
+INPUT ./img/bode.eps
+INPUT img/bode.eps
 INPUT ./img/derivative_comparison.eps
 INPUT ./img/derivative_comparison.eps
 INPUT img/derivative_comparison.eps

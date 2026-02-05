@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex root"] 1769781890.40034 "root.aux" "root.bbl" "root" 1769907998.93934 0
+["bibtex root"] 1770225627.40435 "root.aux" "root.bbl" "root" 1770295579.38808 0
   "./root.bib" 1769182564.70445 670 76d94ffd62d408d2f9bfb020d7f00df3 ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "root.aux" 1769907996.66783 4253 b053f453de788a68249a398973ecef7d "latex"
+  "root.aux" 1770295578.54918 4269 67afa89d7800a666e466a8a9d8604aa7 "latex"
   (generated)
   "root.bbl"
   "root.blg"
   (rewritten before read)
-["dvipdf"] 1769907997.20202 "root.dvi" "root.pdf" "root" 1769907998.94344 0
-  "root.dvi" 1769907996.66883 50136 7ad65c52a2023e23de50679ae3dcddb0 "latex"
+["dvipdf"] 1770295578.78544 "root.dvi" "root.pdf" "root" 1770295579.3895 0
+  "root.dvi" 1770295578.54918 50140 b38fb5bb7fd5ee93d000938dc988475b "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1769907995.51687 "root.tex" "root.dvi" "root" 1769907998.93954 0
+["latex"] 1770295578.07326 "root.tex" "root.dvi" "root" 1770295579.3882 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -175,12 +175,12 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/web2c/pdftex/latex.fmt" 1742823642 8212925 a0a949188b751869d33c8261e9198b86 ""
   "IEEEtran.cls" 1763646362.46884 288451 2ca944e3837f3f55e325ddfd2f1a2479 ""
-  "img/derivative_comparison.eps" 1769885123.56105 287301 2734d44309fe0b949e4ee8a6c48f6f63 ""
-  "img/kernel_comparison.eps" 1769885122.56105 196941 7728188473839b887ea24505924cf295 ""
+  "img/bode.eps" 1770295564.40845 244929 680eb2a5adb7a57f11b51431856b343c ""
+  "img/derivative_comparison.eps" 1770295167.02883 309943 a5727b5a03665ef5e8b7b2ceafcb4999 ""
   "img/mis.eps" 1769185881.98486 49879 f3d27d2b70fb14173b654ce926e25fdd ""
-  "root.aux" 1769907996.66783 4253 b053f453de788a68249a398973ecef7d "latex"
-  "root.bbl" 1769781890.47612 1301 8e09b0570bde88a9331700c9ebd58cc3 "bibtex root"
-  "root.tex" 1769781887.97544 24250 71827cfc31c27f4e79a680df98a1f385 ""
+  "root.aux" 1770295578.54918 4269 67afa89d7800a666e466a8a9d8604aa7 "latex"
+  "root.bbl" 1770225627.4829 1301 8e09b0570bde88a9331700c9ebd58cc3 "bibtex root"
+  "root.tex" 1770295123.32644 24316 790a818fa303064fef6f950522ff2ecc ""
   (generated)
   "root.aux"
   "root.dvi"
