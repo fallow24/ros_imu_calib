@@ -16,27 +16,31 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Developing the Model for Spherical Systems}{2}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Spherical system rolling on a surface with normal $\boldsymbol  {n}$. An IMU (gray) is located at position $\boldsymbol  {r}_e$ relative to the ball center $\boldsymbol  {r}_c$. The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\boldsymbol  {\omega }$ around $\boldsymbol  {r}_c$.}}{2}{}\protected@file@percent }
 \newlabel{fig:spherical_model}{{1}{2}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Misalignment angles $\beta $ between an orthogonal body frame $[x^B, y^B, z^B]$ and the non-orthogonal sensor frame $[x^S, y^S, z^S]$. Original illustration taken from~\cite  {imutk2014}.}}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Misalignment angles $\beta $ between an orthogonal body frame $[x^B, y^B, z^B]$ and the non-orthogonal sensor frame $[x^S, y^S, z^S]$. We include the original illustration from~\cite  {imutk2014} for completeness.}}{2}{}\protected@file@percent }
 \newlabel{fig:mis}{{2}{2}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{2}{}\protected@file@percent }
-\citation{imutk2014}
-\citation{microlie}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Motion Compensation Calibration}{3}{}\protected@file@percent }
 \newlabel{ssec:imucalib}{{\mbox  {III-D}}{3}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Implementation of Discrete Derivative}{3}{}\protected@file@percent }
 \newlabel{eq:kernelnoncausal}{{19}{3}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Multi-IMU Extrinsic Calibration}{3}{}\protected@file@percent }
-\newlabel{ssec:multicalib}{{\mbox  {III-F}}{3}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-F}1}Optimization Problem}{3}{}\protected@file@percent }
-\bibstyle{IEEEtran}
-\bibdata{root}
-\bibcite{imutk2014}{1}
-\bibcite{microlie}{2}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces (Above:) Side-by-side comparison of a causal and non-causal DoG kernel with sampling frequency $f_s=200$~Hz and cutoff frequency $f_{\text  {cut}}=5$~Hz, resulting in a Gaussian standard deviation $\sigma \approx 0.0318~$s and kernel window size $N=39$~samples. The kernels have the same shape but the causal version is shifted $K=19$ samples into the past, corresponding to a delay of $K \cdot f_s^{-1}=0.095$~s. (Center:) Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise adding $\pm 10~\%$ to the amplitude. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. (Below:) TODO! }}{4}{}\protected@file@percent }
-\newlabel{fig:derivatives}{{3}{4}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz. In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. The causal convolution introduces a phase shift of the output, wheras the non-causal convolution has does not. }}{3}{}\protected@file@percent }
+\newlabel{fig:derivatives}{{3}{3}{}{}{}}
+\citation{imutk2014}
+\citation{microlie}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. The convolution with the DoG has the least noise gain across all frequencies, but also the largest phase shift. }}{4}{}\protected@file@percent }
+\newlabel{fig:bode}{{4}{4}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Multi-IMU Extrinsic Calibration}{4}{}\protected@file@percent }
+\newlabel{ssec:multicalib}{{\mbox  {III-F}}{4}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-F}1}Optimization Problem}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Experiments and Evaluation}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Simulation}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Real-World}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {V}Conclusions}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{References}{4}{}\protected@file@percent }
-\gdef \@abspage@last{4}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{4}{}\protected@file@percent }
+\newlabel{apx:ema}{{\mbox  {V-A}}{4}{}{}{}}
+\bibstyle{IEEEtran}
+\bibdata{root}
+\bibcite{imutk2014}{1}
+\bibcite{microlie}{2}
+\@writefile{toc}{\contentsline {section}{References}{5}{}\protected@file@percent }
+\gdef \@abspage@last{5}
