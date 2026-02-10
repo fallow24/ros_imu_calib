@@ -19,15 +19,18 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Misalignment angles $\beta $ between an orthogonal body frame $[x^B, y^B, z^B]$ and the non-orthogonal sensor frame $[x^S, y^S, z^S]$. We include the original illustration from~\cite  {imutk2014} for completeness.}}{2}{}\protected@file@percent }
 \newlabel{fig:mis}{{2}{2}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{2}{}\protected@file@percent }
+\citation{algediff}
+\citation{algediff}
+\citation{algediff}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Motion Compensation Calibration}{3}{}\protected@file@percent }
 \newlabel{ssec:imucalib}{{\mbox  {III-D}}{3}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Implementation of Discrete Derivative}{3}{}\protected@file@percent }
 \newlabel{eq:kernelnoncausal}{{19}{3}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz. In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. The causal convolution introduces a phase shift of the output, wheras the non-causal convolution has does not. }}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz. In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution has does not. }}{3}{}\protected@file@percent }
 \newlabel{fig:derivatives}{{3}{3}{}{}{}}
 \citation{imutk2014}
 \citation{microlie}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. The convolution with the DoG has the least noise gain across all frequencies, but also the largest phase shift. }}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. The convolution with the DoG has the least noise gain across all frequencies, but also a large phase shift. We use the following parameters for the algebraic differentiators~\cite  {algediff}: $\alpha = 4.0$, $\beta = 4.0$, $N = 1$. }}{4}{}\protected@file@percent }
 \newlabel{fig:bode}{{4}{4}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Multi-IMU Extrinsic Calibration}{4}{}\protected@file@percent }
 \newlabel{ssec:multicalib}{{\mbox  {III-F}}{4}{}{}{}}
@@ -40,7 +43,8 @@
 \bibstyle{IEEEtran}
 \bibdata{root}
 \bibcite{imutk2014}{1}
-\bibcite{microlie}{2}
+\bibcite{algediff}{2}
+\bibcite{microlie}{3}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{5}{}\protected@file@percent }
 \newlabel{apx:ema}{{\mbox  {V-A}}{5}{}{}{}}
 \@writefile{toc}{\contentsline {section}{References}{5}{}\protected@file@percent }

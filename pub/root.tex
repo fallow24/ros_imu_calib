@@ -331,32 +331,34 @@ corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $
     Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz.
     In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples.
     The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives.
-    The causal convolution introduces a phase shift of the output, wheras the non-causal convolution has does not. 
+    In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution has does not. 
   }\label{fig:derivatives}
 \end{figure}
 Figure~\ref{fig:derivatives} illustrates the resulting derivatives of a noisy input signal for the method of finite differences, causal-, and non-causal-DoG kernels.
 The non-causal convolution produces a smooth, zero-phase derivative given the selected cutoff frequency of $5$~Hz, which is well suited for the offline calibration procedure.   
+
 In order to select an appropriate cutoff frequency $f_{\text{cut}}$ for online processing, we consider the phase shift, as well as the signal- and noise-gain, as a function of the cutoff frequency.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/bode}
   \caption{
     Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz.
-    The convolution with the DoG has the least noise gain across all frequencies, but also the largest phase shift.
+    The convolution with the DoG has the least noise gain across all frequencies, but also a large phase shift.
+    We use the following parameters for the algebraic differentiators~\cite{algediff}: $\alpha = 4.0$, $\beta = 4.0$, $N = 1$. 
   }\label{fig:bode}
 \end{figure}
-Figure~\ref{fig:bode} compares the DoG convolution method with two other alternative methods: 
-(1) The method of finite differences (FD), and (2) an exponential moving average (EMA) for smoothing, followed by FD. 
+Figure~\ref{fig:bode} compares the DoG convolution method with three other alternative methods: 
+(1) The method of finite differences (FD), (2) an exponential moving average (EMA) for smoothing, followed by FD, and (3) algebraic differentiators due to~\cite{algediff}.
 For a given discrete signal $x$ the EMA produces the smoothed output $y$ by implementing 
 \begin{align}
   y[i] = (1 - \alpha) \cdot y[i-1] + \alpha \cdot x[i],
 \end{align}
 with
 \begin{align}
-  \alpha &= \frac{\sqrt{c^2 - 4c + 3} + c - 1}{3} \\
+  \alpha &= \sqrt{c^2 - 4c + 3} + c - 1\\
   c &= \cos\left(2\pi\cdot\frac{f_{\text{cut}}}{f_{\text{s}}}\right) \nonumber \,
 \end{align}
-corresponding to the half-amplitude point where the amplitude gain is $20\cdot \log_{10}(0.5) \approx -6$~dB.
+corresponding to the half-power point where the power gain is $10\cdot \log_{10}(0.5) \approx -3$~dB.
 We provide a detailed derivation of $\alpha$ in the Appendix~\ref{apx:ema}. 
 According to Figure~\ref{fig:bode}, we select a DoG kernel with $f_{\text{cut}} = 20$~Hz for online processing, since it provides a reasonable tradoff between phase shift and noise gain.
 
@@ -423,14 +425,14 @@ should use it.
 \subsection{Derivation of EMA parameter}\label{apx:ema}
 The causal first-order exponential moving average (EMA) filter is:
 \begin{align}
-y[i] = (1 - \alpha) \cdot y[i-1] + \alpha \cdot x[i]
+y[i] = (1 - \alpha) \cdot y[i-1] + \alpha \cdot x[i]\,, \quad \text{with}\quad \alpha \geq 0\,.
 \end{align}
 Taking the Z-transform and rearranging to find the transfer function:
 \begin{align}
 Y[z] = (1 - \alpha) \cdot z^{-1} Y[z] + \alpha \cdot X[z] \\
 \Rightarrow H(z) = \frac{Y[z]}{X[z]} = \frac{\alpha}{1 - (1-\alpha)z^{-1}}
 \end{align}
-Substituting $z = e^{j\omega}$ where $\omega = 2\pi f / f_s$:
+We obtain the frequency response by substituting $z = e^{j\omega}$ where $\omega = 2\pi f / f_s$:
 \begin{align}
 H(e^{j\omega}) = \frac{\alpha}{1 - (1-\alpha)e^{-j\omega}}
 \end{align}
@@ -448,15 +450,15 @@ Therefore:
 \begin{align}
 |H(e^{j\omega})| = \frac{\alpha}{\sqrt{1 - 2(1-\alpha)\cos\omega + (1-\alpha)^2}}
 \end{align}
-At the cutoff frequency $\omega_c = 2\pi f_{\text{cut}} / f_s$, we want to set the half-amplitude point where the amplitude gain is $20\log_{10}(0.5) \approx -6$~dB.
+At the cutoff frequency $\omega_c = 2\pi \frac{f_{\text{cut}}}{f_s}$, we want to set the half-power point where the power gain is $10\log_{10}(0.5) \approx -3$~dB.
 Thus, we need to solve:
 \begin{align}
-|H(e^{j\omega_c})| = 1/2\,,
+|H(e^{j\omega_c})|^2 = 1/2\,,
 \end{align}
-which yields
+which yields a quadratic polynomial in $\alpha$:
 \begin{align}
-3\alpha^2 + 2\alpha\left(1 - \cos(\omega_c) - 2(1 - \cos(\omega_c)\right) = 0 \\
-\Rightarrow \alpha = \frac{\sqrt{\cos(\omega_c)^2 - 8\cos(\omega_c) + 7} + \cos(\omega_c) - 1}{3} \,.
+-\frac{1}{2} &\alpha^2 + \left(\cos(\omega_c) - 1\right) \alpha + 1 - \cos(\omega_c) = 0\\
+\Rightarrow\quad &\alpha = \sqrt{\cos(\omega_c)^2 - 4\cos(\omega_c) + 3} + \cos(\omega_c) - 1 \,.
 \end{align}
 
 
