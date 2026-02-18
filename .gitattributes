@@ -1,3 +1,4 @@
-pub/** linguist-vendored
-data/** linguist-vendored
+/pub/** linguist-vendored
+/data/** linguist-vendored
 *.ipynb linguist-vendored
+*.tex linguist-vendored
