@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex root"] 1770736436.93885 "root.aux" "root.bbl" "root" 1770736438.60922 0
+["bibtex root"] 1771426680.51897 "root.aux" "root.bbl" "root" 1771428555.09303 0
   "./root.bib" 1770736129.37181 1258 37857b9755fa55f32415bc992eac3d2e ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "root.aux" 1770736437.65624 5070 fc1a0b4fcce10c19f532db18dfcfab53 "latex"
+  "root.aux" 1771428553.91451 5666 4357579322dff3c13497f8eb4d3b9b48 "latex"
   (generated)
   "root.bbl"
   "root.blg"
   (rewritten before read)
-["dvipdf"] 1770736437.94127 "root.dvi" "root.pdf" "root" 1770736438.6106 0
-  "root.dvi" 1770736437.65624 56084 e4e4c41adb65ebe643b3c12e5c514bb8 "latex"
+["dvipdf"] 1771428554.13175 "root.dvi" "root.pdf" "root" 1771428555.09523 0
+  "root.dvi" 1771428553.91551 57608 61e60407b20e68d81fa94ea91a808ced "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1770736437.07226 "root.tex" "root.dvi" "root" 1770736438.6093 0
+["latex"] 1771428553.40522 "root.tex" "root.dvi" "root" 1771428555.09321 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -175,13 +175,18 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/web2c/pdftex/latex.fmt" 1742823642 8212925 a0a949188b751869d33c8261e9198b86 ""
   "IEEEtran.cls" 1763646362.46884 288451 2ca944e3837f3f55e325ddfd2f1a2479 ""
-  "img/bode.eps" 1770735674.81586 246475 1285e0d44057acc78f4cb6a13fe4ade6 ""
-  "img/derivative_comparison.eps" 1770735661.05192 276396 2613bb3ddda65b7e6820838400b966ef ""
-  "img/error_distributions.eps" 1770634567.46411 215495 754fe3efab3ca5b5ffd64ab767285277 ""
+  "img/bode.eps" 1771421500.74936 246475 31af8f02a187e4b1adf163ac2ae39151 ""
+  "img/comp_sim.eps" 1771428493.3828 445190 4d28d4c667784ec61938244b53d25128 ""
+  "img/derivative_comparison.eps" 1771421488.70636 276396 57c6b7797ceb6951c24a4ad1c294a6f8 ""
+  "img/error_distributions.eps" 1771427901.57062 221949 6e111c3952b618b48b43becb1f6b0754 ""
   "img/mis.eps" 1769185881.98486 49879 f3d27d2b70fb14173b654ce926e25fdd ""
-  "root.aux" 1770736437.65624 5070 fc1a0b4fcce10c19f532db18dfcfab53 "latex"
-  "root.bbl" 1770736437.06724 1732 cde427f3803df79c8ffafa6f273bdcba "bibtex root"
-  "root.tex" 1770736432.15614 27892 9a73ad0bb17f17473d8adef3b06f0a69 ""
+  "img/rmse_sim.eps" 1771425453.83092 190123 8d014e1171a714a149f2f24abbd34fa7 ""
+  "img/rot_error_sim.eps" 1771425138.54005 331160 0cd03c64b13085529e75128112e2dfa6 ""
+  "img/sim_poses.eps" 1771426205.61544 253378 d0cb7a5548979545c81b0bf16f0f10d6 ""
+  "img/sim_readings.eps" 1771426208.25542 667369 72e8ec674b36bb75a20b2d511624da54 ""
+  "root.aux" 1771428553.91451 5666 4357579322dff3c13497f8eb4d3b9b48 "latex"
+  "root.bbl" 1771426680.61567 1732 cde427f3803df79c8ffafa6f273bdcba "bibtex root"
+  "root.tex" 1771426678.49968 28960 a12b625804bf1c950e30b3c76c78655c ""
   (generated)
   "root.aux"
   "root.dvi"

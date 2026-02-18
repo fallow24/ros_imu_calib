@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  10 FEB 2026 16:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  18 FEB 2026 16:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -718,25 +718,29 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ]
-Underfull \vbox (badness 1917) has occurred while \output is active []
-
-
-Overfull \hbox (2.54881pt too wide) detected at line 262
+Overfull \hbox (2.54881pt too wide) detected at line 260
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
-Underfull \hbox (badness 1845) in paragraph at lines 267--267
+Underfull \hbox (badness 1845) in paragraph at lines 265--265
 \OT1/ptm/m/n/8 Fig. 2.  Mis-align-ment an-gles $\OML/cmm/m/it/8 ^^L$ \OT1/ptm/m
 /n/8 be-tween an or-thog-o-nal body frame
  []
 
-[2]
+
+Underfull \vbox (badness 4132) has occurred while \output is active []
+
+ [2]
 File: img/derivative_comparison.eps Graphic file (type eps)
- <img/derivative_comparison.eps>
+
+<img/derivative_comparison.eps>
 File: img/bode.eps Graphic file (type eps)
- <img/bode.eps> [3]
+ <img/bode.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
 LaTeX Font Info:    Trying to load font information for U+euf on input line 383
 .
 
@@ -755,21 +759,31 @@ Underfull \hbox (badness 1354) in paragraph at lines 393--396
  []
 
 File: img/error_distributions.eps Graphic file (type eps)
-<img/error_distributions.eps> [4] (./root.bbl) [5
+<img/error_distributions.eps>
+File: img/sim_readings.eps Graphic file (type eps)
+ <img/sim_readings.eps>
+File: img/sim_poses.eps Graphic file (type eps)
+ <img/sim_poses.eps>
+File: img/rmse_sim.eps Graphic file (type eps)
 
-] (./root.aux)
+<img/rmse_sim.eps>
+File: img/rot_error_sim.eps Graphic file (type eps)
+ <img/rot_error_sim.eps>
+File: img/comp_sim.eps Graphic file (type eps)
+ <img/comp_sim.eps> [4] [5]
+(./root.bbl) [6] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 16957 strings out of 474223
- 351438 string characters out of 5748759
- 1960972 words of memory out of 5000000
- 38888 multiletter control sequences out of 15000+600000
- 591713 words of font info for 130 fonts, out of 8000000 for 9000
+ 17000 strings out of 474223
+ 352419 string characters out of 5748759
+ 1961972 words of memory out of 5000000
+ 38926 multiletter control sequences out of 15000+600000
+ 592220 words of font info for 131 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,17n,93p,691b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (5 pages, 56084 bytes).
+Output written on root.dvi (6 pages, 57608 bytes).

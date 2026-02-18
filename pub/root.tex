@@ -182,9 +182,7 @@ Including the measured gravity $\vec{a}_g$ as done in Section~\ref{ssec:derivati
 \begin{equation}
   \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e + R \frac{\partial \vec{\omega}}{\partial t} \times \vec{n} + R \vec{\omega} \times \frac{\partial \vec{n}}{\partial t} - \vec{a} .
 \end{equation}
-However, this model requires a good estimate of the normal vector $\vec{n}$ in the local sensor frame, which itself depends on the current attitude estimate.
-Thus, as of now it is not suitable to use the terms due to linear acceleration for motion compensation on a spherical system.
-We want to explore this further in future work. 
+However, this model requires a good estimate of the normal vector $\vec{n}$ in the local sensor frame, which is subject to future work.
 
 \begin{figure}
   \centering
@@ -342,25 +340,27 @@ In order to select an appropriate cutoff frequency $f_{\text{cut}}$ for online p
   \centering
   \includegraphics[width=\linewidth]{img/bode}
   \caption{
-    Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz.
-    The convolution with the DoG has the least noise gain across all frequencies, but also a large phase shift.
-    We use the following parameters for the algebraic differentiators~\cite{algediff}: $\alpha = 4.0$, $\beta = 4.0$, $N = 1$. 
+    Comparison of signal gain, noise gain, and phase shift of causal numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz.
+    Each method implements smoothing according to a given cutoff frequency to supress the ampliciation of noise.
+    The DoG method provides the lowest noise gain across all cutoff frequencies, but also a considerable phase shift.
   }\label{fig:bode}
 \end{figure}
 Figure~\ref{fig:bode} compares the DoG convolution method with three other alternative methods: 
-(1) The method of finite differences (FD), (2) an exponential moving average (EMA) for smoothing, followed by FD, and (3) algebraic differentiators due to~\cite{algediff}.
+(1) The method of finite differences (FD), (2) an exponential moving average (EMA) for smoothing, followed by FD, and (3) algebraic differentiators (AlgeDiff) due to~\cite{algediff}.
 For a given discrete signal $x$ the EMA produces the smoothed output $y$ by implementing 
 \begin{align}
   y[i] = (1 - \alpha) \cdot y[i-1] + \alpha \cdot x[i],
 \end{align}
 with
 \begin{align}
-  \alpha &= \sqrt{c^2 - 4c + 3} + c - 1\\
-  c &= \cos\left(2\pi\cdot\frac{f_{\text{cut}}}{f_{\text{s}}}\right) \nonumber \,
+  \alpha &= \sqrt{c^2 - 4c + 3} + c - 1\quad\text{and}\\
+  c &= \cos\left(2\pi\cdot\frac{f_{\text{cut}}}{f_{\text{s}}}\right) \nonumber \,,
 \end{align}
-corresponding to the half-power point where the power gain is $10\cdot \log_{10}(0.5) \approx -3$~dB.
+corresponding to the half-power point where the signal power gain is $10\cdot \log_{10}(0.5) \approx -3$~dB.
 We provide a detailed derivation of $\alpha$ in the Appendix~\ref{apx:ema}. 
-According to Figure~\ref{fig:bode}, we select a DoG kernel with $f_{\text{cut}} = 20$~Hz for online processing, since it provides a reasonable tradoff between phase shift and noise gain.
+For the AlgeDiff kernels we use the following parameters: $\alpha = 4.0$, $\beta = 4.0$, $N = 1$, since this results in comparable phase shift and noise gain as the DoG.
+However, AlgeDiff produces aliasing effects for high cutoff frequencies, noticable in the signal gain according to Figure~\ref{fig:bode}.    
+We select a DoG kernel with $f_{\text{cut}} = 20$~Hz for online processing, since it provides a reasonable tradoff between phase shift and noise gain.
 
 \subsection{Multi-IMU Extrinsic Calibration}\label{ssec:multicalib}
 
@@ -395,15 +395,36 @@ which is the vector needed during online motion acceleration compensation.
 The full transformations for each IMU describing their offset from the center of rotation and orientation with respect to the reference sensor, is $\mathbf{T}_i~=~\lbrace\mathbf{R}_{i}^{ref},~\vec{r}_{i}^{ref}\rbrace~\in~\text{SE}(3)$.
 
 \section{Experiments and Evaluation}
-Here we will show some experiments and evaluate them. Ther will be a lot of
-figures.
+We assess the calibration accuracy quantitativley using a Monte-Carlo simulation, which utilizes synthetic IMU data for calibration.
+Furthermore, we qualitativley show the impact on the attitude estimation subsystem on real-world data.      
 
 \subsection{Simulation}
+
 Introduce the simulation model, e.g. noise, random walk, bias, scale, etc...
-\begin{figure}
+\begin{figure*}
   \centering
   \includegraphics[width=\linewidth]{img/error_distributions}
-  \caption{The results (TODO caption)}
+  \caption{Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation.
+  (Left:) Rotation error. The ground truth rotations have been sampled uniformly across $\text{SO}(3)$. 
+  (Right:) Position error. The ground truth positions have been sampled uniformly across the interval $[-0.5, 0.5]$~m.}
+\end{figure*}
+\begin{figure*}
+  \centering
+  \includegraphics[width=.69\linewidth]{img/sim_readings}
+  \includegraphics[width=.29\linewidth]{img/sim_poses}
+  \caption{TODO Caption}
+\end{figure*}
+\begin{figure*}
+  \centering
+  \includegraphics[width=.24\linewidth]{img/rmse_sim}\hfill
+  \hfill
+  \includegraphics[width=.74\linewidth]{img/rot_error_sim}\hfill
+  \caption{TODO Caption}
+\end{figure*}
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{img/comp_sim}
+  \caption{TODO caption}
 \end{figure}
 
 \subsection{Real-World}

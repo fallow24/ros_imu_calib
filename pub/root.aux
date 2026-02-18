@@ -14,13 +14,11 @@
 \citation{imutk2014}
 \citation{imutk2014}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Developing the Model for Spherical Systems}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{2}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Spherical system rolling on a surface with normal $\boldsymbol  {n}$. An IMU (gray) is located at position $\boldsymbol  {r}_e$ relative to the ball center $\boldsymbol  {r}_c$. The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\boldsymbol  {\omega }$ around $\boldsymbol  {r}_c$.}}{2}{}\protected@file@percent }
 \newlabel{fig:spherical_model}{{1}{2}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Misalignment angles $\beta $ between an orthogonal body frame $[x^B, y^B, z^B]$ and the non-orthogonal sensor frame $[x^S, y^S, z^S]$. We include the original illustration from~\cite  {imutk2014} for completeness.}}{2}{}\protected@file@percent }
 \newlabel{fig:mis}{{2}{2}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{2}{}\protected@file@percent }
-\citation{algediff}
-\citation{algediff}
 \citation{algediff}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Motion Compensation Calibration}{3}{}\protected@file@percent }
 \newlabel{ssec:imucalib}{{\mbox  {III-D}}{3}{}{}{}}
@@ -30,22 +28,25 @@
 \newlabel{fig:derivatives}{{3}{3}{}{}{}}
 \citation{imutk2014}
 \citation{microlie}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. The convolution with the DoG has the least noise gain across all frequencies, but also a large phase shift. We use the following parameters for the algebraic differentiators~\cite  {algediff}: $\alpha = 4.0$, $\beta = 4.0$, $N = 1$. }}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of causal numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. Each method implements smoothing according to a given cutoff frequency to supress the ampliciation of noise. The DoG method provides the lowest noise gain across all cutoff frequencies, but also a considerable phase shift. }}{4}{}\protected@file@percent }
 \newlabel{fig:bode}{{4}{4}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Multi-IMU Extrinsic Calibration}{4}{}\protected@file@percent }
 \newlabel{ssec:multicalib}{{\mbox  {III-F}}{4}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-F}1}Optimization Problem}{4}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces The results (TODO caption)}}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Experiments and Evaluation}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Simulation}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Real-World}{4}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {V}Conclusions}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation. (Left:) Rotation error. The ground truth rotations have been sampled uniformly across $\text  {SO}(3)$. (Right:) Position error. The ground truth positions have been sampled uniformly across the interval $[-0.5, 0.5]$~m.}}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces TODO Caption}}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces TODO Caption}}{5}{}\protected@file@percent }
 \bibstyle{IEEEtran}
 \bibdata{root}
 \bibcite{imutk2014}{1}
 \bibcite{algediff}{2}
 \bibcite{microlie}{3}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{5}{}\protected@file@percent }
-\newlabel{apx:ema}{{\mbox  {V-A}}{5}{}{}{}}
-\@writefile{toc}{\contentsline {section}{References}{5}{}\protected@file@percent }
-\gdef \@abspage@last{5}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces TODO caption}}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{6}{}\protected@file@percent }
+\newlabel{apx:ema}{{\mbox  {V-A}}{6}{}{}{}}
+\@writefile{toc}{\contentsline {section}{References}{6}{}\protected@file@percent }
+\gdef \@abspage@last{6}

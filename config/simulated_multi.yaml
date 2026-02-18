@@ -1,0 +1,19 @@
+bag_file: "~/catkin_ws/src/ros_imu_calib/pub/data/simulated.bag"
+imu_topics:
+  - "/imu/0/sim"
+  - "/imu/1/sim"
+  - "/imu/2/sim"
+imu_ref_topic: "/imu/0/sim"
+imu_frequency_hz: 200
+num_samples_per_interval: 200
+min_nr_recorded_intervals: 40
+variance_win_size: 101
+th_variance_min: 2
+th_variance_max: 11
+initial_static_interval: 60.0
+gravity_magnitude: 9.814
+use_acc_means: true
+lowpass_hz: 2
+plot_inspect_static_intervals: false
+calibrate_extrinsic: true
+save_calib_dir: "~/catkin_ws/src/ros_imu_calib/pub/data/calib/imuconf_533/"
