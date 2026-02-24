@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  18 FEB 2026 16:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  24 FEB 2026 15:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -718,44 +718,53 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ]
-Overfull \hbox (2.54881pt too wide) detected at line 260
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Overfull \hbox (2.54881pt too wide) detected at line 261
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
-Underfull \hbox (badness 1845) in paragraph at lines 265--265
+Underfull \hbox (badness 1845) in paragraph at lines 266--266
 \OT1/ptm/m/n/8 Fig. 2.  Mis-align-ment an-gles $\OML/cmm/m/it/8 ^^L$ \OT1/ptm/m
 /n/8 be-tween an or-thog-o-nal body frame
  []
 
-
-Underfull \vbox (badness 4132) has occurred while \output is active []
-
- [2]
+[2]
 File: img/derivative_comparison.eps Graphic file (type eps)
-
-<img/derivative_comparison.eps>
+ <img/derivative_comparison.eps>
 File: img/bode.eps Graphic file (type eps)
  <img/bode.eps>
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 1087) has occurred while \output is active []
 
  [3]
-LaTeX Font Info:    Trying to load font information for U+euf on input line 383
+LaTeX Font Info:    Trying to load font information for U+euf on input line 384
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
 )
-Underfull \hbox (badness 1661) in paragraph at lines 393--396
+Underfull \hbox (badness 1661) in paragraph at lines 394--397
 \OT1/ptm/m/n/10 er-a-tion com-pen-sa-tion. The full trans-for-ma-tions for each
 
  []
 
 
-Underfull \hbox (badness 1354) in paragraph at lines 393--396
+Underfull \hbox (badness 1354) in paragraph at lines 394--397
 \OT1/ptm/m/n/10 and ori-en-ta-tion with re-spect to the ref-er-ence sen-sor, is
 
+ []
+
+[4]
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
+44.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+Overfull \hbox (14.37015pt too wide) detected at line 454
+[]
  []
 
 File: img/error_distributions.eps Graphic file (type eps)
@@ -770,7 +779,10 @@ File: img/rmse_sim.eps Graphic file (type eps)
 File: img/rot_error_sim.eps Graphic file (type eps)
  <img/rot_error_sim.eps>
 File: img/comp_sim.eps Graphic file (type eps)
- <img/comp_sim.eps> [4] [5]
+ <img/comp_sim.eps> [5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 (./root.bbl) [6] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
@@ -778,12 +790,12 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17000 strings out of 474223
- 352419 string characters out of 5748759
- 1961972 words of memory out of 5000000
- 38926 multiletter control sequences out of 15000+600000
- 592220 words of font info for 131 fonts, out of 8000000 for 9000
+ 17039 strings out of 474223
+ 352997 string characters out of 5748759
+ 1959972 words of memory out of 5000000
+ 38961 multiletter control sequences out of 15000+600000
+ 592436 words of font info for 132 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,17n,93p,691b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (6 pages, 57608 bytes).
+Output written on root.dvi (6 pages, 62952 bytes).

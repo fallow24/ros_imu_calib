@@ -1,5 +1,5 @@
-bag_file: "/home/fabi/Documents/pyscripts/examples/simulated_imu.bag"
-imu_topic: "/imu/2/sim"
+bag_file: "/home/fabi/Documents/Bagfiles/simulate_sphere_once.bag"
+imu_topic: "/imu/0/sim"
 imu_frequency_hz: 200         
 num_samples_per_interval: 200     # min number of how many samples to extract for each static interval
 min_nr_recorded_intervals: 40     # min number of how many static intervals should be found
@@ -12,6 +12,6 @@ use_acc_means: true               # use mean accelerometer values for gyro calib
 lowpass_hz : 2                    # lowpass filter frequency cutoff for (noisy) derivative
 plot_inspect_static_intervals: true   # enable plotting and manual inspection of static intervals
 extr_initial_guess : [0.0, 0.0, 0.0]    # initial guess of the extrinsic offset to robot base 
-save_acc_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/acc2.txt"
-save_gyr_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/gyr2.txt"
-save_extr_calib : "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/extr2.yaml"
+save_acc_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/acc0.txt"
+save_gyr_calib: "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/gyr0.txt"
+save_extr_calib : "/home/fabi/catkin_ws/src/ros_imu_calib/data/simulated_single/extr0.yaml"

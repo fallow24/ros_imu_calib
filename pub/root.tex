@@ -98,6 +98,67 @@ Our contributions are:
   \item Calibration method without the need for external equipment
 \end{itemize}
 
+\begin{figure}[!t]
+  \centering
+  \begin{tikzpicture}
+    % Ground/Surface
+    \draw (-4,0) -- (4,0);
+    \fill[pattern=north east lines] (-4,0) rectangle (4,-0.2);
+    
+    % Ball
+    \coordinate (Origin) at (-3.9,0.1);
+    \coordinate (Contact) at (0,0);
+    \coordinate (Center) at (0,1.5);
+    \coordinate (Sensor) at (-1.1,0.8);
+    
+    \draw (Center) circle (1.5cm);
+    
+    % Sensor point
+    \fill[gray] (Sensor) circle (2pt) node[below left=2pt] {IMU};
+    
+    % Center point
+    \fill (Center) circle;
+    
+    % Vectors r_c and r_e
+    \draw[-{Stealth[length=2mm]},blue] (Origin) -- (Center) node[above] {$\vec{r}_c$};
+    \draw[-{Stealth[length=2mm]},blue] (Center) -- (Sensor) node[below right] {$\vec{r}_e$};
+    
+    % Radius R
+    \draw[dashed] (Center) -- (-1.5, 1.5) node[midway,above] {$R$};
+    
+    % Normal vector n
+    \draw[-{Stealth[length=2mm]}] (3.5,0) -- (3.5,0.8) node[midway,left] {$\vec{n}$};
+    
+    % Angular velocity (circular arrow, thinner, label offset)
+    \draw[-{Stealth[length=1.5mm]},thin] (-0.5,2.2) arc (170:10:0.5) node[pos=0.5, above=0.1pt] {$\vec{\omega}$};
+    
+    % Centripetal acceleration (exactly toward center, half length of $\vec{r}_e$)
+    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \times (\vec{\omega} \times \vec{r}_e)$};
+    
+    % Tangential acceleration
+    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e$};
+    
+    % Rolling direction indicator
+    \draw[-{Stealth[length=2.5mm]}] (1.3,0.1) -- (2.3,0.1) node[midway,above] {$R\vec{\omega} \times \vec{n}$};
+    
+    % Coordinate system at bottom right
+    
+    % Draw coordinate axes
+    \draw[-{Stealth[length=1.5mm]}] (Origin) -- ++(0.6,0) node[right] {$x$};
+    \draw[-{Stealth[length=1.5mm]}] (Origin) -- ++(0,0.6) node[above] {$z$};
+    % Y-axis coming out of the page (drawn on top with white fill)
+    \fill[white] (Origin) circle (2pt);
+    \draw (Origin) circle (2pt);
+    \fill (Origin) circle (0.8pt);
+    \node[below left=3pt] at (Origin) {$y$};
+    
+  \end{tikzpicture}
+  \caption{Spherical system rolling on a surface with normal $\vec{n}$. 
+  An IMU (gray) is located at position $\vec{r}_e$ relative to the ball center $\vec{r}_c$. 
+  The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\vec{\omega}$ around $\vec{r}_c$.}\label{fig:spherical_model}
+\end{figure}
+Figure~\ref{fig:spherical_model} is a good illustation of the tangential and centripetal force.
+
 \section{Related Works}
 Here will be some related works. Maybe spend a few words first on spherical
 mobile mapping?
@@ -183,66 +244,6 @@ Including the measured gravity $\vec{a}_g$ as done in Section~\ref{ssec:derivati
   \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e + R \frac{\partial \vec{\omega}}{\partial t} \times \vec{n} + R \vec{\omega} \times \frac{\partial \vec{n}}{\partial t} - \vec{a} .
 \end{equation}
 However, this model requires a good estimate of the normal vector $\vec{n}$ in the local sensor frame, which is subject to future work.
-
-\begin{figure}
-  \centering
-  \begin{tikzpicture}
-    % Ground/Surface
-    \draw (-4,0) -- (4,0);
-    \fill[pattern=north east lines] (-4,0) rectangle (4,-0.2);
-    
-    % Ball
-    \coordinate (Origin) at (-3.9,0.1);
-    \coordinate (Contact) at (0,0);
-    \coordinate (Center) at (0,1.5);
-    \coordinate (Sensor) at (-1.1,0.8);
-    
-    \draw (Center) circle (1.5cm);
-    
-    % Sensor point
-    \fill[gray] (Sensor) circle (2pt) node[below left=2pt] {IMU};
-    
-    % Center point
-    \fill (Center) circle;
-    
-    % Vectors r_c and r_e
-    \draw[-{Stealth[length=2mm]},blue] (Origin) -- (Center) node[above] {$\vec{r}_c$};
-    \draw[-{Stealth[length=2mm]},blue] (Center) -- (Sensor) node[below right] {$\vec{r}_e$};
-    
-    % Radius R
-    \draw[dashed] (Center) -- (-1.5, 1.5) node[midway,above] {$R$};
-    
-    % Normal vector n
-    \draw[-{Stealth[length=2mm]}] (3.5,0) -- (3.5,0.8) node[midway,left] {$\vec{n}$};
-    
-    % Angular velocity (circular arrow, thinner, label offset)
-    \draw[-{Stealth[length=1.5mm]},thin] (-0.5,2.2) arc (170:10:0.5) node[pos=0.5, above=0.1pt] {$\vec{\omega}$};
-    
-    % Centripetal acceleration (exactly toward center, half length of $\vec{r}_e$)
-    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \times (\vec{\omega} \times \vec{r}_e)$};
-    
-    % Tangential acceleration
-    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e$};
-    
-    % Rolling direction indicator
-    \draw[-{Stealth[length=2.5mm]}] (1.3,0.1) -- (2.3,0.1) node[midway,above] {$R\vec{\omega} \times \vec{n}$};
-    
-    % Coordinate system at bottom right
-    
-    % Draw coordinate axes
-    \draw[-{Stealth[length=1.5mm]}] (Origin) -- ++(0.6,0) node[right] {$x$};
-    \draw[-{Stealth[length=1.5mm]}] (Origin) -- ++(0,0.6) node[above] {$z$};
-    % Y-axis coming out of the page (drawn on top with white fill)
-    \fill[white] (Origin) circle (2pt);
-    \draw (Origin) circle (2pt);
-    \fill (Origin) circle (0.8pt);
-    \node[below left=3pt] at (Origin) {$y$};
-    
-  \end{tikzpicture}
-  \caption{Spherical system rolling on a surface with normal $\vec{n}$. 
-  An IMU (gray) is located at position $\vec{r}_e$ relative to the ball center $\vec{r}_c$. 
-  The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\vec{\omega}$ around $\vec{r}_c$.}\label{fig:spherical_model}
-\end{figure}
 
 \subsection{IMU Intrinsic Calibration}
 In order to correct the accelerometer data using the angular motion measured by the gyroscopes, both triads need to provide their readings in a shared coordinate system.
@@ -395,19 +396,75 @@ which is the vector needed during online motion acceleration compensation.
 The full transformations for each IMU describing their offset from the center of rotation and orientation with respect to the reference sensor, is $\mathbf{T}_i~=~\lbrace\mathbf{R}_{i}^{ref},~\vec{r}_{i}^{ref}\rbrace~\in~\text{SE}(3)$.
 
 \section{Experiments and Evaluation}
-We assess the calibration accuracy quantitativley using a Monte-Carlo simulation, which utilizes synthetic IMU data for calibration.
-Furthermore, we qualitativley show the impact on the attitude estimation subsystem on real-world data.      
+We assess the calibration accuracy quantitativley using a Monte-Carlo simulation, which utilizes semi-synthetic IMU data for calibration.
+The data is ``semi-synthetic'', because the input angular velocities for the simulation consist of gyroscope data that we record in the real-world.
+In the simulation we rigidly mount IMUs in different orientations and positions to a base, which is then rotated according to the input angular velocities.
+Thus, we simulate sensor readings for the resulting IMU trajectories.
+The implementation of the simulation is outlined in the next Section~\ref{ssec:simulation}.
+Additionally, we qualitativley show the impact on the attitude estimation subsystem on real-world data in Section~\ref{ssec:realworld}, using LiDAR data from our spherical mobile mapping system. 
 
-\subsection{Simulation}
+\subsection{Simulation}\label{ssec:simulation}
 
-Introduce the simulation model, e.g. noise, random walk, bias, scale, etc...
+We implement a simulation that simulates IMU measurements given a 6-DoF trajectory of the sensor.
+The trajectory can be fully synthetic, recorded in the real-world, or ``semi-synthetic'', e.g., using real-world angular velocities as input to calculate the sensor trajectory.   
+Consider a trajectory as a a set of $N$ poses $\vec{s}$, including timestamp $t$, position vector $\vec{p} = [x, y, z]$, and rotation matrix $\mathbf{R}(\psi, \theta, \phi)$ from yaw $\psi$, pitch $\theta$, and roll $\phi$:
+\begin{align}
+\mathbf{s}_i &= \left[t_i,\; \vec{p}_i,\; \mathbf{R}_i\left(\psi_i,\; \theta_i,\; \phi_i\right)\right], \quad i \in \lbrace 1,\dots,N \rbrace.
+\end{align}
+If the trajectory is not subject to any noise, e.g., if it is fully synthetic, we use plain central differences to calculate the accelerations in the world frame:
+\begin{align}
+  \Delta t_{i} &= t_{i+1} - \;t_{i-1}, \\
+  \vec{a}_i^w &= \frac{\partial^2\,\vec{p}_i}{\partial t^2} \approx \frac{\vec{p}_{i+1} - 2 \cdot \vec{p}_i +\; \vec{p}_{i-1}}{\Delta t_{i}^2}.
+\end{align}
+
+
+For movement-induced acceleration (without gravity), using DoG smoothing (if $\sigma>0$):
+\begin{align}
+v_j[i] &= \frac{1}{\Delta t_i}\,(G_\sigma^{(1)} * p_j)[i], \quad p_j \in \{x,y,z\},\\
+a^{w}_j[i] &= \frac{1}{\Delta t_i^2}\,(G_\sigma^{(2)} * p_j)[i].
+\end{align}
+
+
+World-to-body transform used in code:
+\begin{align}
+\mathbf{a}^{b}_{\text{mov}}[i] &= \mathbf{R}_i^{\top}\,\mathbf{a}^{w}[i].
+\end{align}
+
+Gravity contribution:
+\begin{align}
+\mathbf{g}^{w} &= [0,\;0,\;g]^\top,\quad g=9.80665,\\
+\mathbf{a}^{b}_{\text{grav}}[i] &= \mathbf{R}_i^{\top}\,\mathbf{g}^{w}.
+\end{align}
+
+Clean accelerometer signal:
+\begin{align}
+\mathbf{a}_{\text{clean}}[i] &= \mathbf{a}^{b}_{\text{grav}}[i] + \mathbf{a}^{b}_{\text{mov}}[i].
+\end{align}
+
+Noise model in \texttt{readings()}:
+\begin{align}
+\tilde{\Delta t}_i &= t_i - t_{i-1},\quad \tilde{\Delta t}_0 = t_1
+\quad\text{(as implemented via prepend)},\\
+\mathbf{n}_i &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_n^2}{\tilde{\Delta t}_i}\mathbf{I}\right),\\
+\mathbf{d}_i &= \sigma_{rw}\sqrt{\tilde{\Delta t}_i}\sum_{k=0}^{i}\boldsymbol{\xi}_k,\quad
+\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\\
+\mathbf{a}_{\text{meas}}[i] &=
+\mathrm{clip}\!\Big(\mathbf{a}_{\text{clean}}[i]+\mathbf{b}+\mathbf{d}_i+\mathbf{n}_i,\;
+-a_{\text{sat}},\;a_{\text{sat}}\Big).
+\end{align}
+
+\subsubsection{Calibration}
 \begin{figure*}
   \centering
   \includegraphics[width=\linewidth]{img/error_distributions}
-  \caption{Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation.
+  \caption{Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation that simulates $1000$ calibrations with semi-synthetic data. 
   (Left:) Rotation error. The ground truth rotations have been sampled uniformly across $\text{SO}(3)$. 
-  (Right:) Position error. The ground truth positions have been sampled uniformly across the interval $[-0.5, 0.5]$~m.}
+  (Right:) Position error. The ground truth position vectors $\vec{p} = [p_x, p_y, p_z]$ have been sampled uniformly across the interval $ p_x, p_y, p_z \in [-0.5, 0.5]$~m.
+  Thus, the median position error corresponds to $\approx 3.0$~\% of the maximum sensor offset.}
 \end{figure*}
+
+\subsubsection{Attitude Estimation}
+
 \begin{figure*}
   \centering
   \includegraphics[width=.69\linewidth]{img/sim_readings}
@@ -416,18 +473,20 @@ Introduce the simulation model, e.g. noise, random walk, bias, scale, etc...
 \end{figure*}
 \begin{figure*}
   \centering
-  \includegraphics[width=.24\linewidth]{img/rmse_sim}\hfill
-  \hfill
-  \includegraphics[width=.74\linewidth]{img/rot_error_sim}\hfill
+  \includegraphics[height=0.275\textheight]{img/rmse_sim}\hfill
+  \includegraphics[height=0.275\textheight]{img/rot_error_sim}\hfill
   \caption{TODO Caption}
 \end{figure*}
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/comp_sim}
-  \caption{TODO caption}
+  \caption{Comparison of total acceleration magnitude before and after the proposed calibration.
+  Before calibration (red) motion acceleration effects are present.
+  After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).
+  In this example, the position error of the offset vector after calibration is $3.01$~\%.}
 \end{figure}
 
-\subsection{Real-World}
+\subsection{Real-World}\label{ssec:realworld}
 Introduce the spherical mobile mapping system. Show the real-world results
 based on motion compensation (single IMU). Show the real-world results based on
 using redundant IMUs (no motion compensation). Show the real-world results
