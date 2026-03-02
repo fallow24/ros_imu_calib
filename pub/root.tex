@@ -465,7 +465,7 @@ Given the rotation matrix $\mathbf{R}$ of each pose, we first compute the relati
 \begin{align}
 \Delta \mathbf{R}[n] &= \mathbf{R}^\top[n-1] \cdot \mathbf{R}[n].
 \end{align}
-Using the logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie algebra~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
+Using the capitalized logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie algebra~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
 \begin{align}
 \boldsymbol{\omega}^b[n] &= \frac{\Log\!\big(\Delta \mathbf{R}[n]\big)}{t[n]-t[n-1]}.
 \end{align}
@@ -520,9 +520,9 @@ We integrate the input angular velocity to obtain the orientation $\mathbf{R}_b$
 \end{align}
 Thus, the full semi-synthetic sensor trajectories $\vec{s}_i$ in world coordinates, serving as the input for the simulation, are
 \begin{align}
-\vec{p}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{t}_{i},\\
-\mathbf{R}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{R}_{i} \\
-\mathbf{s}_{i}[n] &= \lbrace t[n],\;\vec{p}_i[n],\;\mathbf{R}_i[n] \rbrace.
+\bar{\vec{p}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{t}_{i},\\
+\bar{\mathbf{R}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{R}_{i} \\
+\mathbf{s}_{i}[n] &= \lbrace t[n],\;\bar{\vec{p}}_i[n],\;\bar{\mathbf{R}}_i[n] \rbrace.
 \end{align}
 
 \subsubsection{Attitude Estimation}

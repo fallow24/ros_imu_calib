@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex root"] 1772459361.9389 "root.aux" "root.bbl" "root" 1772462364.7738 0
+["bibtex root"] 1772459361.9389 "root.aux" "root.bbl" "root" 1772463039.28626 0
   "./root.bib" 1770736129.37181 1258 37857b9755fa55f32415bc992eac3d2e ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "root.aux" 1772462363.38988 6721 c76f6a9a050e0e3be42e1bebbec16509 "latex"
+  "root.aux" 1772463037.97631 6721 c76f6a9a050e0e3be42e1bebbec16509 "latex"
   (generated)
   "root.bbl"
   "root.blg"
   (rewritten before read)
-["dvipdf"] 1772462363.62463 "root.dvi" "root.pdf" "root" 1772462364.77507 0
-  "root.dvi" 1772462363.38988 69772 5c7b0d41a13b34cffd982ca667064616 "latex"
+["dvipdf"] 1772463038.19425 "root.dvi" "root.pdf" "root" 1772463039.28827 0
+  "root.dvi" 1772463037.97631 69852 b30bd159ca43249f1f09d4465e5257cd "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1772462362.87951 "root.tex" "root.dvi" "root" 1772462364.77388 0
+["latex"] 1772463037.51097 "root.tex" "root.dvi" "root" 1772463039.28641 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -181,9 +181,9 @@
   "img/rot_error_sim.eps" 1771935620.6307 355613 bd6709975c6b66a95a1813eeada7b029 ""
   "img/sim_poses.eps" 1771935613.45374 253378 30a0c5e41e5bf3aabd11d27cc9596d99 ""
   "img/sim_readings.eps" 1771935612.53674 1048851 e6606003f332f0813efa43d494c06650 ""
-  "root.aux" 1772462363.38988 6721 c76f6a9a050e0e3be42e1bebbec16509 "latex"
+  "root.aux" 1772463037.97631 6721 c76f6a9a050e0e3be42e1bebbec16509 "latex"
   "root.bbl" 1772459362.02356 1732 cde427f3803df79c8ffafa6f273bdcba "bibtex root"
-  "root.tex" 1772462359.9993 37618 b4629de974fba4aa6ddded548ebcff6b ""
+  "root.tex" 1772463034.93733 37654 5bb4008bc2667453e65a38d4aec5b8cb ""
   (generated)
   "root.aux"
   "root.dvi"
