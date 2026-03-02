@@ -4,6 +4,7 @@
 %\usepackage{algorithmic}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{amssymb}
 \usepackage{setspace}
 \usepackage{array}
 \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
@@ -44,6 +45,7 @@
 \DeclareMathOperator{\SLERP}{SLERP}
 \DeclareMathOperator{\SE}{SE}
 \DeclareMathOperator{\Exp}{Exp}
+\DeclareMathOperator{\Log}{Log}
 
 \begin{document}
 
@@ -133,13 +135,13 @@ Our contributions are:
     \draw[-{Stealth[length=1.5mm]},thin] (-0.5,2.2) arc (170:10:0.5) node[pos=0.5, above=0.1pt] {$\vec{\omega}$};
     
     % Centripetal acceleration (exactly toward center, half length of $\vec{r}_e$)
-    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \times (\vec{\omega} \times \vec{r}_e)$};
+    \draw[-{Stealth[length=2mm]},orange] (Sensor) -- ($(Sensor)!0.6!(Center)$) node[midway, right=4pt] {\small $\vec{\omega} \!\times\! (\vec{\omega} \!\times\! \vec{r}_e)$};
     
     % Tangential acceleration
-    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e$};
+    \draw[-{Stealth[length=2mm]},green!60!black] (Sensor) -- ++(-0.35,0.5) node[left] {\small $\frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r}_e$};
     
     % Rolling direction indicator
-    \draw[-{Stealth[length=2.5mm]}] (1.3,0.1) -- (2.3,0.1) node[midway,above] {$R\vec{\omega} \times \vec{n}$};
+    \draw[-{Stealth[length=2.5mm]}] (1.3,0.1) -- (2.3,0.1) node[midway,above] {$R\vec{\omega} \!\times\! \vec{n}$};
     
     % Coordinate system at bottom right
     
@@ -193,19 +195,19 @@ Let $\vec{r}$ be the offset of the sensor from the center of rotation and let
 $\vec{\omega}$ be its angular velocity. The linear velocity of the sensor
 following the circular trajectory is
 \begin{align}
-  \vec{v} = \frac{\partial \vec{r}}{\partial t} = \vec{\omega} \times \vec{r} \, .
+  \vec{v} = \frac{\partial \vec{r}}{\partial t} = \vec{\omega} \!\times\! \vec{r} \, .
 \end{align}
 Taking the derviative with respect to time results in the linear acceleration:
 \begin{align}
   \vec{a} & = \frac{\partial \vec{v}}{\partial t}                                                                                                              \\
-          & = \frac{\partial \vec{\omega}}{\partial t} \times \vec{r} \, + \, \vec{\omega} \times \frac{\partial \vec{r}}{\partial t}                                                \\
-          & = \frac{\partial \vec{\omega}}{\partial t} \times \vec{r} \, + \, \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right) \label{eq:forces}
+          & = \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r} \, + \, \vec{\omega} \!\times\! \frac{\partial \vec{r}}{\partial t}                                                \\
+          & = \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r} \, + \, \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r} \right) \label{eq:forces}
 \end{align}
 An accelerometer measures the gravity in negative direction, e.g., a sensor laying flat on a desk measures the upwards force from the desk pushing against gravity.
 Thus, we extend~\eqref{eq:forces} by subtracting gravity as measured by the accelerometer, $\vec{a}_g$.
 Rearranging for $\vec{a}_g$ yields
 \begin{equation}
-  \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r} \right) \, + \, \frac{\partial \vec{\omega}}{\partial t} \times \vec{r} \, - \, \vec{a} \, ,
+  \vec{a}_g = \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r} \right) \, + \, \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r} \, - \, \vec{a} \, ,
 \end{equation}
 where $\vec{a}$ is the measurement of the accelerometer.
 \subsection{Developing the Model for Spherical Systems}
@@ -222,26 +224,26 @@ center:
 \end{align}
 The same considerations from the previous Section~\ref{ssec:derivation} apply to $\vec{r_e}$, i.e.
 \begin{align}
-  \vec{v}_e & = \frac{\partial \vec{r}_e}{\partial t} = \vec{\omega} \times \vec{r}_e \, , \\
-  \vec{a}_e & = \frac{\partial \vec{v}_e}{\partial t} = \frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e \, + \, \vec{\omega} \times \left( \vec{\omega} \times \vec{r}_e \right) \, .
+  \vec{v}_e & = \frac{\partial \vec{r}_e}{\partial t} = \vec{\omega} \!\times\! \vec{r}_e \, , \\
+  \vec{a}_e & = \frac{\partial \vec{v}_e}{\partial t} = \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r}_e \, + \, \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r}_e \right) \, .
 \end{align}
 The linear velocity of the balls center, rolling without slippage, is
 \begin{align}
-  \vec{v}_c = \frac{\partial \vec{r}_c}{\partial t} = \left( R \cdot \vec{\omega} \right) \times \vec{n} \,.
+  \vec{v}_c = \frac{\partial \vec{r}_c}{\partial t} = \left( R \cdot \vec{\omega} \right) \!\times\! \vec{n} \,.
 \end{align}
 Taking the derivative with constant ball radius $R$ yields
 \begin{align}
-  \vec{a}_c = \frac{\partial \vec{v}_c}{\partial t} = ( R \cdot \frac{\partial \vec{\omega}}{\partial t} ) \times \vec{n} \, + \, \left( R \cdot \vec{\omega} \right) \times \frac{\partial \vec{n}}{\partial t} \,.
+  \vec{a}_c = \frac{\partial \vec{v}_c}{\partial t} = ( R \cdot \frac{\partial \vec{\omega}}{\partial t} ) \!\times\! \vec{n} \, + \, \left( R \cdot \vec{\omega} \right) \!\times\! \frac{\partial \vec{n}}{\partial t} \,.
 \end{align}
 The combined acceleration of the sensor due to linear and angular motion, excluding gravity, consequently is
 \begin{align}
   \vec{a} & = \frac{\partial^2 \vec{r}}{\partial t^2} \nonumber \\
           & = \frac{\partial^2 \vec{r}_e}{\partial t^2} + \frac{\partial^2 \vec{r}_c}{\partial t^2} = \vec{a}_e + \vec{a}_c  \\
-          & = \vec{\omega} \times \left( \vec{\omega} \times \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e  +  R \frac{\partial \vec{\omega}}{\partial t} \times \vec{n} +  R \vec{\omega} \times \frac{\partial \vec{n}}{\partial t}. \nonumber
+          & = \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r}_e  +  R \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{n} +  R \vec{\omega} \!\times\! \frac{\partial \vec{n}}{\partial t}. \nonumber
 \end{align}
 Including the measured gravity $\vec{a}_g$ as done in Section~\ref{ssec:derivation} and rearranging yields
 \begin{equation}
-  \vec{a}_g = \vec{\omega} \times \left( \vec{\omega} \times \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \times \vec{r}_e + R \frac{\partial \vec{\omega}}{\partial t} \times \vec{n} + R \vec{\omega} \times \frac{\partial \vec{n}}{\partial t} - \vec{a} .
+  \vec{a}_g = \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r}_e \right) +  \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r}_e + R \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{n} + R \vec{\omega} \!\times\! \frac{\partial \vec{n}}{\partial t} - \vec{a} .
 \end{equation}
 However, this model requires a good estimate of the normal vector $\vec{n}$ in the local sensor frame, which is subject to future work.
 
@@ -252,12 +254,12 @@ For further details regarding derivation and calibration residuals, reffer to th
 The model for intrinsic calibration of the IMU triads, taking into account scale, bias, and misalignments between the triad axes with respect to the accelerometers x-axis, is:
 \begin{align}
   \vec{a} &= \mathbf{M}_a \cdot \mathbf{S}_a \cdot \left( \hat{\vec{a}} - \vec{b}_a\right), \\
-  \vec{g} &= \mathbf{M}_g \cdot \mathbf{S}_g \cdot \left( \hat{\vec{g}} - \vec{b}_g\right),
+  \vec{\omega} &= \mathbf{M}_\omega \cdot \mathbf{S}_\omega \cdot \left( \hat{\vec{\omega}} - \vec{b}_\omega\right),
 \end{align}
-where $\hat{\vec{a}}$ and $\hat{\vec{g}}$ are the raw sensor readings of the accelerometer and gyroscope respectively, $\vec{b_a}$ and $\vec{b_g}$ represent biases, $\mathbf{S}_a$ and $\mathbf{S}_g$ are diagonal scale matrices, and $\mathbf{M}_a$ and $\mathbf{M}_g$ are misalignment matrices of the form:
+where $\hat{\vec{a}}$ and $\hat{\vec{\omega}}$ are the raw sensor readings of the accelerometer and gyroscope respectively, $\vec{b}_a$ and $\vec{b}_\omega$ represent biases, $\mathbf{S}_a$ and $\mathbf{S}_\omega$ are diagonal scale matrices, and $\mathbf{M}_a$ and $\mathbf{M}_\omega$ are misalignment matrices of the form:
 \begin{align}
   \mathbf{M}_a &= \begin{bmatrix} 1 & -\alpha_{yz} & \alpha_{zy} \\ 0 & 1 & -\alpha_{zx} \\ 0 & 0 & 1 \end{bmatrix},\,
-  \mathbf{M}_g = \begin{bmatrix} 1 & -\gamma_{yz} & \gamma_{zy} \\ \gamma_{xz} & 1 & -\gamma_{zx} \\ -\gamma_{xy} & \gamma_{yx} & 1 \end{bmatrix}. \nonumber
+  \mathbf{M}_\omega = \begin{bmatrix} 1 & -\gamma_{yz} & \gamma_{zy} \\ \gamma_{xz} & 1 & -\gamma_{zx} \\ -\gamma_{xy} & \gamma_{yx} & 1 \end{bmatrix}. \nonumber
 \end{align}
 \begin{figure}
   \centering
@@ -272,17 +274,18 @@ We apply the method from~\cite{imutk2014} to calibrate the bias, scale, and misa
 The proposed calibration method is based on the principle that after subtracting the accelerations due to motion from the accelerometer measurements, the result should have the same magnitude as local gravity $\norm*{\vec{g}}^2$.
 Thus, to collect an appropriate dataset for calibration, the operator should try to avoid translation of the base when rotating the system, i.e., the center of rotation should stay fixed.
 However, the presented method is robust against small deviations from this.
-Given $N$ measurements, let $\vec{\omega}_n$ and $\vec{a}_n$ with $n = \lbrace 1, 2, \dots, N\rbrace$ be corresponding intrinsically calibrated gyroscope and accelerometer measurements.
+Given $N$ measurements, let $\vec{\omega}_n$ and $\vec{a}_n$ with $n \in \lbrace 1, 2, \dots, N\rbrace$ be corresponding intrinsically calibrated gyroscope and accelerometer measurements.
 The optimization problem subject to the error $E \in \mathbb{R}$ is:
 \begin{align}
   E &= E(\tilde{\vec{r}}) \nonumber \\
-  &= \left(\sum_{n=1}^{N} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_n \times \left( \vec{\omega}_n \times \tilde{\vec{r}} \right) + \frac{\partial \vec{\omega}_n}{\partial t} \times \tilde{\vec{r}} - \vec{a}_n}^2} \right)^2 \nonumber \\
+  &= \left(\sum_{n=1}^{N} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_n \!\times\! \left( \vec{\omega}_n \!\times\! \tilde{\vec{r}} \right) + \frac{\partial \vec{\omega}_n}{\partial t} \!\times\! \tilde{\vec{r}} - \vec{a}_n}^2} \right)^2 \nonumber \\
   \vec{r} &= \argmin_{\tilde{\vec{r}}} \left( E(\tilde{\vec{r}}) \right)\,,
 \end{align}
 which is solved using the well known Levenberg-Marquardt (LM) optimization algorithm in Ceres.
+
 \subsection{Implementation of Discrete Derivative}
 In order to implement the derivative of the gyroscope $\frac{\partial \vec{\omega}}{\partial t}$, which
-is needed during calibration but also during online attitude estimation, we need to consider it as a discrete, noisy signal $x[n]$, with $N$ samples and $n \in \lbrace 1,2, \dots, N \rbrace$.
+is needed during calibration but also during online attitude estimation, we need to consider each axis as a discrete, noisy signal $x[n]$, with $N$ samples and $n \in \lbrace 1,2, \dots, N \rbrace$.
 Naivley differentiating numerically using the method of fintie differences leads to amplification of noise, making the result unusable for downstream processing.
 Instead, we use a Derivative-of-Gaussian (DoG) kernel. 
 A DoG kernel combines smoothing and differentiation in a single convolution.
@@ -298,18 +301,18 @@ The derivative of the Gaussian is
 \end{align}
 Considering the signal in discrete, variable time steps $\Delta t$, we implement the DoG as a kernel:  
 \begin{align}
-h[k] &= -\frac{t_k}{\sigma^3 \sqrt{2\pi}} 
+h_1[k] &= -\frac{t_k}{\sigma^3 \sqrt{2\pi}} 
 \exp\!\left(-\frac{t_k^2}{2\sigma^2}\right),
 \quad t_k = k \, \Delta t.
 \end{align} 
 When applying the convolution during calibration, we use the kernel with (odd) size $2K+1$ centered at $k=0$, such that it is symmetric and non-causal:
 \begin{align}
-\frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h[k] \, x[n-k].\label{eq:kernelnoncausal}
+\frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h_1[k] \, x[n-k].\label{eq:kernelnoncausal}
 \end{align}
 This yields a zero-phase, zero-delay derivative.
 For the causal version, which runs online, we apply the same kernel but shifted by $K$ samples, such that it uses only present and past samples:
 \begin{align}
-  \frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h[k] \, x[n-k-K].
+  \frac{\partial x[n]}{\partial t} &= \sum_{k=-K}^{K} h_1[k] \, x[n-k-K].
 \end{align}
 This enforces causality but introduces an inherent delay of $K$ samples. The trade-off is:
 Choosing a larger kernel (larger $K$) increases smoothing and delay, while a smaller kernel yields less delay but is noisier.
@@ -318,9 +321,9 @@ We calculate the standard deviation of the Gaussian $\sigma$ as
 \begin{align}
 \sigma &= \frac{1}{2\pi f_{\text{cut}}}.
 \end{align}
-Given the sampling frequency $f_s$ of the sensor, we calculate the kernel window size $N$ (in samples):
+Given the sampling frequency $f_s$ of the sensor, we calculate the kernel window size $W$ (in samples):
 \begin{align}
-N &= 2K+1 = \left\lceil 6 \,\sigma f_s\right\rceil,
+W &= 2K+1 = \left\lceil 6 \,\sigma f_s\right\rceil,
 \end{align}
 corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $99.7\%$ coverage.
 \begin{figure}
@@ -374,26 +377,35 @@ For the extrinsic calibration we can only use gyroscope data, since the accelero
 The rotation around the gravity vector can not be recovered.
 Thus, we formulate an optimization problem using the intrinsically calibrated gyroscope data.
 The resulting rotation then also applies to the accelerometer data since the gyroscope triads are already aligned with the accelerometer triads after intrinsic calibration due to~\cite{imutk2014}.
+\newline
 
 \subsubsection{Optimization Problem}
 
 Given $N$ measurements, let $\vec{\omega}_{n}^{i}$ be an intrinsically calibrated measurement of
-the $i$-th gyroscope triad, and let $\vec{\omega}_{n}^{ref}$ be the
-corresponding intrinsically calibrated measurement of the reference gyroscope triad, with $n = \lbrace 1, 2, \dots, N\rbrace$.
-We want to find the rotation $\mathbf{R}_{i}^{ref}~\in~\text{SO}(3)$ that transforms measurements taken in the $i$-th frame into the reference frame. 
-In order to maintain a valid rotation matrix during calibration at all times, we parameterize the optimization residual with the axis-angle $\vec{\theta}~\in~\mathfrak{so}(3)$ using the exponential map $\mathbf{R}(\vec{\theta})~=~\Exp(\vec{\theta}^\wedge)$ that maps $\mathfrak{so}(3)~\to~\text{SO}(3)$, where ${(\cdot)}^\wedge$ denotes the skew symmetric operator and $\Exp(\cdot)$ denotes the matrix exponential~\cite{microlie}.
+the $i$-th gyroscope triad, and let $\vec{\omega}_{n}^{\text{ref}}$ be the
+corresponding intrinsically calibrated measurement of the reference gyroscope triad, with $n \in \lbrace 1, 2, \dots, N\rbrace$.
+We want to find the rotation $\mathbf{R}_{i}^{\text{ref}}~\in~\text{SO}(3)$ that transforms measurements taken in the $i$-th frame into the reference frame. 
+In order to maintain a valid rotation matrix during calibration at all times, we parameterize the optimization residual with the axis-angle $\vec{\theta}~\in~\mathbb{R}^3$, using the capitalized exponential map $\Exp : \mathbb{R}^3 \to \text{SO}(3)$ as $\Exp(\vec{\theta}) = \exp(\vec{\theta}^\wedge)$, where $(\cdot)^\wedge$ denotes the skew symmetric operator and $\exp(\cdot)$ is the matrix exponential~\cite{microlie}.
 Thus, we construct the optimization problem subject to the error $\vec{e} \in \mathbb{R}^3$ as:
 \begin{align}
-  \vec{e}\left(\vec{\theta}\right) &= \sum_{n=1}^{N} \norm{\mathbf{R}(\vec{\theta}) \cdot \vec{\omega}_{n}^{i} - \vec{\omega}_{n}^{ref}}^2 \nonumber \\
-  \mathbf{R}_{i}^{ref} &= \Exp \left({\argmin_{\vec{\theta}} \vec{e}\left(\vec{\theta}\right)}^\wedge\right)\,,
+  \vec{e}\left(\vec{\theta}\right) &= \sum_{n=1}^{N} \norm{\mathbf{R}(\vec{\theta}) \cdot \vec{\omega}_{n}^{i} - \vec{\omega}_{n}^{\text{ref}}}^2 \nonumber \\
+  \mathbf{R}_{i}^{\text{ref}} &= \Exp \left({\argmin_{\vec{\theta}} \vec{e}\left(\vec{\theta}\right)}\right)\,,
 \end{align} 
 which is solved using LM in Ceres.
 We then transform the extrinsic vector $\vec{r}_i$ recovered from the motion compensation calibration outlined in Section~\ref{ssec:imucalib} to express it in the reference frame:
 \begin{align}
-  \vec{r}_i^{ref} = \mathbf{R}_{i}^{ref} \cdot \vec{r}_i \,,
+  \vec{r}_i^{\text{ref}} = \mathbf{R}_{i}^{\text{ref}} \cdot \vec{r}_i \,,
 \end{align}
 which is the vector needed during online motion acceleration compensation.
-The full transformations for each IMU describing their offset from the center of rotation and orientation with respect to the reference sensor, is $\mathbf{T}_i~=~\lbrace\mathbf{R}_{i}^{ref},~\vec{r}_{i}^{ref}\rbrace~\in~\text{SE}(3)$.
+The full transformation $\mathbf{T} \in~\text{SE}(3)$ for each IMU describing their offset from the center of rotation and orientation with respect to the reference sensor, is 
+\begin{align}
+\mathbf{T}_i~=
+  \begin{bmatrix}
+    \mathbf{R}_{i}^{\text{ref}} & \vec{r}_{i}^{\text{ref}} \\
+    \vec{0} & 1
+  \end{bmatrix}.
+  \label{eq:se3}
+\end{align}
 
 \section{Experiments and Evaluation}
 We assess the calibration accuracy quantitativley using a Monte-Carlo simulation, which utilizes semi-synthetic IMU data for calibration.
@@ -407,51 +419,73 @@ Additionally, we qualitativley show the impact on the attitude estimation subsys
 
 We implement a simulation that simulates IMU measurements given a 6-DoF trajectory of the sensor.
 The trajectory can be fully synthetic, recorded in the real-world, or ``semi-synthetic'', e.g., using real-world angular velocities as input to calculate the sensor trajectory.   
-Consider a trajectory as a a set of $N$ poses $\vec{s}$, including timestamp $t$, position vector $\vec{p} = [x, y, z]$, and rotation matrix $\mathbf{R}(\psi, \theta, \phi)$ from yaw $\psi$, pitch $\theta$, and roll $\phi$:
+Consider a trajectory as a a set of $N$ discrete poses $\vec{s}[n]$, ordered ascending in $n \in \lbrace 1,\dots,N \rbrace$ according to timestamps $t[n]$, and including the position vector $\vec{p}[n] \in \mathbb{R}^3$ and rotation matrix $\mathbf{R}[n] \in \text{SO}(3)$:
 \begin{align}
-\mathbf{s}_i &= \left[t_i,\; \vec{p}_i,\; \mathbf{R}_i\left(\psi_i,\; \theta_i,\; \phi_i\right)\right], \quad i \in \lbrace 1,\dots,N \rbrace.
+\mathbf{s}[n] &= \lbrace t[n],\; \vec{p}[n],\; \mathbf{R}[n] \rbrace.
 \end{align}
-If the trajectory is not subject to any noise, e.g., if it is fully synthetic, we use plain central differences to calculate the accelerations in the world frame:
+If the position and orientation data is not subject to any noise, e.g., if the trajectory is fully synthetic, we use plain central differences to calculate the accelerations due to movement in the world frame $\vec{a}_{m}^{w}$:
 \begin{align}
-  \Delta t_{i} &= t_{i+1} - \;t_{i-1}, \\
-  \vec{a}_i^w &= \frac{\partial^2\,\vec{p}_i}{\partial t^2} \approx \frac{\vec{p}_{i+1} - 2 \cdot \vec{p}_i +\; \vec{p}_{i-1}}{\Delta t_{i}^2}.
+  \Delta t_n &= t[n+1] - t[n-1], \\
+  \vec{a}^w_m[n] &= \frac{\partial^2\,\vec{p}[n]}{\partial t^2} \approx \frac{\vec{p}[n+1] - 2 \cdot \vec{p}[n] +\; \vec{p}[n-1]}{\Delta t_{n}^2}.
 \end{align}
-
-
-For movement-induced acceleration (without gravity), using DoG smoothing (if $\sigma>0$):
+If the pose data is subject to noise, we instead apply a convolution to each axis with a second order DoG kernel $h_2$:
 \begin{align}
-v_j[i] &= \frac{1}{\Delta t_i}\,(G_\sigma^{(1)} * p_j)[i], \quad p_j \in \{x,y,z\},\\
-a^{w}_j[i] &= \frac{1}{\Delta t_i^2}\,(G_\sigma^{(2)} * p_j)[i].
+t_k[n] &= k \cdot \Delta t_n \\
+h_2[k, n] &= \frac{1}{\sigma \sqrt{2\pi}} \left( \frac{t_k^2}{\sigma^4} - \frac{1}{\sigma^2} \right) \exp\!\left( - \frac{t_k^2}{2\sigma^2} \right), \\
+\vec{a}^w_{m}[n] &= (h_2 * \vec{p})[n], \label{eq:awm}
 \end{align}
-
-
-World-to-body transform used in code:
+where $*$ denotes an axis-wise non-causal convolution, similar to Equation~\eqref{eq:kernelnoncausal}.
+In the subsequent evaluation, we select the parameter $\sigma = 15$~ms, corresponding to a width of 3 samples for a $200$~Hz signal.  
+The sensor measures an acceleration in its own inertial body frame $\vec{a}_m^b$:
 \begin{align}
-\mathbf{a}^{b}_{\text{mov}}[i] &= \mathbf{R}_i^{\top}\,\mathbf{a}^{w}[i].
+\vec{a}^{b}_{m}[n] = \vec{R}^{\top}\![n] \cdot \vec{a}^{w}_m[n].\label{eq:abm}
 \end{align}
-
-Gravity contribution:
+The contribution $\vec{a}^b_g$ due to gravity with magnitude $G$ in the inertial body frame is:
 \begin{align}
-\mathbf{g}^{w} &= [0,\;0,\;g]^\top,\quad g=9.80665,\\
-\mathbf{a}^{b}_{\text{grav}}[i] &= \mathbf{R}_i^{\top}\,\mathbf{g}^{w}.
+\vec{g}^{w} &= [0,\;0,\;G]^\top,\\
+\vec{a}^{b}_{g}[n] &= \vec{R}^{\top}\![n]\cdot\vec{g}^{w}.\label{eq:abg}
 \end{align}
-
-Clean accelerometer signal:
+If the positions and orientations of the trajectory contain noise, it propagates through Equation~\eqref{eq:awm},~\eqref{eq:abm}, and~\eqref{eq:abg}.
+Thus, the full simulated measurement in the inertial sensor body frame, including signal noise, is
 \begin{align}
-\mathbf{a}_{\text{clean}}[i] &= \mathbf{a}^{b}_{\text{grav}}[i] + \mathbf{a}^{b}_{\text{mov}}[i].
+\mathbf{a}^b[n] &= \mathbf{a}^{b}_{g}[n] + \mathbf{a}^{b}_{m}[n].
 \end{align}
-
-Noise model in \texttt{readings()}:
+If the trajectory is fully synthetic and is not subject to any noise, we simulate accelerometer noise as sampled additive white noise $\vec{\eta}_a$.
+Furthermore, we simulate constant sensor bias $\vec{b}_a$, as well as drift $\vec{d}_a$ as brownian motion: 
 \begin{align}
-\tilde{\Delta t}_i &= t_i - t_{i-1},\quad \tilde{\Delta t}_0 = t_1
-\quad\text{(as implemented via prepend)},\\
-\mathbf{n}_i &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_n^2}{\tilde{\Delta t}_i}\mathbf{I}\right),\\
-\mathbf{d}_i &= \sigma_{rw}\sqrt{\tilde{\Delta t}_i}\sum_{k=0}^{i}\boldsymbol{\xi}_k,\quad
+\vec{\eta}_a[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{a}^2}{\Delta t}\mathbf{I}\right),\\
+\vec{d}_a[n] &= \sigma_{b_a}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
 \boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\\
-\mathbf{a}_{\text{meas}}[i] &=
-\mathrm{clip}\!\Big(\mathbf{a}_{\text{clean}}[i]+\mathbf{b}+\mathbf{d}_i+\mathbf{n}_i,\;
--a_{\text{sat}},\;a_{\text{sat}}\Big).
+\vec{a}[n] &= \vec{a}^b[n]+\vec{d}_a[n]+\vec{\eta}_a[n]+\vec{b}_a,
 \end{align}
+where $\Delta t$ is the mean sampling interval, $\sigma_a$ defines the noise density in units of $\left[\text{m} \cdot \text{s}^{-2} \cdot \text{Hz}^{-0.5}\right]$, and $\sigma_{b_a}$ defines the in-run bias instability in units of $\left[\text{m} \cdot \text{s}^{-3} \cdot \text{Hz}^{-0.5}\right]$.
+
+Analogously, we simulate gyroscope measurements from the orientation sequence.
+Given the rotation matrix $\mathbf{R}$ of each pose, we first compute the relative rotation between consecutive samples:
+\begin{align}
+\Delta \mathbf{R}[n] &= \mathbf{R}^\top[n-1] \cdot \mathbf{R}[n].
+\end{align}
+Using the logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie algebra~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
+\begin{align}
+\boldsymbol{\omega}^b[n] &= \frac{\Log\!\big(\Delta \mathbf{R}[n]\big)}{t[n]-t[n-1]}.
+\end{align}
+Similarly to the accelerometer, we apply an axis-wise convolution with a non-causal Gaussian kernel $h_0$ if the trajectory is not fully synthetic:
+\begin{align}
+h_0[k, n] &= \frac{1}{\sigma \sqrt{2\pi}} \exp\!\left(-\frac{k^2}{2\sigma^2}\left( t[n]-t[n-1] \right)^2\right),\\
+\tilde{\boldsymbol{\omega}}^b[n] &= (h_0 * \boldsymbol{\omega}^b)[n].
+\end{align}
+If the trajectory is fully synthetic, we do not need smoothing and thus continue with $\tilde{\boldsymbol{\omega}}^b=\boldsymbol{\omega}^b$.
+In that case we model constant bias error $\vec{b}_\omega$, constant scale error $\mathbf{S}$, additive white noise $\vec{\eta}_\omega$, and in-run bias drift $\vec{d}_\omega$:
+\begin{align}
+\boldsymbol{\eta}_\omega[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{g}^2}{\Delta t}\mathbf{I}\right),\\
+\mathbf{d}_\omega[n] &= \sigma_{b_g}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
+\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\\
+\boldsymbol{\omega}[n] &= 
+\mathbf{S}\,\tilde{\boldsymbol{\omega}}^b[n]+\vec{d}_\omega[n]+\vec{\eta}_\omega[n]+\vec{b}_\omega,
+\end{align}
+where $\Delta t$ is the mean sampling interval, $\sigma_{g}$ is the gyroscope noise density in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-1}\cdot \mathrm{Hz}^{-0.5}\right]$,
+$\sigma_{b_g}$ is the gyroscope random walk in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-2}\cdot \mathrm{Hz}^{-0.5}\right]$.
+\newline
 
 \subsubsection{Calibration}
 \begin{figure*}
@@ -462,6 +496,34 @@ Noise model in \texttt{readings()}:
   (Right:) Position error. The ground truth position vectors $\vec{p} = [p_x, p_y, p_z]$ have been sampled uniformly across the interval $ p_x, p_y, p_z \in [-0.5, 0.5]$~m.
   Thus, the median position error corresponds to $\approx 3.0$~\% of the maximum sensor offset.}
 \end{figure*}
+In order to quantify the accuracy of the proposed calibration method we use a Monte-Carlo simulation that calibrates IMUs using $3000$ semi-synthetic datasets.
+We generate the input trajectories for the semi-synthetic datasets by first recording real-world gyroscope data
+\begin{align}
+\boldsymbol{\omega}_{\mathrm{in}}[n] &= \lbrace t[n],\;\hat{\vec{\omega}}[n]\rbrace,
+\end{align}
+with timestamps $t[n]$ and measured angular velocities $\hat{\vec{\omega}}[n]$.
+In the simulation, we rigidly mount multiple sensors to a rotating base. 
+Let the sensor rigid transformations $\mathbf{T}_i \in \text{SE}(3)$ according to Equation~\eqref{eq:se3} be known:
+\begin{align}
+  \mathbf{T}_i = 
+  \begin{bmatrix}
+    \mathbf{R}_i & \vec{t}_i \\
+    \vec{0} & 1
+  \end{bmatrix}.
+\end{align}
+In our implementation, the reference orientation in the inertial frame is always the identity $\mathbf{R}_{\text{ref}} = \mathbf{I}$, such that its initial orientation coincides with the world frame and $\mathbf{R}^{\text{ref}}_i = \mathbf{R}_i$.
+We integrate the input angular velocity to obtain the orientation $\mathbf{R}_b$ of the base
+\begin{align}
+\Delta t[n]&=t[n]-t[n-1],\\
+\Delta \mathbf{R}[n] &= \Exp\!\big(\boldsymbol{\omega}[n] \cdot \Delta t[n]\big) \\
+\mathbf{R}_b[n] &= \mathbf{R}_b[n-1] \cdot \Delta \mathbf{R}[n].
+\end{align}
+Thus, the full semi-synthetic sensor trajectories $\vec{s}_i$ in world coordinates, serving as the input for the simulation, are
+\begin{align}
+\vec{p}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{t}_{i},\\
+\mathbf{R}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{R}_{i} \\
+\mathbf{s}_{i}[n] &= \lbrace t[n],\;\vec{p}_i[n],\;\mathbf{R}_i[n] \rbrace.
+\end{align}
 
 \subsubsection{Attitude Estimation}
 

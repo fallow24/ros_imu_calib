@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  24 FEB 2026 15:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  2 MAR 2026 15:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -251,7 +251,10 @@ Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
 \ALG@tmplength=\skip60
 )
 Document Style - pseudocode environments for use with the `algorithmicx' style
-) (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2022/12/04 v6.7b set line spacing
 )
 (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
@@ -684,32 +687,32 @@ File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
+LaTeX Font Info:    ... okay on input line 50.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Calculating math sizes for size <18> on input line 68.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 68.
+LaTeX Font Info:    Calculating math sizes for size <18> on input line 70.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 70.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 68.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 70.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -721,13 +724,13 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Overfull \hbox (2.54881pt too wide) detected at line 261
+Overfull \hbox (3.68529pt too wide) detected at line 263
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
-Underfull \hbox (badness 1845) in paragraph at lines 266--266
+Underfull \hbox (badness 1845) in paragraph at lines 268--268
 \OT1/ptm/m/n/8 Fig. 2.  Mis-align-ment an-gles $\OML/cmm/m/it/8 ^^L$ \OT1/ptm/m
 /n/8 be-tween an or-thog-o-nal body frame
  []
@@ -740,62 +743,58 @@ File: img/bode.eps Graphic file (type eps)
 Underfull \vbox (badness 1087) has occurred while \output is active []
 
  [3]
-LaTeX Font Info:    Trying to load font information for U+euf on input line 384
-.
-
-(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/ueuf.fd
-File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-)
-Underfull \hbox (badness 1661) in paragraph at lines 394--397
-\OT1/ptm/m/n/10 er-a-tion com-pen-sa-tion. The full trans-for-ma-tions for each
-
+Underfull \hbox (badness 2065) in paragraph at lines 371--381
+[]\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 1354) in paragraph at lines 394--397
-\OT1/ptm/m/n/10 and ori-en-ta-tion with re-spect to the ref-er-ence sen-sor, is
+Underfull \hbox (badness 10000) in paragraph at lines 371--381
 
  []
 
 [4]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
-44.
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-)
-Overfull \hbox (14.37015pt too wide) detected at line 454
-[]
+Underfull \vbox (badness 3148) has occurred while \output is active []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 485--489
+
  []
 
 File: img/error_distributions.eps Graphic file (type eps)
 <img/error_distributions.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [5]
 File: img/sim_readings.eps Graphic file (type eps)
- <img/sim_readings.eps>
+
+<img/sim_readings.eps>
 File: img/sim_poses.eps Graphic file (type eps)
  <img/sim_poses.eps>
 File: img/rmse_sim.eps Graphic file (type eps)
-
-<img/rmse_sim.eps>
+ <img/rmse_sim.eps>
 File: img/rot_error_sim.eps Graphic file (type eps)
- <img/rot_error_sim.eps>
+
+<img/rot_error_sim.eps>
 File: img/comp_sim.eps Graphic file (type eps)
- <img/comp_sim.eps> [5]
+ <img/comp_sim.eps>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [6]
+(./root.bbl) [7
 
-(./root.bbl) [6] (./root.aux)
+] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17039 strings out of 474223
- 352997 string characters out of 5748759
- 1959972 words of memory out of 5000000
- 38961 multiletter control sequences out of 15000+600000
- 592436 words of font info for 132 fonts, out of 8000000 for 9000
+ 17406 strings out of 474223
+ 356520 string characters out of 5748759
+ 1962972 words of memory out of 5000000
+ 39335 multiletter control sequences out of 15000+600000
+ 591040 words of font info for 126 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 84i,17n,93p,691b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,18n,93p,691b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (6 pages, 62952 bytes).
+Output written on root.dvi (7 pages, 69772 bytes).
