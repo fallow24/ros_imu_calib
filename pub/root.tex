@@ -208,8 +208,10 @@ Thus, we extend~\eqref{eq:forces} by subtracting gravity as measured by the acce
 Rearranging for $\vec{a}_g$ yields
 \begin{equation}
   \vec{a}_g = \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r} \right) \, + \, \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r} \, - \, \vec{a} \, ,
+  \label{eq:compensation}
 \end{equation}
 where $\vec{a}$ is the measurement of the accelerometer.
+
 \subsection{Developing the Model for Spherical Systems}
 The previous Section~\ref{ssec:derivation} only considers the accelerations due
 to rotation of the system. This Section will develop the model including the
@@ -271,7 +273,15 @@ Figure~\ref{fig:mis} illustrates the misalignment angles represented by the matr
 We apply the method from~\cite{imutk2014} to calibrate the bias, scale, and misalignment parameters without external equipment, using the multi-orientation approach: We place the IMUs in different orientations for a short duration, then rotate it into another orientation, and repeat.
 
 \subsection{Motion Compensation Calibration}\label{ssec:imucalib}
-The proposed calibration method is based on the principle that after subtracting the accelerations due to motion from the accelerometer measurements, the result should have the same magnitude as local gravity $\norm*{\vec{g}}^2$.
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{img/comp_sim}
+  \caption{Comparison of total acceleration magnitude before and after the proposed calibration.
+  Before calibration (red) motion acceleration effects are present.
+  After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).
+  In this example, the position error of the offset vector after calibration is $3.01$~\%.}\label{fig:magnitude}
+\end{figure}
+The proposed calibration method is based on the principle that after subtracting the accelerations due to motion from the accelerometer measurements, the result should have the same magnitude as local gravity $\norm*{\vec{g}}^2$, which is illustrated by Figure~\ref{fig:magnitude}.
 Thus, to collect an appropriate dataset for calibration, the operator should try to avoid translation of the base when rotating the system, i.e., the center of rotation should stay fixed.
 However, the presented method is robust against small deviations from this.
 Given $N$ measurements, let $\vec{\omega}_n$ and $\vec{a}_n$ with $n \in \lbrace 1, 2, \dots, N\rbrace$ be corresponding intrinsically calibrated gyroscope and accelerometer measurements.
@@ -451,12 +461,12 @@ Thus, the full simulated measurement in the inertial sensor body frame, includin
 \mathbf{a}^b[n] &= \mathbf{a}^{b}_{g}[n] + \mathbf{a}^{b}_{m}[n].
 \end{align}
 If the trajectory is fully synthetic and is not subject to any noise, we simulate accelerometer noise as sampled additive white noise $\vec{\eta}_a$.
-Furthermore, we simulate constant sensor bias $\vec{b}_a$, as well as drift $\vec{d}_a$ as brownian motion: 
+Furthermore, we simulate constant sensor bias $\vec{b}_a$, constant scale error $\mathbf{S}_a$ as well as drift $\vec{d}_a$ as brownian motion: 
 \begin{align}
-\vec{\eta}_a[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{a}^2}{\Delta t}\mathbf{I}\right),\\
+\vec{\eta}_a[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{a}^2}{\Delta t}\mathbf{I}\right),\nonumber \\
 \vec{d}_a[n] &= \sigma_{b_a}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
-\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\\
-\vec{a}[n] &= \vec{a}^b[n]+\vec{d}_a[n]+\vec{\eta}_a[n]+\vec{b}_a,
+\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\nonumber \\
+\vec{a}[n] &= \mathbf{S}_a \cdot \vec{a}^b[n]+\vec{d}_a[n]+\vec{\eta}_a[n]+\vec{b}_a,\label{eq:simacc}
 \end{align}
 where $\Delta t$ is the mean sampling interval, $\sigma_a$ defines the noise density in units of $\left[\text{m} \cdot \text{s}^{-2} \cdot \text{Hz}^{-0.5}\right]$, and $\sigma_{b_a}$ defines the in-run bias instability in units of $\left[\text{m} \cdot \text{s}^{-3} \cdot \text{Hz}^{-0.5}\right]$.
 
@@ -465,7 +475,7 @@ Given the rotation matrix $\mathbf{R}$ of each pose, we first compute the relati
 \begin{align}
 \Delta \mathbf{R}[n] &= \mathbf{R}^\top[n-1] \cdot \mathbf{R}[n].
 \end{align}
-Using the capitalized logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie algebra~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
+Using the capitalized logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie group~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
 \begin{align}
 \boldsymbol{\omega}^b[n] &= \frac{\Log\!\big(\Delta \mathbf{R}[n]\big)}{t[n]-t[n-1]}.
 \end{align}
@@ -475,31 +485,23 @@ h_0[k, n] &= \frac{1}{\sigma \sqrt{2\pi}} \exp\!\left(-\frac{k^2}{2\sigma^2}\lef
 \tilde{\boldsymbol{\omega}}^b[n] &= (h_0 * \boldsymbol{\omega}^b)[n].
 \end{align}
 If the trajectory is fully synthetic, we do not need smoothing and thus continue with $\tilde{\boldsymbol{\omega}}^b=\boldsymbol{\omega}^b$.
-In that case we model constant bias error $\vec{b}_\omega$, constant scale error $\mathbf{S}$, additive white noise $\vec{\eta}_\omega$, and in-run bias drift $\vec{d}_\omega$:
+In that case we model constant bias error $\vec{b}_\omega$, constant scale error $\mathbf{S}_\omega$, additive white noise $\vec{\eta}_\omega$, and in-run bias drift $\vec{d}_\omega$:
 \begin{align}
-\boldsymbol{\eta}_\omega[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{g}^2}{\Delta t}\mathbf{I}\right),\\
+\boldsymbol{\eta}_\omega[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{g}^2}{\Delta t}\mathbf{I}\right), \nonumber \\
 \mathbf{d}_\omega[n] &= \sigma_{b_g}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
-\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\\
+\boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\nonumber \\
 \boldsymbol{\omega}[n] &= 
-\mathbf{S}\,\tilde{\boldsymbol{\omega}}^b[n]+\vec{d}_\omega[n]+\vec{\eta}_\omega[n]+\vec{b}_\omega,
+\mathbf{S}_\omega\, \cdot \tilde{\boldsymbol{\omega}}^b[n]+\vec{d}_\omega[n]+\vec{\eta}_\omega[n]+\vec{b}_\omega,\label{eq:simomega}
 \end{align}
 where $\Delta t$ is the mean sampling interval, $\sigma_{g}$ is the gyroscope noise density in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-1}\cdot \mathrm{Hz}^{-0.5}\right]$,
 $\sigma_{b_g}$ is the gyroscope random walk in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-2}\cdot \mathrm{Hz}^{-0.5}\right]$.
 \newline
 
 \subsubsection{Calibration}
-\begin{figure*}
-  \centering
-  \includegraphics[width=\linewidth]{img/error_distributions}
-  \caption{Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation that simulates $1000$ calibrations with semi-synthetic data. 
-  (Left:) Rotation error. The ground truth rotations have been sampled uniformly across $\text{SO}(3)$. 
-  (Right:) Position error. The ground truth position vectors $\vec{p} = [p_x, p_y, p_z]$ have been sampled uniformly across the interval $ p_x, p_y, p_z \in [-0.5, 0.5]$~m.
-  Thus, the median position error corresponds to $\approx 3.0$~\% of the maximum sensor offset.}
-\end{figure*}
-In order to quantify the accuracy of the proposed calibration method we use a Monte-Carlo simulation that calibrates IMUs using $3000$ semi-synthetic datasets.
+In order to quantify the accuracy of the proposed calibration method we use a Monte-Carlo simulation that calibrates $2000$ IMUs using semi-synthetic data.
 We generate the input trajectories for the semi-synthetic datasets by first recording real-world gyroscope data
 \begin{align}
-\boldsymbol{\omega}_{\mathrm{in}}[n] &= \lbrace t[n],\;\hat{\vec{\omega}}[n]\rbrace,
+  \boldsymbol{\omega}_{\mathrm{in}}[n] &= \lbrace t[n],\;\hat{\vec{\omega}}[n]\rbrace,
 \end{align}
 with timestamps $t[n]$ and measured angular velocities $\hat{\vec{\omega}}[n]$.
 In the simulation, we rigidly mount multiple sensors to a rotating base. 
@@ -511,42 +513,56 @@ Let the sensor rigid transformations $\mathbf{T}_i \in \text{SE}(3)$ according t
     \vec{0} & 1
   \end{bmatrix}.
 \end{align}
-In our implementation, the reference orientation in the inertial frame is always the identity $\mathbf{R}_{\text{ref}} = \mathbf{I}$, such that its initial orientation coincides with the world frame and $\mathbf{R}^{\text{ref}}_i = \mathbf{R}_i$.
-We integrate the input angular velocity to obtain the orientation $\mathbf{R}_b$ of the base
+In our implementation, the reference orientation in the inertial frame is always the identity $\mathbf{R}_{\text{ref}} = \mathbf{I}$, such that its initial orientation coincides with the world frame, and $\mathbf{R}^{\text{ref}}_i = \mathbf{R}_i$.
+We use discrete integration of the input angular velocity to obtain the orientation $\mathbf{R}_b$ of the base
 \begin{align}
-\Delta t[n]&=t[n]-t[n-1],\\
-\Delta \mathbf{R}[n] &= \Exp\!\big(\boldsymbol{\omega}[n] \cdot \Delta t[n]\big) \\
-\mathbf{R}_b[n] &= \mathbf{R}_b[n-1] \cdot \Delta \mathbf{R}[n].
+  \mathbf{R}_b[n] &= \mathbf{R}_b[n-1] \cdot \Exp\!\big(\boldsymbol{\hat{\omega}}[n] \cdot \left(t[n]-t[n-1]\right) \big) .
 \end{align}
 Thus, the full semi-synthetic sensor trajectories $\vec{s}_i$ in world coordinates, serving as the input for the simulation, are
 \begin{align}
-\bar{\vec{p}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{t}_{i},\\
-\bar{\mathbf{R}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{R}_{i} \\
-\mathbf{s}_{i}[n] &= \lbrace t[n],\;\bar{\vec{p}}_i[n],\;\bar{\mathbf{R}}_i[n] \rbrace.
+  \bar{\vec{p}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{t}_{i} \;,\\
+  \bar{\mathbf{R}}_i[n] &= \mathbf{R}_b[n] \cdot \mathbf{R}_{i} \;,\\
+  \mathbf{s}_{i}[n] &= \lbrace t[n],\;\bar{\vec{p}}_i[n],\;\bar{\mathbf{R}}_i[n] \rbrace.
 \end{align}
-
-\subsubsection{Attitude Estimation}
-
 \begin{figure*}
   \centering
-  \includegraphics[width=.69\linewidth]{img/sim_readings}
-  \includegraphics[width=.29\linewidth]{img/sim_poses}
-  \caption{TODO Caption}
+  \includegraphics[width=\linewidth]{img/error_distributions}
+  \caption{Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation that simulates $2000$ sensor calibrations with semi-synthetic data. 
+  (Left:) Rotation error. The ground truth rotations have been sampled uniformly across Euler angles. 
+  (Right:) Position error. The ground truth position vectors $\vec{p} = [p_x, p_y, p_z]$ have been sampled uniformly across the interval $ p_x, p_y, p_z \in [-0.5, 0.5]$~m.}\label{fig:histograms}
 \end{figure*}
+The simulation samples the ground truth offset vectors $\vec{t}_i$ uniformly from a cube with $1$~m side length, and the ground truth rotations are uniformly sampled in Euler coordinates. 
+Figure~\ref{fig:histograms} shows the resulting distribution of rotation and position errors.
+The distributions show a median position error of $2.6$~cm and rotation error of $0.0091^{\circ}$, indicating the accuracy to which the method recovers the known rigid body transformation $\mathbf{T}_i$ of each sensor. 
+However, these estimates are likely influenced by the input angular velocities used to create the semi-synthetic data and thus, might not reflect the true accuracy of the proposed method.
+We want to explore other possible dependencies and test the method with different hardware in future work.
+\newline
+
+\subsubsection{Attitude Estimation}
+In this section we consider the influence of the proposed calibration method on popular downstream attitude estimation algorithms, using fully synthetic data.    
+The simulation first creates true angular velocities which are input to a trochoidal motion model~\cite{trochoidal}, resembling the trajectory of a point rigidly mounted inside a rolling ball.
+We use the resulting trochoidal sensor trajectories to simulate measurements according to Equations~\eqref{eq:simacc} and~\eqref{eq:simomega}.
+Figure~\ref{fig:simtraj} shows an example of the simulated trochoidal trajectory, as well as the corresponding sensor measurements.
+\begin{figure*}
+  \centering
+  \includegraphics[width=.29\linewidth]{img/sim_poses}
+  \includegraphics[width=.69\linewidth]{img/sim_readings}
+  \caption{Example of a simulated fully-synthetic dataset.
+  (Left:) Trochoidal trajectory generated from true angular velocities via the trochoidal motion model due to~\cite{trochoidal}.
+  (Right:) Corresponding simulated accelerometer and gyroscope measurements, subject to bias, noise, drift, and scale errors.}\label{fig:simtraj}
+\end{figure*}
+We compare three state-of-the-art attitude estimation algorithms: 
+(1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well known Madgwick-\cite{madgwick} with the Complementary-filter~\cite{complementary}. 
+(2) A quaternion based Extended Kalman Filter (QEKF)
+Instead of the raw accelerometer data, each algorithm processes the compensated data due to Equation~\eqref{eq:compensation}, using the calibrated offset vector.
+Figure~\ref{fig:simerror} shows the corre
 \begin{figure*}
   \centering
   \includegraphics[height=0.275\textheight]{img/rmse_sim}\hfill
   \includegraphics[height=0.275\textheight]{img/rot_error_sim}\hfill
-  \caption{TODO Caption}
+  \caption{TODO Caption}\label{fig:simerror}
 \end{figure*}
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{img/comp_sim}
-  \caption{Comparison of total acceleration magnitude before and after the proposed calibration.
-  Before calibration (red) motion acceleration effects are present.
-  After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).
-  In this example, the position error of the offset vector after calibration is $3.01$~\%.}
-\end{figure}
+
 
 \subsection{Real-World}\label{ssec:realworld}
 Introduce the spherical mobile mapping system. Show the real-world results
