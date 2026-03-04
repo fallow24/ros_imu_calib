@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  3 MAR 2026 13:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  4 MAR 2026 15:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -754,13 +754,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 381--391
  []
 
 [4]
+Underfull \hbox (badness 3386) in paragraph at lines 495--499
+\OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
+s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
+e
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 495--499
 
  []
 
-[5]
+
+Underfull \vbox (badness 1168) has occurred while \output is active []
+
+ [5]
 File: img/error_distributions.eps Graphic file (type eps)
- <img/error_distributions.eps>
+
+<img/error_distributions.eps>
 Underfull \hbox (badness 10000) in paragraph at lines 526--540
 
  []
@@ -773,23 +784,50 @@ File: img/rmse_sim.eps Graphic file (type eps)
  <img/rmse_sim.eps>
 File: img/rot_error_sim.eps Graphic file (type eps)
 
-<img/rot_error_sim.eps> [6] (./root.bbl
+<img/rot_error_sim.eps>
+File: img/single_raw_top.eps Graphic file (type eps)
+ <img/single_raw_top.eps>
+File: img/single_cor_top.eps Graphic file (type eps)
+ <img/single_cor_top.eps>
+File: img/multi_raw_top.eps Graphic file (type eps)
+
+<img/multi_raw_top.eps>
+File: img/multi_cor_top.eps Graphic file (type eps)
+ <img/multi_cor_top.eps>
+File: img/single_raw_side.eps Graphic file (type eps)
+ <img/single_raw_side.eps>
+File: img/single_cor_side.eps Graphic file (type eps)
+
+<img/single_cor_side.eps>
+File: img/multi_raw_side.eps Graphic file (type eps)
+ <img/multi_raw_side.eps>
+File: img/multi_cor_side.eps Graphic file (type eps)
+ <img/multi_cor_side.eps>
+File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
+
+<img/multi_cor_vs_raw_zoom.eps> [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-) [7]
-(./root.aux)
+
+(./root.bbl [7]
+Underfull \hbox (badness 4467) in paragraph at lines 47--51
+[]\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
+d
+ []
+
+) [8] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17416 strings out of 474223
- 356654 string characters out of 5748759
+ 17492 strings out of 474223
+ 358669 string characters out of 5748759
  1960972 words of memory out of 5000000
- 39345 multiletter control sequences out of 15000+600000
- 590533 words of font info for 125 fonts, out of 8000000 for 9000
+ 39412 multiletter control sequences out of 15000+600000
+ 591040 words of font info for 126 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 84i,18n,93p,691b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,18n,93p,1173b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (7 pages, 73728 bytes).
+Output written on root.dvi (8 pages, 78112 bytes).

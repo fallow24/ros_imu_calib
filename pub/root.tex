@@ -487,14 +487,14 @@ h_0[k, n] &= \frac{1}{\sigma \sqrt{2\pi}} \exp\!\left(-\frac{k^2}{2\sigma^2}\lef
 If the trajectory is fully synthetic, we do not need smoothing and thus continue with $\tilde{\boldsymbol{\omega}}^b=\boldsymbol{\omega}^b$.
 In that case we model constant bias error $\vec{b}_\omega$, constant scale error $\mathbf{S}_\omega$, additive white noise $\vec{\eta}_\omega$, and in-run bias drift $\vec{d}_\omega$:
 \begin{align}
-\boldsymbol{\eta}_\omega[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{g}^2}{\Delta t}\mathbf{I}\right), \nonumber \\
-\mathbf{d}_\omega[n] &= \sigma_{b_g}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
+\boldsymbol{\eta}_\omega[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{\omega}^2}{\Delta t}\mathbf{I}\right), \nonumber \\
+\mathbf{d}_\omega[n] &= \sigma_{b_\omega}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
 \boldsymbol{\xi}_k\sim\mathcal{N}(\mathbf{0},\mathbf{I}),\nonumber \\
 \boldsymbol{\omega}[n] &= 
 \mathbf{S}_\omega\, \cdot \tilde{\boldsymbol{\omega}}^b[n]+\vec{d}_\omega[n]+\vec{\eta}_\omega[n]+\vec{b}_\omega,\label{eq:simomega}
 \end{align}
-where $\Delta t$ is the mean sampling interval, $\sigma_{g}$ is the gyroscope noise density in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-1}\cdot \mathrm{Hz}^{-0.5}\right]$,
-$\sigma_{b_g}$ is the gyroscope random walk in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-2}\cdot \mathrm{Hz}^{-0.5}\right]$.
+where $\Delta t$ is the mean sampling interval, $\sigma_{\omega}$ is the gyroscope noise density in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-1}\cdot \mathrm{Hz}^{-0.5}\right]$,
+$\sigma_{b_\omega}$ is the gyroscope in-run bias instability in units of $\left[\mathrm{rad}\cdot \mathrm{s}^{-2}\cdot \mathrm{Hz}^{-0.5}\right]$.
 \newline
 
 \subsubsection{Calibration}
@@ -547,20 +547,36 @@ Figure~\ref{fig:simtraj} shows an example of the simulated trochoidal trajectory
   \centering
   \includegraphics[width=.29\linewidth]{img/sim_poses}
   \includegraphics[width=.69\linewidth]{img/sim_readings}
-  \caption{Example of a simulated fully-synthetic dataset.
+  \caption{Example of a simulated fully-synthetic dataset used for comparison of attitude estimation algorithms.
   (Left:) Trochoidal trajectory generated from true angular velocities via the trochoidal motion model due to~\cite{trochoidal}.
-  (Right:) Corresponding simulated accelerometer and gyroscope measurements, subject to bias, noise, drift, and scale errors.}\label{fig:simtraj}
+  (Right:) Corresponding simulated accelerometer and gyroscope measurements, subject to bias, noise, drift, and scale errors.
+  Simulated parameters: Accelerometer noise density $\sigma_a = 0.002~\left[\text{m} \cdot \text{s}^{-2} \cdot \text{Hz}^{-0.5}\right]$, 
+  accelerometer in-run bias instability $\sigma_{b_a} = 0.00002~\left[\text{m} \cdot \text{s}^{-3} \cdot \text{Hz}^{-0.5}\right]$,
+  gyroscope noise density $\sigma_{\omega} = 0.002~\left[\mathrm{rad}\cdot \mathrm{s}^{-1}\cdot \mathrm{Hz}^{-0.5}\right]$,
+  and gyroscope in-run bias instability $\sigma_{b_\omega} = 0.0002~\left[\mathrm{rad}\cdot \mathrm{s}^{-2}\cdot \mathrm{Hz}^{-0.5}\right]$.
+  In this example, we do not simulate scale and bias errors, since attitude estimation happens after applying calibration.}\label{fig:simtraj}
 \end{figure*}
-We compare three state-of-the-art attitude estimation algorithms: 
-(1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well known Madgwick-\cite{madgwick} with the Complementary-filter~\cite{complementary}. 
-(2) A quaternion based Extended Kalman Filter (QEKF)
-Instead of the raw accelerometer data, each algorithm processes the compensated data due to Equation~\eqref{eq:compensation}, using the calibrated offset vector.
-Figure~\ref{fig:simerror} shows the corre
+These simulated measurements are input to three state-of-the-art attitude estimation algorithms: 
+(1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well known Madgwick- with the Complementary-filter~\cite{madgwick,complementary}. 
+(2) A quaternion-based Extended Kalman Filter (QEKF)~\cite{qekf}.
+We use the magnetometer-free reference implementation from the AHRS toolbox~\cite{ahrs}.
+Finally, (3) the Mahony filter~\cite{mahony}.
+Instead of the raw accelerometer data, each estimator processes the compensated data due to Equation~\eqref{eq:compensation}, using the calibrated offset vector.
+Figure~\ref{fig:simerror} shows the resulting attitude estimtation errors for each algorithm with and without applying the proposed method.
+The errors of each estimator significantly reduce after applying calibration and motion compensation to the accelerometer data.
+Without compensation, the attitude estimators accumulate error quickly due to the high angular velocity, such that both noisy gyroscope integration, as well as gravity measurements from the accelerometer, are unreliable. 
 \begin{figure*}
   \centering
   \includegraphics[height=0.275\textheight]{img/rmse_sim}\hfill
   \includegraphics[height=0.275\textheight]{img/rot_error_sim}\hfill
-  \caption{TODO Caption}\label{fig:simerror}
+  \caption{Comparison of rotation errors on attitude estimators with and without motion-acceleration compensation.
+  Input to the estimators in the illustrated example are the fully-synthetic simulated accelerometer and gyroscope readings from Figure~\ref{fig:simtraj}.
+  We use the following parameters for each estimator. 
+  Autogain~\cite{imujasper}: $\Theta = 0.1$, $\theta = 0.1$.
+  QEKF~\cite{ahrs}: $P_{\text{init}} = 1$, $\sigma_a = 0.005$, $\sigma_g = 0.005$.
+  Mahony~\cite{mahony}: $K_p = 50$, $K_i = 0.01$.
+  (Left:) Root mean squared of rotation errors. 
+  (Right:) Rotation errors as timeseries.}\label{fig:simerror}
 \end{figure*}
 
 
@@ -570,7 +586,25 @@ based on motion compensation (single IMU). Show the real-world results based on
 using redundant IMUs (no motion compensation). Show the real-world results
 based on using reduntant IMUs (with motion compensation). Maybe even add
 subsubsections for them.
-% \subsubsection{Motion Compensation}
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.245\textwidth]{img/single_raw_top}
+  \includegraphics[width=0.245\textwidth]{img/single_cor_top}
+  \includegraphics[width=0.245\textwidth]{img/multi_raw_top}
+  \includegraphics[width=0.245\textwidth]{img/multi_cor_top}\vspace{1pt}
+  \includegraphics[width=0.245\textwidth]{img/single_raw_side}
+  \includegraphics[width=0.245\textwidth]{img/single_cor_side}
+  \includegraphics[width=0.245\textwidth]{img/multi_raw_side}
+  \includegraphics[width=0.245\textwidth]{img/multi_cor_side}
+  \caption{TODO caption!}
+\end{figure*}
+\begin{figure}
+  \centering
+  \includegraphics[width=\linewidth]{img/multi_cor_vs_raw_zoom}
+  \caption{TODO caption. Magenta: Before calibration. Yellow: After calibration.}
+\end{figure}
+  % \subsubsection{Motion Compensation}
 % \subsubsection{Redundant IMUs}
 % \subsubsection{Redundant IMUs with Motion Compensation}
 
