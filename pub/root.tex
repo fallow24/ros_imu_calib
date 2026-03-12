@@ -7,12 +7,13 @@
 \usepackage{amssymb}
 \usepackage{setspace}
 \usepackage{array}
-\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage[font=normalsize]{subfig}
 \usepackage{textcomp}
 \usepackage{stfloats}
 \usepackage{url}
 \usepackage{verbatim}
 \usepackage{graphicx}
+%\usepackage[draft]{graphicx}
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,decorations.markings,calc,patterns}
 \usepackage{cite}
@@ -589,20 +590,49 @@ subsubsections for them.
 
 \begin{figure*}
   \centering
-  \includegraphics[width=0.245\textwidth]{img/single_raw_top}
-  \includegraphics[width=0.245\textwidth]{img/single_cor_top}
-  \includegraphics[width=0.245\textwidth]{img/multi_raw_top}
-  \includegraphics[width=0.245\textwidth]{img/multi_cor_top}\vspace{1pt}
-  \includegraphics[width=0.245\textwidth]{img/single_raw_side}
-  \includegraphics[width=0.245\textwidth]{img/single_cor_side}
-  \includegraphics[width=0.245\textwidth]{img/multi_raw_side}
-  \includegraphics[width=0.245\textwidth]{img/multi_cor_side}
-  \caption{TODO caption!}
+  \subfloat[]{
+    \begin{minipage}[b]{0.249\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/single_raw_top}\vspace{4pt}
+      \includegraphics[width=\linewidth]{img/single_raw_side}
+    \end{minipage}
+  }
+  \subfloat[]{
+    \begin{minipage}[b]{0.249\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/single_cor_top}\vspace{4pt}
+      \includegraphics[width=\linewidth]{img/single_cor_side}
+    \end{minipage}
+  }
+  \subfloat[]{
+    \begin{minipage}[b]{0.249\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/multi_raw_top}\vspace{4pt}
+      \includegraphics[width=\linewidth]{img/multi_raw_side}
+    \end{minipage}
+  }
+  \subfloat[]{
+    \begin{minipage}[b]{0.249\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/multi_cor_top}\vspace{4pt}
+      \includegraphics[width=\linewidth]{img/multi_cor_side}
+    \end{minipage}
+  }
+  \caption{Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation.
+  (Above row:) Truncated orthographic birds-eye perspective with cut ceiling.
+  (Below row:) Truncated orthographic horizontal perspective with one cut wall.
+  (Column a:) Single off-centered IMU without motion acceleration compensation.
+  (Column b:) Single off-centered IMU with compensation. Same point data as in (a). 
+  (Column c:) Multiple, symmetrically placed IMU's without compensation.
+  (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (d).}\label{fig:pointcompare}
 \end{figure*}
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/multi_cor_vs_raw_zoom}
-  \caption{TODO caption. Magenta: Before calibration. Yellow: After calibration.}
+  \caption{Detailed comparison of the point clouds shown in Figure~\ref{fig:pointcompare}~(c) and~(d).
+  The view is a truncated orthographic horizontal perspective with one cut wall. 
+  (Magenta:) Without compensation, corresponding to Figure~\ref{fig:pointcompare}~(c). 
+  (Yellow:) With compensation, corresponding to Figure~\ref{fig:pointcompare}~(d).}
 \end{figure}
   % \subsubsection{Motion Compensation}
 % \subsubsection{Redundant IMUs}

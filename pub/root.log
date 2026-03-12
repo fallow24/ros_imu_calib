@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  4 MAR 2026 15:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  12 MAR 2026 11:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -270,6 +270,9 @@ Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
 (/usr/share/texlive/texmf-dist/tex/latex/subfig/subfig.sty
 Package: subfig 2005/06/28 ver: 1.3 subfig package
 
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen185
@@ -294,28 +297,36 @@ ference \hbox to\hsize {\normalfont \footnotesize \hfil \box \@tempboxa \hfil }
 \else \hbox to\hsize {\normalfont \footnotesize \box \@tempboxa \hfil }\fi \fi 
 \fi  on input line 1175.
 )
-\c@KVtest=\count293
+
+Package caption Warning: Unknown document class (or package),
+(caption)                standard defaults will be used.
+See the caption package documentation for explanation.
+
+\c@caption@flags=\count293
+\c@continuedfloat=\count294
+Package caption Info: float package is loaded.
+)
+\c@KVtest=\count295
 \sf@farskip=\skip63
 \sf@captopadj=\dimen193
 \sf@capskip=\skip64
 \sf@nearskip=\skip65
-\c@subfigure=\count294
-\c@subfigure@save=\count295
-\c@lofdepth=\count296
-\c@subtable=\count297
-\c@subtable@save=\count298
-\c@lotdepth=\count299
+\c@subfigure=\count296
+\c@subfigure@save=\count297
+\c@lofdepth=\count298
+\c@subtable=\count299
+\c@subtable@save=\count300
+\c@lotdepth=\count301
 \sf@top=\skip66
 \sf@bottom=\skip67
-)
-(/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+) (/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
 Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
 )
 (/usr/share/texlive/texmf-dist/tex/latex/sttools/stfloats.sty
 Package: stfloats 2017/03/27 v3.3 Improve float mechanism and baselineskip sett
 ings
-\@dblbotnum=\count300
-\c@dblbotnumber=\count301
+\@dblbotnum=\count302
+\c@dblbotnumber=\count303
 )
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
@@ -389,14 +400,14 @@ Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
 \pgf@yd=\dimen263
 \w@pgf@writea=\write3
 \r@pgf@reada=\read3
-\c@pgf@counta=\count302
-\c@pgf@countb=\count303
-\c@pgf@countc=\count304
-\c@pgf@countd=\count305
+\c@pgf@counta=\count304
+\c@pgf@countb=\count305
+\c@pgf@countc=\count306
+\c@pgf@countd=\count307
 \t@pgf@toka=\toks34
 \t@pgf@tokb=\toks35
 \t@pgf@tokc=\toks36
-\pgf@sys@id@count=\count306
+\pgf@sys@id@count=\count308
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
 )
@@ -407,13 +418,13 @@ File: pgfsys-dvips.def 2023-01-15 v3.1.10 (3.1.10)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-postsc
 ript.def
 File: pgfsys-common-postscript.def 2023-01-15 v3.1.10 (3.1.10)
-\pgf@objectcount=\count307
+\pgf@objectcount=\count309
 )))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.
 tex
 File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfsyssoftpath@smallbuffer@items=\count308
-\pgfsyssoftpath@bigbuffer@items=\count309
+\pgfsyssoftpath@smallbuffer@items=\count310
+\pgfsyssoftpath@bigbuffer@items=\count311
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.
 tex
@@ -443,7 +454,7 @@ Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen264
-\pgfmath@count=\count310
+\pgfmath@count=\count312
 \pgfmath@box=\box61
 \pgfmath@toks=\toks37
 \pgfmath@stack@operand=\toks38
@@ -468,7 +479,7 @@ tex)
 thmetics.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
-\c@pgfmathroundto@lastzeros=\count311
+\c@pgfmathroundto@lastzeros=\count313
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.te
@@ -507,7 +518,7 @@ File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfpic=\box62
 \pgf@hbox=\box63
 \pgf@layerbox@main=\box64
-\pgf@picture@serial@count=\count312
+\pgf@picture@serial@count=\count314
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.c
 ode.tex
@@ -540,8 +551,8 @@ File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@max=\dimen288
-\pgf@sys@shading@range@num=\count313
-\pgf@shadingcount=\count314
+\pgf@sys@shading@range@num=\count315
+\pgf@shadingcount=\count316
 )
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
@@ -599,7 +610,7 @@ Package: tikz 2023-01-15 v3.1.10 (3.1.10)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@plot@mark@count=\count315
+\pgf@plot@mark@count=\count317
 \pgfplotmarksize=\dimen293
 )
 \tikz@lastx=\dimen294
@@ -614,18 +625,18 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikz@figbox@bg=\box68
 \tikz@tempbox=\box69
 \tikz@tempbox@bg=\box70
-\tikztreelevel=\count316
-\tikznumberofchildren=\count317
-\tikznumberofcurrentchild=\count318
-\tikz@fig@count=\count319
+\tikztreelevel=\count318
+\tikznumberofchildren=\count319
+\tikznumberofcurrentchild=\count320
+\tikz@fig@count=\count321
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfmatrixcurrentrow=\count320
-\pgfmatrixcurrentcolumn=\count321
-\pgf@matrix@numberofcolumns=\count322
+\pgfmatrixcurrentrow=\count322
+\pgfmatrixcurrentcolumn=\count323
+\pgf@matrix@numberofcolumns=\count324
 )
-\tikz@expandcount=\count323
+\tikz@expandcount=\count325
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -650,7 +661,7 @@ e.tex
 \pgfdecoratedinputsegmentcompleteddistance=\dimen308
 \pgfdecoratedinputsegmentremainingdistance=\dimen309
 \pgf@decorate@distancetomove=\dimen310
-\pgf@decorate@repeatstate=\count324
+\pgf@decorate@repeatstate=\count326
 \pgfdecorationsegmentamplitude=\dimen311
 \pgfdecorationsegmentlength=\dimen312
 )
@@ -677,42 +688,42 @@ Package: cite 2015/02/27  v 5.5
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
 \l__pdf_internal_box=\box72
-\g__pdf_backend_object_int=\count325
+\g__pdf_backend_object_int=\count327
 \l__pdf_backend_content_box=\box73
 \l__pdf_backend_model_box=\box74
-\g__pdf_backend_annotation_int=\count326
-\g__pdf_backend_link_int=\count327
-\g__pdf_backend_link_sf_int=\count328
+\g__pdf_backend_annotation_int=\count328
+\g__pdf_backend_link_int=\count329
+\g__pdf_backend_link_sf_int=\count330
 )
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 50.
-LaTeX Font Info:    ... okay on input line 50.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
+LaTeX Font Info:    ... okay on input line 51.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Calculating math sizes for size <18> on input line 70.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 70.
+LaTeX Font Info:    Calculating math sizes for size <18> on input line 71.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 71.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 70.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 71.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -721,62 +732,58 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 
 ]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 4341) has occurred while \output is active []
 
 
-Overfull \hbox (3.68529pt too wide) detected at line 265
+Overfull \hbox (3.68529pt too wide) detected at line 266
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
-Underfull \hbox (badness 1845) in paragraph at lines 270--270
-\OT1/ptm/m/n/8 Fig. 2.  Mis-align-ment an-gles $\OML/cmm/m/it/8 ^^L$ \OT1/ptm/m
-/n/8 be-tween an or-thog-o-nal body frame
- []
-
 File: img/comp_sim.eps Graphic file (type eps)
-<img/comp_sim.eps> [2]
-Underfull \vbox (badness 1117) has occurred while \output is active []
-
+ <img/comp_sim.eps> [2]
 File: img/derivative_comparison.eps Graphic file (type eps)
-
-<img/derivative_comparison.eps>
+ <img/derivative_comparison.eps>
 File: img/bode.eps Graphic file (type eps)
- <img/bode.eps> [3]
-Underfull \hbox (badness 2065) in paragraph at lines 381--391
+
+<img/bode.eps>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
+Underfull \hbox (badness 2065) in paragraph at lines 382--392
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 381--391
+Underfull \hbox (badness 10000) in paragraph at lines 382--392
 
  []
 
 [4]
-Underfull \hbox (badness 3386) in paragraph at lines 495--499
+Underfull \hbox (badness 3386) in paragraph at lines 496--500
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 495--499
+Underfull \hbox (badness 10000) in paragraph at lines 496--500
 
  []
 
-
-Underfull \vbox (badness 1168) has occurred while \output is active []
-
- [5]
+[5]
 File: img/error_distributions.eps Graphic file (type eps)
-
-<img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 526--540
+ <img/error_distributions.eps>
+Underfull \hbox (badness 10000) in paragraph at lines 527--541
 
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: img/sim_poses.eps Graphic file (type eps)
+
 <img/sim_poses.eps>
 File: img/sim_readings.eps Graphic file (type eps)
  <img/sim_readings.eps>
@@ -787,47 +794,52 @@ File: img/rot_error_sim.eps Graphic file (type eps)
 <img/rot_error_sim.eps>
 File: img/single_raw_top.eps Graphic file (type eps)
  <img/single_raw_top.eps>
-File: img/single_cor_top.eps Graphic file (type eps)
- <img/single_cor_top.eps>
-File: img/multi_raw_top.eps Graphic file (type eps)
-
-<img/multi_raw_top.eps>
-File: img/multi_cor_top.eps Graphic file (type eps)
- <img/multi_cor_top.eps>
 File: img/single_raw_side.eps Graphic file (type eps)
  <img/single_raw_side.eps>
-File: img/single_cor_side.eps Graphic file (type eps)
+File: img/single_cor_top.eps Graphic file (type eps)
 
-<img/single_cor_side.eps>
+<img/single_cor_top.eps>
+File: img/single_cor_side.eps Graphic file (type eps)
+ <img/single_cor_side.eps>
+File: img/multi_raw_top.eps Graphic file (type eps)
+ <img/multi_raw_top.eps>
 File: img/multi_raw_side.eps Graphic file (type eps)
- <img/multi_raw_side.eps>
+
+<img/multi_raw_side.eps>
+File: img/multi_cor_top.eps Graphic file (type eps)
+ <img/multi_cor_top.eps>
 File: img/multi_cor_side.eps Graphic file (type eps)
  <img/multi_cor_side.eps>
-File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
+Overfull \hbox (25.92188pt too wide) in paragraph at lines 599--627
+ [][][][][] 
+ []
 
+File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
 <img/multi_cor_vs_raw_zoom.eps> [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-(./root.bbl [7]
+ [7]
+(./root.bbl [8]
 Underfull \hbox (badness 4467) in paragraph at lines 47--51
 []\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
 d
  []
 
-) [8] (./root.aux)
+) [9
+
+] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 17492 strings out of 474223
- 358669 string characters out of 5748759
- 1960972 words of memory out of 5000000
- 39412 multiletter control sequences out of 15000+600000
- 591040 words of font info for 126 fonts, out of 8000000 for 9000
+ 17983 strings out of 474223
+ 367420 string characters out of 5748759
+ 1961972 words of memory out of 5000000
+ 39903 multiletter control sequences out of 15000+600000
+ 589918 words of font info for 123 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 84i,18n,93p,1173b,728s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,18n,93p,1173b,749s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (8 pages, 78112 bytes).
+Output written on root.dvi (9 pages, 79396 bytes).
