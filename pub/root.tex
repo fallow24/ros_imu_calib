@@ -13,7 +13,7 @@
 \usepackage{url}
 \usepackage{verbatim}
 \usepackage{graphicx}
-%\usepackage[draft]{graphicx}
+%\usepackage[draft]{graphicx} 
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,decorations.markings,calc,patterns}
 \usepackage{cite}
@@ -163,15 +163,54 @@ Our contributions are:
 Figure~\ref{fig:spherical_model} is a good illustation of the tangential and centripetal force.
 
 \section{Related Works}
-Here will be some related works. Maybe spend a few words first on spherical
-mobile mapping?
+
+The proposed calibration method is inspired by~\cite{imutk2014}, which is a robust method for intrinsic accelerometer and gyroscope triads calibration without external equippment. 
+The data collection approach consists of two steps: 
+(1) First, the IMU system is static for a moderate duration.
+The authors suggest $60$~s as a generally good value but note that sensor dependend values can be derived from plotting the Allan variance.
+(2) Then, an operator has to manually put the IMU system in different orientations for a brief duration.
+The authors state that $36$ to $50$ different attitudes for at least $5$~s are sufficient for good calibration. 
+Our proposed calibration method does not change this data collection approach.  
+
 \subsection{Attitude Estimation}
-Here will be some IMU filters, e.g., Complementary, Madgwick, Mahony, Extended
-Kalman Filter, etc...
+The de-facto choice of state-of-the-art attitude estimation filters is to put less trust on the accerlerometer estimations during dynamic motions.
+This happens if the local gravity vector predicted by gyroscope integration does not match the one measured by the accelerometer.
+Two recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a generic dynamic acceleration term in the model equations.
+Arguably the most commonly used filter due to its simplicity and good performance is the Complementary filter~\cite{complementary}.
+It has usually only one dynamic parameter that weights the attitude estimations of the accerlerometer and gyroscope complementarily, hence the name.
+Another popular filter is the Mahony filter~\cite{madgwick}.
+This filter can be categorized as a non-linear explicit complementary filter that acts directly on the SO$(3)$ group and additionally estimates the gyroscope bias online.
+A geometric observer estimates the error on the manifold and is then used in a proportional-integral feedback scheme.
+This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
+Another popular family of ``non-optimal'' filters are extended Kalman filters (EKF), e.g., formulated with quaternions (QEKF)~\cite{qekf}.
+They are generally considered non-optimal since the first-order linearization via Jacobians introduces truncation errors and forces a Gaussian approximation onto the inherently non-Gaussian posterior of the nonlinear system.
+This violates the minimum-variance optimality of the linear Kalman filter (LKF), but still works generally well in practice.
+QEKF are especially prominent in unmanned aerlial vehicles (UAV), examples include~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion}.
+
+Any of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
+Consequently, a method that compensates for the additional accelerations during motion will improve the estimation accuracy of any filter. 
+
 \subsection{Motion Compensation}
-Here will be some references (if I can find any) that use motion compensation.
-Most of these approaches will just state the formula without further
-investigating.
+Few approaches exist in the literature that are concerned with utilizing or even compensating the measured intertial acceleration due to motion.
+In~\cite{guner2022novel} the authors propose a calibration method for non-centered IMUs based on rotations induced by an external servo.
+The known angular velocities from the servo are used to predict the centripetal- and tangetial-accelerations which are then used to calibrate accelerometer intrinsic parameters. 
+Furthermore, the method also estimates the position of the IMU with respect to the axis of rotation.
+However, the authors focus only on rotations around one single axis at a time, and their method requires external equipment.
+Another approach that considers the off-centered motion accelerations to obtain better gravity measurements is~\cite{9110127}.
+Unlike our method,~\cite{9110127} considers the lever-arm as an intrinsic parameter of a highly precise fiber optical gyroscope (FOG) IMU.
+Since the lever-arm is comparably small, the method requires mounting the IMU to an accurate turntable that captures data for around $30$~min. 
+To the best of our knowledge, the most similar approach to ours is~\cite{9423615}:
+The authors provide a calibration procedure for off-centered IMUs that estimates the intrinsic and extrinsic parameters by utilizing the motion accelerations. 
+However, unlike our approach, their method optimizes all $45$ intrinsic and extrinsic paramters simultaneously in one optimization problem.
+Additionally, there exist $4$ hyper-paramters which the authors estimate via the covariances of the underlying IMU data.
+This makes their method sensitive to the initial guess: 
+Selecting improper values leads to optimizing towards a local optimimum, which results in failed calibration.
+Our approach does not suffer from this and is robust even from large initial deviations. 
+Three additional differences to~\cite{9423615} are: 
+(1) This work considers the intrinsic scale errors as linear instead of non-linear, 
+(2) our data collection approach does not depend on free-fall data, i.e., does not require throwing the system in the air, and 
+(3) the proposed method uses Derivative of Gaussian (DoG) kernels instead of 3rd-order finite-differences to calculate angular accelerations.
+
 \subsection{Multi-Position IMU Calibration}
 Here will be some references about offline and online IMU calibration. None of
 these calibrate the extrinsic base-to-IMU vector.
@@ -589,34 +628,35 @@ based on using reduntant IMUs (with motion compensation). Maybe even add
 subsubsections for them.
 
 \begin{figure*}
-  \centering
-  \subfloat[]{
-    \begin{minipage}[b]{0.249\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/single_raw_top}\vspace{4pt}
-      \includegraphics[width=\linewidth]{img/single_raw_side}
-    \end{minipage}
-  }
-  \subfloat[]{
-    \begin{minipage}[b]{0.249\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/single_cor_top}\vspace{4pt}
-      \includegraphics[width=\linewidth]{img/single_cor_side}
-    \end{minipage}
-  }
-  \subfloat[]{
-    \begin{minipage}[b]{0.249\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/multi_raw_top}\vspace{4pt}
-      \includegraphics[width=\linewidth]{img/multi_raw_side}
-    \end{minipage}
-  }
-  \subfloat[]{
-    \begin{minipage}[b]{0.249\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/multi_cor_top}\vspace{4pt}
-      \includegraphics[width=\linewidth]{img/multi_cor_side}
-    \end{minipage}
+  \centering{
+    \subfloat[]{
+      \begin{minipage}[b]{0.249\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/single_raw_top}\vspace{4pt}
+        \includegraphics[width=\linewidth]{img/single_raw_side}
+      \end{minipage}
+    }
+    \subfloat[]{
+      \begin{minipage}[b]{0.249\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/single_cor_top}\vspace{4pt}
+        \includegraphics[width=\linewidth]{img/single_cor_side}
+      \end{minipage}
+    }
+    \subfloat[]{
+      \begin{minipage}[b]{0.249\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/multi_raw_top}\vspace{4pt}
+        \includegraphics[width=\linewidth]{img/multi_raw_side}
+      \end{minipage}
+    }
+    \subfloat[]{
+      \begin{minipage}[b]{0.249\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/multi_cor_top}\vspace{4pt}
+        \includegraphics[width=\linewidth]{img/multi_cor_side}
+      \end{minipage}
+    }
   }
   \caption{Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation.
   (Above row:) Truncated orthographic birds-eye perspective with cut ceiling.
@@ -624,7 +664,7 @@ subsubsections for them.
   (Column a:) Single off-centered IMU without motion acceleration compensation.
   (Column b:) Single off-centered IMU with compensation. Same point data as in (a). 
   (Column c:) Multiple, symmetrically placed IMU's without compensation.
-  (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (d).}\label{fig:pointcompare}
+  (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (c).}\label{fig:pointcompare}
 \end{figure*}
 \begin{figure}
   \centering
