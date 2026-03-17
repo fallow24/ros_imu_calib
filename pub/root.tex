@@ -55,10 +55,10 @@
 % % BETTER! (?):
 %\title{Calibration of Motion Acceleration and Redundant IMU \\without External Equipment for Attitude Estimation Filters }
 
-\author{Fabian Arzberger and Andreas N{\"u}chter
+\author{Fabian Arzberger and Andreas N{\"u}chter}
   % <-this % stops a space
-  \thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}% <-this % stops a space
-  \thanks{Manuscript received April 19, 2021; revised August 16, 2021.}}
+  %\thanks{This paper was produced by the IEEE Publication Technology Group. They are in Piscataway, NJ.}% <-this % stops a space
+  %\thanks{Manuscript received April 19, 2021; revised August 16, 2021.}}
 
 % The paper headers
 % \markboth{Journal of \LaTeX\ Class Files,~Vol.~14, No.~8, August~2021}%
@@ -165,7 +165,7 @@ Figure~\ref{fig:spherical_model} is a good illustation of the tangential and cen
 \section{Related Works}
 
 The proposed calibration method is inspired by~\cite{imutk2014}, which is a robust method for intrinsic accelerometer and gyroscope triads calibration without external equippment. 
-The data collection approach consists of two steps: 
+In the literature the data collection approach is commonly reffered to as the ``multi-position method'',  consisting of two steps: 
 (1) First, the IMU system is static for a moderate duration.
 The authors suggest $60$~s as a generally good value but note that sensor dependend values can be derived from plotting the Allan variance.
 (2) Then, an operator has to manually put the IMU system in different orientations for a brief duration.
@@ -173,18 +173,22 @@ The authors state that $36$ to $50$ different attitudes for at least $5$~s are s
 Our proposed calibration method does not change this data collection approach.  
 
 \subsection{Attitude Estimation}
-The de-facto choice of state-of-the-art attitude estimation filters is to put less trust on the accerlerometer estimations during dynamic motions.
+The de-facto approach of state-of-the-art attitude estimation filters is to put less trust on the accerlerometer estimations during dynamic motions.
 This happens if the local gravity vector predicted by gyroscope integration does not match the one measured by the accelerometer.
-Two recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a generic dynamic acceleration term in the model equations.
+Two recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a general dynamic acceleration term in the error-state equations.
+In~\cite{6172226}, the authors propose another Kalman-filter based appraoch that includes a similar dynamic acceleration term in the model equations.
+However, in the aforementioned works, the centripetal- and tangential-accelerations are not explicitly modelled. 
 Arguably the most commonly used filter due to its simplicity and good performance is the Complementary filter~\cite{complementary}.
 It has usually only one dynamic parameter that weights the attitude estimations of the accerlerometer and gyroscope complementarily, hence the name.
+The weight of the accelerometer estimation can then be decreased heuristically by either considering the estimated gravity direction error or the magnitude of the angular velocity. 
+Additionally, many systems try placing the IMU as close to the center of rotation as possible to minimize centripetal and tangential contributions~\cite{6957468}.
 Another popular filter is the Mahony filter~\cite{madgwick}.
 This filter can be categorized as a non-linear explicit complementary filter that acts directly on the SO$(3)$ group and additionally estimates the gyroscope bias online.
 A geometric observer estimates the error on the manifold and is then used in a proportional-integral feedback scheme.
 This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
 Another popular family of ``non-optimal'' filters are extended Kalman filters (EKF), e.g., formulated with quaternions (QEKF)~\cite{qekf}.
 They are generally considered non-optimal since the first-order linearization via Jacobians introduces truncation errors and forces a Gaussian approximation onto the inherently non-Gaussian posterior of the nonlinear system.
-This violates the minimum-variance optimality of the linear Kalman filter (LKF), but still works generally well in practice.
+This breaks the mathematically proven minimum-variance optimality of the original linear Kalman filter (LKF)~\cite{kalmanoriginal}, but still works generally well in practice.
 QEKF are especially prominent in unmanned aerlial vehicles (UAV), examples include~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion}.
 
 Any of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
@@ -211,9 +215,9 @@ Three additional differences to~\cite{9423615} are:
 (2) our data collection approach does not depend on free-fall data, i.e., does not require throwing the system in the air, and 
 (3) the proposed method uses Derivative of Gaussian (DoG) kernels instead of 3rd-order finite-differences to calculate angular accelerations.
 
-\subsection{Multi-Position IMU Calibration}
-Here will be some references about offline and online IMU calibration. None of
-these calibrate the extrinsic base-to-IMU vector.
+% \subsection{Multi-Position IMU Calibration}
+% Here will be some references about offline and online IMU calibration. None of
+% these calibrate the extrinsic base-to-IMU vector.
 
 \section{Method}
 It is our goal to correct the accelerometer measurement, i.e., subtract the
