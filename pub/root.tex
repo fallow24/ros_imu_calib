@@ -173,23 +173,27 @@ The authors state that $36$ to $50$ different attitudes for at least $5$~s are s
 Our proposed calibration method does not change this data collection approach.  
 
 \subsection{Attitude Estimation}
-The de-facto approach of state-of-the-art attitude estimation filters is to put less trust on the accerlerometer estimations during dynamic motions.
-This happens if the local gravity vector predicted by gyroscope integration does not match the one measured by the accelerometer.
+The de-facto standards of state-of-the-art attitude estimation filters are twofold:
+(1) Many systems try placing the IMU as close to the center of rotation as possible to minimize centripetal and tangential contributions~\cite{6957468}, and 
+(2) put less trust on the accerlerometer estimations during dynamic motions.
+The latter happens if the local gravity vector predicted by gyroscope integration does not match the one measured by the accelerometer.
 Two recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a general dynamic acceleration term in the error-state equations.
-In~\cite{6172226}, the authors propose another Kalman-filter based appraoch that includes a similar dynamic acceleration term in the model equations.
+In a similar work~\cite{10203029}, the authors propose an iterated error-state Kalman filter (IESKF) to estimate the linear non-gravity accelerations using the error-state equations.
+Additionally, their approach includes a long short-term memory (LSTM) neural network which assists the IESKF by estimating the non-Gaussian process noise covariance. 
+In~\cite{6172226}, the authors propose another Kalman-filter based appraoch that also includes a dynamic acceleration term in the model equations.
 However, in the aforementioned works, the centripetal- and tangential-accelerations are not explicitly modelled. 
 Arguably the most commonly used filter due to its simplicity and good performance is the Complementary filter~\cite{complementary}.
 It has usually only one dynamic parameter that weights the attitude estimations of the accerlerometer and gyroscope complementarily, hence the name.
 The weight of the accelerometer estimation can then be decreased heuristically by either considering the estimated gravity direction error or the magnitude of the angular velocity. 
-Additionally, many systems try placing the IMU as close to the center of rotation as possible to minimize centripetal and tangential contributions~\cite{6957468}.
-Another popular filter is the Mahony filter~\cite{madgwick}.
+Another common filter is the ``Mahony'' filter~\cite{madgwick}.
 This filter can be categorized as a non-linear explicit complementary filter that acts directly on the SO$(3)$ group and additionally estimates the gyroscope bias online.
 A geometric observer estimates the error on the manifold and is then used in a proportional-integral feedback scheme.
 This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
 Another popular family of ``non-optimal'' filters are extended Kalman filters (EKF), e.g., formulated with quaternions (QEKF)~\cite{qekf}.
 They are generally considered non-optimal since the first-order linearization via Jacobians introduces truncation errors and forces a Gaussian approximation onto the inherently non-Gaussian posterior of the nonlinear system.
-This breaks the mathematically proven minimum-variance optimality of the original linear Kalman filter (LKF)~\cite{kalmanoriginal}, but still works generally well in practice.
-QEKF are especially prominent in unmanned aerlial vehicles (UAV), examples include~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion}.
+This breaks the mathematically proven minimum-variance optimality of the original linear Kalman filter (LKF)~\cite{kalmanoriginal}, but still works generally well in practice~\cite{crassidis2007survey}.
+QEKF are especially prominent in unmanned aerlial vehicles (UAV)~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion} and in-orbit spacecrafts~\cite{lefferts1982kalman}.
+
 
 Any of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
 Consequently, a method that compensates for the additional accelerations during motion will improve the estimation accuracy of any filter. 
@@ -214,16 +218,22 @@ Three additional differences to~\cite{9423615} are:
 (1) This work considers the intrinsic scale errors as linear instead of non-linear, 
 (2) our data collection approach does not depend on free-fall data, i.e., does not require throwing the system in the air, and 
 (3) the proposed method uses Derivative of Gaussian (DoG) kernels instead of 3rd-order finite-differences to calculate angular accelerations.
+Finally, there is one remarkable example of motion acceleration compensation from the LiDAR-Inertial Odometry (LIO) community:
+In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry and Mapping'' (DLIOM) in an ArXiv preprint from 2023, which seems to be an unpublished continuation of the authors work in~\cite{chen2022direct}.  
+Notably, in the preprint DLIOM estimates the centripetal- and tangential-accelerations acting on the IMU due to the non-centered placement on the mounting base in Equation~4. 
+Strikingly however, in the corresponding published conference version~\cite{10160508} this Equation does not show up.
+We do not certainly know why the authors have abandoned the idea.
+A possible explanation might be issues with the angular acceleration term, which has to be numerically estimated using noisy gyroscope measurements. 
+In the following sections of this work, we first derive the motion compensation model and show it is beneficial if the derivative of the angular velocity is handled carefully.
+Based on this, we propose a calibration framework to estimate the displacement vector to the center of rotation, which is then used to correct the accelerometer measurment on-line. 
 
 % \subsection{Multi-Position IMU Calibration}
 % Here will be some references about offline and online IMU calibration. None of
 % these calibrate the extrinsic base-to-IMU vector.
 
 \section{Method}
-It is our goal to correct the accelerometer measurement, i.e., subtract the
-accelerations due to linear and angular motion, such that only the gravity
-component remains. This will benefit the downstream attitude estimation, which
-relies on the direction of gravity.
+It is our goal to correct the accelerometer measurement, i.e., subtract the accelerations due to linear and angular motion, such that only the gravity component remains. 
+This benefits the downstream attitude estimation, which relies on the direction of gravity.
 The presented procedure uses the same data recording approach as in~\cite{imutk2014}, i.e., we need to collect measurements where the sensor is static for a short duration ($\approx 5~s$) and then rotated into a different orientation.
 This process is repeated around $36 - 50$ times. 
 Our approach additionally requires the IMUs to be rigidly mounted to the base of the system when collecting the data.
@@ -625,11 +635,22 @@ Without compensation, the attitude estimators accumulate error quickly due to th
 
 
 \subsection{Real-World}\label{ssec:realworld}
-Introduce the spherical mobile mapping system. Show the real-world results
-based on motion compensation (single IMU). Show the real-world results based on
-using redundant IMUs (no motion compensation). Show the real-world results
-based on using reduntant IMUs (with motion compensation). Maybe even add
-subsubsections for them.
+
+We test the proposed calibration and compensation appraoch on our spherical mobile mapping system.
+\begin{figure}
+  \centering
+  \includegraphics[height=0.17\textheight]{img/sphere1}
+  \includegraphics[height=0.17\textheight]{img/sphere2}
+  \caption{The spherical mobile mapping system from our lab. 
+  It is equipped with symmetrically placed Phidgets Spatial 3/3/3 IMUs (marked red), as well as a Hesai Pandar-XT32 laser scanner (marked green).}\label{fig:sphere}
+\end{figure}
+Figure~\ref{fig:sphere} shows the prototype from our lab.
+On-board sensors includes symmetrically placed Phidget Spatial 3/3/3 1044b IMUs and a Hesai Pandar-XT32 laserscanner.
+During the data collection phase for the calibration we place the spherical system on a roll of tape to ensure stability.
+Since a roll of tape is a common item, we do not consider it as additional equipment.     
+The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub~\cite{arzberger2025sphere}.
+
+
 
 \begin{figure*}
   \centering{

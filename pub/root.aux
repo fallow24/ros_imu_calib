@@ -1,14 +1,17 @@
 \relax 
 \citation{imutk2014}
+\citation{6957468}
 \citation{wei2025robust}
 \citation{chen2024robust}
+\citation{10203029}
 \citation{6172226}
 \citation{complementary}
-\citation{6957468}
 \citation{madgwick}
 \citation{qekf}
 \citation{kalmanoriginal}
+\citation{crassidis2007survey}
 \citation{jing2017attitude,zhang2017attitude,hall2008quaternion}
+\citation{lefferts1982kalman}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {II}Related Works}{1}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Spherical system rolling on a surface with normal $\boldsymbol  {n}$. An IMU (gray) is located at position $\boldsymbol  {r}_e$ relative to the ball center $\boldsymbol  {r}_c$. The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\boldsymbol  {\omega }$ around $\boldsymbol  {r}_c$.}}{1}{}\protected@file@percent }
@@ -20,32 +23,35 @@
 \citation{9110127}
 \citation{9423615}
 \citation{9423615}
+\citation{chen2023direct}
+\citation{chen2022direct}
+\citation{10160508}
 \citation{imutk2014}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Motion Compensation}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {III}Method}{2}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Derivation of the Model}{2}{}\protected@file@percent }
 \newlabel{ssec:derivation}{{\mbox  {III-A}}{2}{}{}{}}
-\newlabel{eq:forces}{{4}{2}{}{}{}}
-\newlabel{eq:compensation}{{5}{2}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Developing the Model for Spherical Systems}{2}{}\protected@file@percent }
 \citation{imutk2014}
 \citation{imutk2014}
 \citation{imutk2014}
 \citation{imutk2014}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{3}{}\protected@file@percent }
+\newlabel{eq:forces}{{4}{3}{}{}{}}
+\newlabel{eq:compensation}{{5}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Developing the Model for Spherical Systems}{3}{}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Misalignment angles $\beta $ between an orthogonal body frame $[x^B, y^B, z^B]$ and the non-orthogonal sensor frame $[x^S, y^S, z^S]$. We include the original illustration from~\cite  {imutk2014} for completeness.}}{3}{}\protected@file@percent }
 \newlabel{fig:mis}{{2}{3}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Comparison of total acceleration magnitude before and after the proposed calibration. Before calibration (red) motion acceleration effects are present. After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$). In this example, the position error of the offset vector after calibration is $3.01$~\%.}}{3}{}\protected@file@percent }
-\newlabel{fig:magnitude}{{3}{3}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Motion Compensation Calibration}{3}{}\protected@file@percent }
-\newlabel{ssec:imucalib}{{\mbox  {III-D}}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}IMU Intrinsic Calibration}{3}{}\protected@file@percent }
 \citation{algediff}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Comparison of total acceleration magnitude before and after the proposed calibration. Before calibration (red) motion acceleration effects are present. After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$). In this example, the position error of the offset vector after calibration is $3.01$~\%.}}{4}{}\protected@file@percent }
+\newlabel{fig:magnitude}{{3}{4}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}Motion Compensation Calibration}{4}{}\protected@file@percent }
+\newlabel{ssec:imucalib}{{\mbox  {III-D}}{4}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}Implementation of Discrete Derivative}{4}{}\protected@file@percent }
 \newlabel{eq:kernelnoncausal}{{19}{4}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz. In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution has does not. }}{4}{}\protected@file@percent }
-\newlabel{fig:derivatives}{{4}{4}{}{}{}}
 \citation{imutk2014}
 \citation{microlie}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz. In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples. The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives. In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution has does not. }}{5}{}\protected@file@percent }
+\newlabel{fig:derivatives}{{4}{5}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces  Comparison of signal gain, noise gain, and phase shift of causal numerical differentiation methods on a noisy $1$~Hz input signal sampled at $200$~Hz. Each method implements smoothing according to a given cutoff frequency to supress the ampliciation of noise. The DoG method provides the lowest noise gain across all cutoff frequencies, but also a considerable phase shift. }}{5}{}\protected@file@percent }
 \newlabel{fig:bode}{{5}{5}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-F}}Multi-IMU Extrinsic Calibration}{5}{}\protected@file@percent }
@@ -53,9 +59,9 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {III-F}1}Optimization Problem}{5}{}\protected@file@percent }
 \newlabel{eq:se3}{{27}{5}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {IV}Experiments and Evaluation}{5}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Simulation}{5}{}\protected@file@percent }
-\newlabel{ssec:simulation}{{\mbox  {IV-A}}{5}{}{}{}}
 \citation{microlie}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Simulation}{6}{}\protected@file@percent }
+\newlabel{ssec:simulation}{{\mbox  {IV-A}}{6}{}{}{}}
 \newlabel{eq:awm}{{33}{6}{}{}{}}
 \newlabel{eq:abm}{{34}{6}{}{}{}}
 \newlabel{eq:abg}{{36}{6}{}{}{}}
@@ -76,47 +82,57 @@
 \citation{imujasper}
 \citation{ahrs}
 \citation{mahony}
+\citation{arzberger2025sphere}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Histograms that show the distribution and median of calibration RMSE in the Monte-Carlo simulation that simulates $2000$ sensor calibrations with semi-synthetic data. (Left:) Rotation error. The ground truth rotations have been sampled uniformly across Euler angles. (Right:) Position error. The ground truth position vectors $\boldsymbol  {p} = [p_x, p_y, p_z]$ have been sampled uniformly across the interval $ p_x, p_y, p_z \in [-0.5, 0.5]$~m.}}{7}{}\protected@file@percent }
 \newlabel{fig:histograms}{{6}{7}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Example of a simulated fully-synthetic dataset used for comparison of attitude estimation algorithms. (Left:) Trochoidal trajectory generated from true angular velocities via the trochoidal motion model due to~\cite  {trochoidal}. (Right:) Corresponding simulated accelerometer and gyroscope measurements, subject to bias, noise, drift, and scale errors. Simulated parameters: Accelerometer noise density $\sigma _a = 0.002~\left [\text  {m} \cdot \text  {s}^{-2} \cdot \text  {Hz}^{-0.5}\right ]$, accelerometer in-run bias instability $\sigma _{b_a} = 0.00002~\left [\text  {m} \cdot \text  {s}^{-3} \cdot \text  {Hz}^{-0.5}\right ]$, gyroscope noise density $\sigma _{\omega } = 0.002~\left [\mathrm  {rad}\cdot \mathrm  {s}^{-1}\cdot \mathrm  {Hz}^{-0.5}\right ]$, and gyroscope in-run bias instability $\sigma _{b_\omega } = 0.0002~\left [\mathrm  {rad}\cdot \mathrm  {s}^{-2}\cdot \mathrm  {Hz}^{-0.5}\right ]$. In this example, we do not simulate scale and bias errors, since attitude estimation happens after applying calibration.}}{7}{}\protected@file@percent }
-\newlabel{fig:simtraj}{{7}{7}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {\mbox  {IV-A}2}Attitude Estimation}{7}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Real-World}{7}{}\protected@file@percent }
 \newlabel{ssec:realworld}{{\mbox  {IV-B}}{7}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusions}{7}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Example of a simulated fully-synthetic dataset used for comparison of attitude estimation algorithms. (Left:) Trochoidal trajectory generated from true angular velocities via the trochoidal motion model due to~\cite  {trochoidal}. (Right:) Corresponding simulated accelerometer and gyroscope measurements, subject to bias, noise, drift, and scale errors. Simulated parameters: Accelerometer noise density $\sigma _a = 0.002~\left [\text  {m} \cdot \text  {s}^{-2} \cdot \text  {Hz}^{-0.5}\right ]$, accelerometer in-run bias instability $\sigma _{b_a} = 0.00002~\left [\text  {m} \cdot \text  {s}^{-3} \cdot \text  {Hz}^{-0.5}\right ]$, gyroscope noise density $\sigma _{\omega } = 0.002~\left [\mathrm  {rad}\cdot \mathrm  {s}^{-1}\cdot \mathrm  {Hz}^{-0.5}\right ]$, and gyroscope in-run bias instability $\sigma _{b_\omega } = 0.0002~\left [\mathrm  {rad}\cdot \mathrm  {s}^{-2}\cdot \mathrm  {Hz}^{-0.5}\right ]$. In this example, we do not simulate scale and bias errors, since attitude estimation happens after applying calibration.}}{8}{}\protected@file@percent }
+\newlabel{fig:simtraj}{{7}{8}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Comparison of rotation errors on attitude estimators with and without motion-acceleration compensation. Input to the estimators in the illustrated example are the fully-synthetic simulated accelerometer and gyroscope readings from Figure~\ref {fig:simtraj}. We use the following parameters for each estimator. Autogain~\cite  {imujasper}: $\Theta = 0.1$, $\theta = 0.1$. QEKF~\cite  {ahrs}: $P_{\text  {init}} = 1$, $\sigma _a = 0.005$, $\sigma _g = 0.005$. Mahony~\cite  {mahony}: $K_p = 50$, $K_i = 0.01$. (Left:) Root mean squared of rotation errors. (Right:) Rotation errors as timeseries.}}{8}{}\protected@file@percent }
 \newlabel{fig:simerror}{{8}{8}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation. (Above row:) Truncated orthographic birds-eye perspective with cut ceiling. (Below row:) Truncated orthographic horizontal perspective with one cut wall. (Column a:) Single off-centered IMU without motion acceleration compensation. (Column b:) Single off-centered IMU with compensation. Same point data as in (a). (Column c:) Multiple, symmetrically placed IMU's without compensation. (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (c).}}{8}{}\protected@file@percent }
-\newlabel{fig:pointcompare}{{9}{8}{}{}{}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{8}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {}}}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{8}{}\protected@file@percent }
+\newlabel{apx:ema}{{\mbox  {V-A}}{8}{}{}{}}
 \bibstyle{IEEEtran}
 \bibdata{root}
 \bibcite{imutk2014}{1}
-\bibcite{wei2025robust}{2}
-\bibcite{chen2024robust}{3}
-\bibcite{6172226}{4}
-\bibcite{complementary}{5}
-\bibcite{6957468}{6}
-\bibcite{madgwick}{7}
-\bibcite{qekf}{8}
-\bibcite{kalmanoriginal}{9}
-\bibcite{jing2017attitude}{10}
-\bibcite{zhang2017attitude}{11}
-\bibcite{hall2008quaternion}{12}
-\bibcite{guner2022novel}{13}
-\bibcite{9110127}{14}
-\bibcite{9423615}{15}
-\bibcite{algediff}{16}
-\bibcite{microlie}{17}
-\bibcite{trochoidal}{18}
-\bibcite{imujasper}{19}
-\bibcite{ahrs}{20}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Detailed comparison of the point clouds shown in Figure~\ref {fig:pointcompare}~(c) and~(d). The view is a truncated orthographic horizontal perspective with one cut wall. (Magenta:) Without compensation, corresponding to Figure~\ref {fig:pointcompare}~(c). (Yellow:) With compensation, corresponding to Figure~\ref {fig:pointcompare}~(d).}}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusions}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Derivation of EMA parameter}{9}{}\protected@file@percent }
-\newlabel{apx:ema}{{\mbox  {V-A}}{9}{}{}{}}
+\bibcite{6957468}{2}
+\bibcite{wei2025robust}{3}
+\bibcite{chen2024robust}{4}
+\bibcite{10203029}{5}
+\bibcite{6172226}{6}
+\bibcite{complementary}{7}
+\bibcite{madgwick}{8}
+\bibcite{qekf}{9}
+\bibcite{kalmanoriginal}{10}
+\bibcite{crassidis2007survey}{11}
+\bibcite{jing2017attitude}{12}
+\bibcite{zhang2017attitude}{13}
+\bibcite{hall2008quaternion}{14}
+\bibcite{lefferts1982kalman}{15}
+\bibcite{guner2022novel}{16}
+\bibcite{9110127}{17}
+\bibcite{9423615}{18}
+\bibcite{chen2023direct}{19}
+\bibcite{chen2022direct}{20}
+\bibcite{10160508}{21}
+\bibcite{algediff}{22}
+\bibcite{microlie}{23}
+\bibcite{trochoidal}{24}
+\bibcite{imujasper}{25}
+\bibcite{ahrs}{26}
+\bibcite{mahony}{27}
+\bibcite{arzberger2025sphere}{28}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces The spherical mobile mapping system from our lab. It is equipped with symmetrically placed Phidgets Spatial 3/3/3 IMUs (marked red), as well as a Hesai Pandar-XT32 laser scanner (marked green).}}{9}{}\protected@file@percent }
+\newlabel{fig:sphere}{{9}{9}{}{}{}}
 \@writefile{toc}{\contentsline {section}{References}{9}{}\protected@file@percent }
-\bibcite{mahony}{21}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation. (Above row:) Truncated orthographic birds-eye perspective with cut ceiling. (Below row:) Truncated orthographic horizontal perspective with one cut wall. (Column a:) Single off-centered IMU without motion acceleration compensation. (Column b:) Single off-centered IMU with compensation. Same point data as in (a). (Column c:) Multiple, symmetrically placed IMU's without compensation. (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (c).}}{10}{}\protected@file@percent }
+\newlabel{fig:pointcompare}{{10}{10}{}{}{}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {}}}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Detailed comparison of the point clouds shown in Figure~\ref {fig:pointcompare}~(c) and~(d). The view is a truncated orthographic horizontal perspective with one cut wall. (Magenta:) Without compensation, corresponding to Figure~\ref {fig:pointcompare}~(c). (Yellow:) With compensation, corresponding to Figure~\ref {fig:pointcompare}~(d).}}{10}{}\protected@file@percent }
 \gdef \@abspage@last{10}

@@ -315,6 +315,12 @@ INPUT img/rmse_sim.eps
 INPUT ./img/rot_error_sim.eps
 INPUT ./img/rot_error_sim.eps
 INPUT img/rot_error_sim.eps
+INPUT ./img/sphere1.eps
+INPUT ./img/sphere1.eps
+INPUT img/sphere1.eps
+INPUT ./img/sphere2.eps
+INPUT ./img/sphere2.eps
+INPUT img/sphere2.eps
 INPUT ./img/single_raw_top.eps
 INPUT ./img/single_raw_top.eps
 INPUT img/single_raw_top.eps
