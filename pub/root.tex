@@ -177,26 +177,38 @@ The de-facto standards of state-of-the-art attitude estimation filters are twofo
 (1) Many systems try placing the IMU as close to the center of rotation as possible to minimize centripetal and tangential contributions~\cite{6957468}, and 
 (2) put less trust on the accerlerometer estimations during dynamic motions.
 The latter happens if the local gravity vector predicted by gyroscope integration does not match the one measured by the accelerometer.
-Two recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a general dynamic acceleration term in the error-state equations.
-In a similar work~\cite{10203029}, the authors propose an iterated error-state Kalman filter (IESKF) to estimate the linear non-gravity accelerations using the error-state equations.
+A popular family of ``non-optimal'' filters are extended Kalman filters (EKF), e.g., formulated with quaternions (QEKF)~\cite{qekf}.
+In~\cite{6172226}, the authors propose a QEKF that also includes a dynamic acceleration term in the model equations.
+EKF are generally considered non-optimal since the first-order linearization via Jacobians introduces truncation errors and forces a Gaussian approximation onto the inherently non-Gaussian posterior of the nonlinear system.
+This breaks the mathematically proven minimum-variance optimality of the original linear Kalman filter (LKF)~\cite{kalmanoriginal}, but still works generally well in practice~\cite{crassidis2007survey}.
+QEKF are especially prominent in unmanned aerlial vehicles (UAV)~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion} and in-orbit spacecrafts~\cite{lefferts1982kalman}.
+Two more recent examples include~\cite{wei2025robust} or~\cite{chen2024robust}, where the authors implement error-state Kalman filters (ESKF) for attitude estimation which include a general dynamic acceleration term in the error-state equations.
+Unlike the EKF, an ESKF does not linearize the full state, but only the error-state.
+Since the error state is close to zero this leads to better linearization accuracy and slower covariance divergence.
+However, ESKF are still non-optimal. 
+Iterated error-state Kalman filters (IESKF) improve on ESKF by re-linearizing the measurement model around the updated nominal state estimate over multiple iterations within each update step, effectively solving a Gauss-Newton problem at each timestep.
+One example is~\cite{10203029}, where the authors propose an IESKF to estimate the linear non-gravity accelerations using the error-state equations.
 Additionally, their approach includes a long short-term memory (LSTM) neural network which assists the IESKF by estimating the non-Gaussian process noise covariance. 
-In~\cite{6172226}, the authors propose another Kalman-filter based appraoch that also includes a dynamic acceleration term in the model equations.
-However, in the aforementioned works, the centripetal- and tangential-accelerations are not explicitly modelled. 
+Another less popular extension of the Kalman filter for non-linear systems is the unscented Kalman filter (UKF)~\cite{julier1997new}.
+Instead of linearizing the models with Jacobians, a discrete sampling approach using the unscented transform approximates the mean and covariance of the state distribution.
+One example of a UKF implementation with quaternions for attitude estimation is~\cite{1257247}.
+Generally, UKF achive higher-order accuracy and increased robustness compared to EKF, but are harder to tune effectively and are computationally more complex.
+Many of the aforementioned works estimate dynamic accelerations indirectly, yet the centripetal- and tangential-accelerations are never explicitly modelled. 
 Arguably the most commonly used filter due to its simplicity and good performance is the Complementary filter~\cite{complementary}.
 It has usually only one dynamic parameter that weights the attitude estimations of the accerlerometer and gyroscope complementarily, hence the name.
 The weight of the accelerometer estimation can then be decreased heuristically by either considering the estimated gravity direction error or the magnitude of the angular velocity. 
-Another common filter is the ``Mahony'' filter~\cite{madgwick}.
+Another common filter is the ``Mahony'' filter~\cite{mahony}.
 This filter can be categorized as a non-linear explicit complementary filter that acts directly on the SO$(3)$ group and additionally estimates the gyroscope bias online.
-A geometric observer estimates the error on the manifold and is then used in a proportional-integral feedback scheme.
+A geometric observer estimates the gyroscope integration error on the manifold which is then used in a proportional-integral feedback scheme.
 This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
-Another popular family of ``non-optimal'' filters are extended Kalman filters (EKF), e.g., formulated with quaternions (QEKF)~\cite{qekf}.
-They are generally considered non-optimal since the first-order linearization via Jacobians introduces truncation errors and forces a Gaussian approximation onto the inherently non-Gaussian posterior of the nonlinear system.
-This breaks the mathematically proven minimum-variance optimality of the original linear Kalman filter (LKF)~\cite{kalmanoriginal}, but still works generally well in practice~\cite{crassidis2007survey}.
-QEKF are especially prominent in unmanned aerlial vehicles (UAV)~\cite{jing2017attitude, zhang2017attitude, hall2008quaternion} and in-orbit spacecrafts~\cite{lefferts1982kalman}.
+The ``Madgwick'' filter~\cite{madgwick} also estimates the gyroscope integration error and corrects it with a gradient descent appraoch using accelerometer data.
+The method needs to compute only four derivatives, one for each quaternion dimension, and is thus computationally efficient.
+Furthermore, the Madgwick filter has only one parameter which is linked to the mean zero gyroscope error and is thus straightforward to set. 
+Finally, the ``Autogain'' filter, a design from our lab~\cite{imujasper} which is specialized for spherical systems.
+It combines the well known Complementary-~\cite{complementary} with the Madgwick-~\cite{madgwick} filter and automatically adjusts the filter gains based on the angular velocity. 
 
-
-Any of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
-Consequently, a method that compensates for the additional accelerations during motion will improve the estimation accuracy of any filter. 
+All of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
+Consequently, a method that compensates for the additional accelerations during motion improves the estimation accuracy of any filter. 
 
 \subsection{Motion Compensation}
 Few approaches exist in the literature that are concerned with utilizing or even compensating the measured intertial acceleration due to motion.

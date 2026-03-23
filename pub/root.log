@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  19 MAR 2026 11:46
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  23 MAR 2026 11:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -731,59 +731,61 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 
-] [2]
-Overfull \hbox (3.68529pt too wide) detected at line 319
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [2]
+Overfull \hbox (3.68529pt too wide) detected at line 331
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
-<img/mis.eps>
+<img/mis.eps> [3]
 File: img/comp_sim.eps Graphic file (type eps)
- <img/comp_sim.eps> [3]
-File: img/derivative_comparison.eps Graphic file (type eps)
- <img/derivative_comparison.eps>
-File: img/bode.eps Graphic file (type eps)
-
-<img/bode.eps>
-Underfull \vbox (badness 10000) has occurred while \output is active []
+ <img/comp_sim.eps>
+Underfull \vbox (badness 1616) has occurred while \output is active []
 
  [4]
-Underfull \hbox (badness 2065) in paragraph at lines 435--445
+File: img/derivative_comparison.eps Graphic file (type eps)
+
+<img/derivative_comparison.eps>
+File: img/bode.eps Graphic file (type eps)
+ <img/bode.eps>
+Underfull \hbox (badness 2065) in paragraph at lines 447--457
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 435--445
+Underfull \hbox (badness 10000) in paragraph at lines 447--457
 
  []
 
-
+[5]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [5]
-Underfull \hbox (badness 3386) in paragraph at lines 549--553
+ [6]
+Underfull \hbox (badness 3386) in paragraph at lines 561--565
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 549--553
+Underfull \hbox (badness 10000) in paragraph at lines 561--565
 
  []
 
-
-Underfull \vbox (badness 1168) has occurred while \output is active []
-
- [6]
 File: img/error_distributions.eps Graphic file (type eps)
-
 <img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 580--594
+Underfull \hbox (badness 10000) in paragraph at lines 592--606
 
  []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
 File: img/sim_poses.eps Graphic file (type eps)
+
 <img/sim_poses.eps>
 File: img/sim_readings.eps Graphic file (type eps)
  <img/sim_readings.eps>
@@ -792,74 +794,59 @@ File: img/rmse_sim.eps Graphic file (type eps)
 File: img/rot_error_sim.eps Graphic file (type eps)
 
 <img/rot_error_sim.eps>
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 File: img/sphere1.eps Graphic file (type eps)
-
-<img/sphere1.eps>
+ <img/sphere1.eps>
 File: img/sphere2.eps Graphic file (type eps)
  <img/sphere2.eps>
 File: img/single_raw_top.eps Graphic file (type eps)
- <img/single_raw_top.eps>
-File: img/single_raw_side.eps Graphic file (type eps)
 
-<img/single_raw_side.eps>
+<img/single_raw_top.eps>
+File: img/single_raw_side.eps Graphic file (type eps)
+ <img/single_raw_side.eps>
 File: img/single_cor_top.eps Graphic file (type eps)
  <img/single_cor_top.eps>
 File: img/single_cor_side.eps Graphic file (type eps)
- <img/single_cor_side.eps>
-File: img/multi_raw_top.eps Graphic file (type eps)
 
-<img/multi_raw_top.eps>
+<img/single_cor_side.eps>
+File: img/multi_raw_top.eps Graphic file (type eps)
+ <img/multi_raw_top.eps>
 File: img/multi_raw_side.eps Graphic file (type eps)
  <img/multi_raw_side.eps>
 File: img/multi_cor_top.eps Graphic file (type eps)
- <img/multi_cor_top.eps>
-File: img/multi_cor_side.eps Graphic file (type eps)
 
-<img/multi_cor_side.eps>
-Overfull \hbox (25.92188pt too wide) in paragraph at lines 663--692
+<img/multi_cor_top.eps>
+File: img/multi_cor_side.eps Graphic file (type eps)
+ <img/multi_cor_side.eps>
+Overfull \hbox (25.92188pt too wide) in paragraph at lines 675--704
  [][][][][] 
  []
 
 File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
-<img/multi_cor_vs_raw_zoom.eps>
-Underfull \vbox (badness 1946) has occurred while \output is active []
-
- [7]
-Underfull \vbox (badness 1655) has occurred while \output is active []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [8]
-(./root.bbl
-Underfull \hbox (badness 4467) in paragraph at lines 154--158
+<img/multi_cor_vs_raw_zoom.eps> [7] [8] (./root.bbl
+Underfull \hbox (badness 4467) in paragraph at lines 121--125
 []\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
 d
  []
 
-
-Underfull \hbox (badness 1675) in paragraph at lines 172--176
+[9]
+Underfull \hbox (badness 1675) in paragraph at lines 183--187
 []\OT1/ptm/m/n/8 F. Arzberger, ``Spher-i-cal mo-bile map-ping sys-tems,'' $http
 s : / / github .
  []
 
-) [9] [10
-
-] (./root.aux)
+) [10] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18019 strings out of 474223
- 368026 string characters out of 5748759
- 1959972 words of memory out of 5000000
- 39937 multiletter control sequences out of 15000+600000
+ 18021 strings out of 474223
+ 368050 string characters out of 5748759
+ 1961972 words of memory out of 5000000
+ 39939 multiletter control sequences out of 15000+600000
  589918 words of font info for 123 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,18n,93p,1173b,749s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (10 pages, 94480 bytes).
+Output written on root.dvi (10 pages, 97244 bytes).
