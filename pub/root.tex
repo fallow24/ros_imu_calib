@@ -89,6 +89,29 @@
 \end{IEEEkeywords}
 
 \section{Introduction}
+
+Inertial measurement units (IMUs) are well known and essential sensors for many types of mobile systems.
+IMUs consist of accelerometer-, gyroscope-, and sometimes, magnetometer-triads.
+They are vital instruments for attitude estimation and are used in countless robotic-, navigation-, and computer-vision-pipelines.  
+Some systems do not rely on the magnetometer, especially considering applications with strong external magnetic fields, or space, where a magnetic field is not always available.
+The field of gravity, on the other hand, is a more reliably source of inertial direction measured by the accelerometer.
+Since the rotation around the gravity direction is not observable by the accelerometers alone, one has to rely partially on either the magnetometers or measurements of the bodies angular velocity.
+The gyroscopes measure anuglar velocity, which makes rotations around all 3 degrees of freedom (DoF) observable.
+However, relying solely on integration of angular velocities leads to drift, which is why many approaches apply filtering algorithms to estimate the attitude from multiple modalities.    
+During the motion of a mobile system, the rigidly mounted IMU will be subject not only to gravity, but to additional accelerations which skews the measurement.
+This effect depends on the specific trajectory of the sensor, but generally gets amplified the further away the IMU is from the systems center of rotation.
+Any rotation around that center leads to centripetal- and tangential-forces in the inertial frame, which the accelerometer then measures.
+The effect of these forces on IMUs have been identified early on, yet the center of rotation varies across systems.
+For example, in 1969 the NASA considered the trajectory of a vertical and/or short take-off and landing (V/STOL) aircraft~\cite{ibm1969vstol}.
+Using the aircraft trajectory, which is estimated from the INS, RADAR, and control inputs, they calculate and subsequently subtract the centripetal- and coriolis-forces acting on the aircraft.
+Their work omits the tangential-force, since the primary motion acceleration effect was due to a large distance to the center of rotation during turning flight, instead of fast rotary dynamics. 
+Similarly, in a military technical report from 1979~\cite{hung1979size} the authors identify the effect of centripetal- and tangential-forces on the accelerometer in cruise missiles and label it the ``size effect''.  
+They also identify a simple yet effective way to negate the effects due to the vehicles own body angular rate, which is to mount multiple IMUs symetrically around the missiles turning center and average their measurements. 
+Another similar but more recent example is~\cite{euston2008complementary}, where the authors propose an attitude estimation filter for a fixed-wing unmanned aerial vehicle (UAV).
+When the UAV banks in, the filter estimates the turn radius using bank angle and airspeed data, calculates the resulting centripetal acceleration and subtracts it from the accelerometer reading.   
+
+Many attitude estimation filters account for this effect by putting more weight in the gyroscope integration for periods of higher angular velocity.
+
 Here will be the introduction. Motivation: (1) Reiterate the problem presented
 in the abstract. (2) Maybe talk about spherical mobile mapping systems and
 their advantages and limitations. (3) No use of magnetometer due to
