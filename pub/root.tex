@@ -50,7 +50,7 @@
 
 \begin{document}
 
-\title{Motion-Acceleration- and SE$(3)$-Calibration of IMUs \\ without External Equipment for Attitude Estimation Filters}
+\title{Motion-Acceleration Calibration and Compensation in IMUs \\ without External Equipment for Attitude Estimation Filters}
 
 % % BETTER! (?):
 %\title{Calibration of Motion Acceleration and Redundant IMU \\without External Equipment for Attitude Estimation Filters }
@@ -75,13 +75,11 @@
   However, during the motion of a mobile system the inertial measurement unit (IMU) will be subject to additional accelerations which skews the measurement of local gravity.
   This effect gets amplified the further away the IMU is from the base of the system.
   Many attitude estimation filters account for this by relying more on gyroscope integration for periods of high angular velocity.
-  However, this approach is prone to accumulate long term error especially around the gravity vector (yaw axis).
+  However, this approach is prone to accumulate long term error especially around the gravity vector.
   In this work we utilize the gyroscope measurements to compensate the additional accelerations induced by the motion of the system, i.e., centripetal- and tangential-accelerations.
-  We study the effects on the most popular attitude filters (Complementary, Madgwick, Mahony, Extended Kalman Filter).
-  Additionally, we introduce a calibration method that estimates intrinsic IMU parameters (axes misalignment, bias, scale), as well as the extrinsic base-to-IMU vector without the necessity for additional external equipment.
+  Additionally, we introduce a calibration method that estimates intrinsic IMU parameters such as axes misalignment, bias, scale, as well as the extrinsic base-to-IMU vector without the necessity for additional external equipment.
   Our evaluation in simulation as well as in the real-world shows that this method improves any attitude filter that relies on the direction of gravity.
-  Furthermore we demonstrate the effectivenes on highly dynamic systems or systems that can not center the IMU on the base, using our real-world spherical mobile mapping system.
-
+  Furthermore we demonstrate the effectivenes on highly dynamic systems, and systems that are unable to put the IMU at the center of rotation, using our real-world spherical mobile mapping system.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -101,30 +99,7 @@ However, relying solely on integration of angular velocities leads to drift, whi
 During the motion of a mobile system, the rigidly mounted IMU will be subject not only to gravity, but to additional accelerations which skews the measurement.
 This effect depends on the specific trajectory of the sensor, but generally gets amplified the further away the IMU is from the systems center of rotation.
 Any rotation around that center leads to centripetal- and tangential-forces in the inertial frame, which the accelerometer then measures.
-The effect of these forces on IMUs have been identified early on, yet the center of rotation varies across systems.
-For example, in 1969 the NASA considered the trajectory of a vertical and/or short take-off and landing (V/STOL) aircraft~\cite{ibm1969vstol}.
-Using the aircraft trajectory, which is estimated from the INS, RADAR, and control inputs, they calculate and subsequently subtract the centripetal- and coriolis-forces acting on the aircraft.
-Their work omits the tangential-force, since the primary motion acceleration effect was due to a large distance to the center of rotation during turning flight, instead of fast rotary dynamics. 
-Similarly, in a military technical report from 1979~\cite{hung1979size} the authors identify the effect of centripetal- and tangential-forces on the accelerometer in cruise missiles and label it the ``size effect''.  
-They also identify a simple yet effective way to negate the effects due to the vehicles own body angular rate, which is to mount multiple IMUs symetrically around the missiles turning center and average their measurements. 
-Another similar but more recent example is~\cite{euston2008complementary}, where the authors propose an attitude estimation filter for a fixed-wing unmanned aerial vehicle (UAV).
-When the UAV banks in, the filter estimates the turn radius using bank angle and airspeed data, calculates the resulting centripetal acceleration and subtracts it from the accelerometer reading.   
-
-Many attitude estimation filters account for this effect by putting more weight in the gyroscope integration for periods of higher angular velocity.
-
-Here will be the introduction. Motivation: (1) Reiterate the problem presented
-in the abstract. (2) Maybe talk about spherical mobile mapping systems and
-their advantages and limitations. (3) No use of magnetometer due to
-extraterestrial exploration.
-
-Our contributions are:
-\begin{itemize}
-  \item Detailed Derivation of the method
-  \item Evaluation of the method using state-of-the-art filters
-  \item Calibration method without the need for external equipment
-\end{itemize}
-
-\begin{figure}[!t]
+\begin{figure}
   \centering
   \begin{tikzpicture}
     % Ground/Surface
@@ -180,10 +155,42 @@ Our contributions are:
     
   \end{tikzpicture}
   \caption{Spherical system rolling on a surface with normal $\vec{n}$. 
-  An IMU (gray) is located at position $\vec{r}_e$ relative to the ball center $\vec{r}_c$. 
+  A rigidly mounted IMU (gray) is located at position $\vec{r}_e$ relative to the ball center $\vec{r}_c$. 
   The centripetal (orange) and tangential (green) accelerations act on the sensor due to the angular motion $\vec{\omega}$ around $\vec{r}_c$.}\label{fig:spherical_model}
 \end{figure}
-Figure~\ref{fig:spherical_model} is a good illustation of the tangential and centripetal force.
+In this work, we put a particular emphasis to spherical systems as illustrated in Figure~\ref{fig:spherical_model}, which is one possible application for motion force compensation.
+Many other examples exist where the same idea applies.
+The effect of rotation related forces on IMUs have been identified early on, yet the center of rotation varies across systems.
+For example, in 1969 the NASA considered the trajectory of a vertical and/or short take-off and landing (V/STOL) aircraft~\cite{ibm1969vstol}.
+Using the aircraft trajectory, which is estimated from the INS, RADAR, and control inputs, they calculate and subsequently subtract the centripetal- and coriolis-forces acting on the aircraft.
+Their work omits the tangential-force, since the primary motion acceleration effect was due to a large distance to the center of rotation during turning flight, instead of fast rotary dynamics. 
+Similarly, in a military technical report from 1979~\cite{hung1979size} the authors identify the effect of centripetal- and tangential-forces on the strapdown accelerometer in cruise missiles and label it the ``size effect''.  
+They also identify a simple yet effective way to negate the effects due to the vehicles own body angular rate, which is to mount multiple IMUs symetrically around the missiles turning center and average their measurements. 
+Another similar but more recent example is~\cite{euston2008complementary}, where the authors propose an attitude estimation filter for a fixed-wing unmanned aerial vehicle (UAV).
+When the UAV banks in, the filter estimates the turn radius using bank angle and airspeed data, calculates the resulting centripetal acceleration and subtracts it from the accelerometer reading.   
+While the idea of motion acceleration compensation exists primarily in the aerospace and military community, it is heavily underrepresented in the scientific community.
+Since the centripetal- and tangential-accelerations depend on the angular velocity measurement and its derivative (c.f.~Figure~\ref{fig:spherical_model}), one possible explanation is the comparably lower precision in micro-electro-mechanical systems (MEMS) gyroscopes.
+Another explanation might be a lack of motivation for systems where the displacement to the center of rotation or magnitude of angular velocity are small. 
+Whilst not applicable to all systems, there exist many examples where the non-centered placement of the IMU on the systems base is rigid, a center of rotation exists while turning, and motion acceleration effects are not negligable:
+(1) Spherical mobile mapping, where the IMU is mounted rigidly inside the rolling ball, (2) robotic arms or grippers, where the IMU is mounted on the end-effector, (3) bio-inspired mobile robots, (4) rotary-wing UAVs, or (5) in-orbit spacecrafts.
+Placing the IMU on the center of rotation might not be possible due to design constraints.
+Generally, the measurement of local gravity gets more skewed the higher the angular velocity and the higher the displacement of the sensor towards the center of rotation is. 
+Many attitude estimation filters account for this effect by putting more weight in the gyroscope integration for periods of higher angular velocity, leading to drift.
+However, if the displacement is known, the attitude estimation is able to put more weight in the corrected accelerometer measurements to reduce drift.
+In this work, we show that any attitude estimation filter benefits from doing this, and provide a robust IMU calibration method to recover the displacement.
+The proposed method also calibrates the intrinsic scale, misalginment, and bias parameters of the triads and is able to recover the relative rotation between multiple IMUs.
+No external equipment other than the mounting base of the system itself and no external reference other than the magnitude of local gravity is required.
+We omit the usage of the magnetometer in this work due to the background of our spherical mobile mapping system in extraterestrial exploration~\cite{deadalus}.
+The contributions of this work are:
+\begin{itemize}
+  \item A robust method to calibrate intrinsic scale, misalginment, and bias parameters of IMU accelerometer and gyroscope triads, as well as the displacement vectors to the center of rotation and relative sensor orientations in a multi-IMU system, without external equipment.
+  \item A numerically stable method for online motion acceleration compensation that subtracts centripetal- and tangential-terms in the accelerometer measurements using corresponding gyroscope measurements.
+  \item An evaluation of the calibration and online compensation method using synthetic, semi-synthetic, and real-world datasets, showing that any state-of-the-art attitude estimation filter improves its accuracy by using the proposed method. 
+  \item We open-source our calibration- and simulation-software, as well as calibration datasets from our spherical mobile mapping prototype.\footnote{\url{https://github.com/fallow24/ros_imu_calib}}
+\end{itemize}
+
+
+%Figure~\ref{fig:spherical_model} is a good illustation of the tangential and centripetal force.
 
 \section{Related Works}
 
@@ -193,7 +200,10 @@ In the literature the data collection approach is commonly reffered to as the ``
 The authors suggest $60$~s as a generally good value but note that sensor dependend values can be derived from plotting the Allan variance.
 (2) Then, an operator has to manually put the IMU system in different orientations for a brief duration.
 The authors state that $36$ to $50$ different attitudes for at least $5$~s are sufficient for good calibration. 
-Our proposed calibration method does not change this data collection approach.  
+Our proposed calibration method does not change this data collection approach.
+We extend their method, using the same data, to recover the displacement vector from the center of rotation towards the sensor, as well as the relative orientations between sensors in a multi-IMU system.
+When collecting a dataset for calibration, the system should primarily experience rotations around one common center point.
+However, when testing the proposed method with real-world handheld data, it proves to be robust against small deviations from this assumption.
 
 \subsection{Attitude Estimation}
 The de-facto standards of state-of-the-art attitude estimation filters are twofold:
@@ -226,7 +236,7 @@ A geometric observer estimates the gyroscope integration error on the manifold w
 This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
 The ``Madgwick'' filter~\cite{madgwick} also estimates the gyroscope integration error and corrects it with a gradient descent appraoch using accelerometer data.
 The method needs to compute only four derivatives, one for each quaternion dimension, and is thus computationally efficient.
-Furthermore, the Madgwick filter has only one parameter which is linked to the mean zero gyroscope error and is thus straightforward to set. 
+Furthermore, the Madgwick filter has only one parameter which is linked to the mean zero gyroscope error and is thus straightforward to tune. 
 Finally, the ``Autogain'' filter, a design from our lab~\cite{imujasper} which is specialized for spherical systems.
 It combines the well known Complementary-~\cite{complementary} with the Madgwick-~\cite{madgwick} filter and automatically adjusts the filter gains based on the angular velocity. 
 
@@ -258,7 +268,7 @@ In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry an
 Notably, in the preprint DLIOM estimates the centripetal- and tangential-accelerations acting on the IMU due to the non-centered placement on the mounting base in Equation~4. 
 Strikingly however, in the corresponding published conference version~\cite{10160508} this Equation does not show up.
 We do not certainly know why the authors have abandoned the idea.
-A possible explanation might be issues with the angular acceleration term, which has to be numerically estimated using noisy gyroscope measurements. 
+A possible explanation is an issue with the angular acceleration needed for the tangential term, which has to be numerically derived using noisy gyroscope measurements. 
 In the following sections of this work, we first derive the motion compensation model and show it is beneficial if the derivative of the angular velocity is handled carefully.
 Based on this, we propose a calibration framework to estimate the displacement vector to the center of rotation, which is then used to correct the accelerometer measurment on-line. 
 
@@ -270,12 +280,10 @@ Based on this, we propose a calibration framework to estimate the displacement v
 It is our goal to correct the accelerometer measurement, i.e., subtract the accelerations due to linear and angular motion, such that only the gravity component remains. 
 This benefits the downstream attitude estimation, which relies on the direction of gravity.
 The presented procedure uses the same data recording approach as in~\cite{imutk2014}, i.e., we need to collect measurements where the sensor is static for a short duration ($\approx 5~s$) and then rotated into a different orientation.
-This process is repeated around $36 - 50$ times. 
-Our approach additionally requires the IMUs to be rigidly mounted to the base of the system when collecting the data.
+This process is repeated around $36 - 50$ times.
 Depending on the platform, a user moves the system in different orientations, or the system might do this itself. 
 The calibration procedure then recovers the SE$(3)$ transformation between all IMUs.
 Specifically, our method estimates the position vectors from the center of rotation towards the sensors, as well as the orientation between them.
-We see potential applications in wheeled rovers, unmanned aerial vehicles, robotic arms, and, most notably, spherical systems.
 
 \subsection{Derivation of the Model}\label{ssec:derivation}
 In this Section we derive the model describing the centripetal and tangential
@@ -378,13 +386,13 @@ The optimization problem subject to the error $E \in \mathbb{R}$ is:
 \begin{align}
   E &= E(\tilde{\vec{r}}) \nonumber \\
   &= \left(\sum_{n=1}^{N} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_n \!\times\! \left( \vec{\omega}_n \!\times\! \tilde{\vec{r}} \right) + \frac{\partial \vec{\omega}_n}{\partial t} \!\times\! \tilde{\vec{r}} - \vec{a}_n}^2} \right)^2 \nonumber \\
-  \vec{r} &= \argmin_{\tilde{\vec{r}}} \left( E(\tilde{\vec{r}}) \right)\,,
+  \vec{r} &= \argmin_{\tilde{\vec{r}}} \left( E(\tilde{\vec{r}}) \right)\,.\label{eq:mindisplacement}
 \end{align}
-which is solved using the well known Levenberg-Marquardt (LM) optimization algorithm in Ceres.
+We compute the gradient using automatic differentiation (AD) and minimize Equation~\eqref{eq:mindisplacement} using the well known Levenberg-Marquardt (LM) optimization algorithm in Ceres.
+For AD to work properly, we have to provide a numerically stable implementation of the angular acceleration term $\frac{\partial \vec{\omega}}{\partial t}$.
 
 \subsection{Implementation of Discrete Derivative}
-In order to implement the derivative of the gyroscope $\frac{\partial \vec{\omega}}{\partial t}$, which
-is needed during calibration but also during online attitude estimation, we need to consider each axis as a discrete, noisy signal $x[n]$, with $N$ samples and $n \in \lbrace 1,2, \dots, N \rbrace$.
+In order to implement the numerical derivative of the gyroscope $\frac{\partial \vec{\omega}}{\partial t}$, which we need during calibration but also during online attitude estimation, we have to consider each axis as a discrete, noisy signal $x[n]$, with $N$ samples and $n \in \lbrace 1,2, \dots, N \rbrace$.
 Naivley differentiating numerically using the method of fintie differences leads to amplification of noise, making the result unusable for downstream processing.
 Instead, we use a Derivative-of-Gaussian (DoG) kernel. 
 A DoG kernel combines smoothing and differentiation in a single convolution.
@@ -432,7 +440,7 @@ corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $
     Comparison of numerical derivatives on a $1$~Hz sine wave with additional white noise sampled at $200$~Hz.
     In this illustrative example the DoG kernels have a cutoff frequency of $5$~Hz corresponding to a standard deviation of the Gaussian $\sigma \approx 0.032$~s and window size of $N = 39$ samples.
     The method of finite differences amplifies noise, wheras convolution with the DoG kernels produce smooth derivatives.
-    In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution has does not. 
+    In this example, the causal convolution introduces a delay of $0.095$~s of the output, wheras the non-causal convolution does not. 
   }\label{fig:derivatives}
 \end{figure}
 Figure~\ref{fig:derivatives} illustrates the resulting derivatives of a noisy input signal for the method of finite differences, causal-, and non-causal-DoG kernels.
@@ -648,7 +656,7 @@ Figure~\ref{fig:simtraj} shows an example of the simulated trochoidal trajectory
 These simulated measurements are input to three state-of-the-art attitude estimation algorithms: 
 (1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well known Madgwick- with the Complementary-filter~\cite{madgwick,complementary}. 
 (2) A quaternion-based Extended Kalman Filter (QEKF)~\cite{qekf}.
-We use the magnetometer-free reference implementation from the AHRS toolbox~\cite{ahrs}.
+We use the magnetometer-free reference implementation from the AHRS toolbox\footnote{\url{https://ahrs.readthedocs.io/en/latest/filters/ekf.html}}.
 Finally, (3) the Mahony filter~\cite{mahony}.
 Instead of the raw accelerometer data, each estimator processes the compensated data due to Equation~\eqref{eq:compensation}, using the calibrated offset vector.
 Figure~\ref{fig:simerror} shows the resulting attitude estimtation errors for each algorithm with and without applying the proposed method.
@@ -683,7 +691,7 @@ Figure~\ref{fig:sphere} shows the prototype from our lab.
 On-board sensors includes symmetrically placed Phidget Spatial 3/3/3 1044b IMUs and a Hesai Pandar-XT32 laserscanner.
 During the data collection phase for the calibration we place the spherical system on a roll of tape to ensure stability.
 Since a roll of tape is a common item, we do not consider it as additional equipment.     
-The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub~\cite{arzberger2025sphere}.
+The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub~\footnote{https://github.com/JMUWRobotics/sphere-mobile-mapping}.
 
 
 

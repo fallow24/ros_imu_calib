@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  23 MAR 2026 18:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  24 MAR 2026 13:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -717,19 +717,18 @@ LaTeX Font Info:    ... okay on input line 51.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Calculating math sizes for size <18> on input line 71.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 71.
-
+LaTeX Font Info:    Trying to load font information for U+msa on input line 124
+.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 71.
-
+LaTeX Font Info:    Trying to load font information for U+msb on input line 124
+.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 4899) in paragraph at lines 93--112
+Underfull \hbox (badness 4899) in paragraph at lines 91--186
 []\OT1/ptm/m/n/10 Inertial mea-sure-ment units (IMUs) are well known
  []
 
@@ -737,56 +736,58 @@ Underfull \hbox (badness 4899) in paragraph at lines 93--112
 
 
 ] [2] [3]
-Overfull \hbox (3.68529pt too wide) detected at line 354
+Overfull \hbox (3.68529pt too wide) detected at line 362
 []
  []
 
 File: img/mis.eps Graphic file (type eps)
 <img/mis.eps>
 File: img/comp_sim.eps Graphic file (type eps)
- <img/comp_sim.eps>
+ <img/comp_sim.eps> [4]
+File: img/derivative_comparison.eps Graphic file (type eps)
+ <img/derivative_comparison.eps>
+File: img/bode.eps Graphic file (type eps)
+
+<img/bode.eps>
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4]
-File: img/derivative_comparison.eps Graphic file (type eps)
+ [5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-<img/derivative_comparison.eps>
-File: img/bode.eps Graphic file (type eps)
- <img/bode.eps> [5]
-Underfull \hbox (badness 2065) in paragraph at lines 470--480
+
+Underfull \hbox (badness 2065) in paragraph at lines 478--488
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 470--480
+Underfull \hbox (badness 10000) in paragraph at lines 478--488
 
  []
 
 [6]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Underfull \hbox (badness 3386) in paragraph at lines 584--588
+ [7]
+Underfull \hbox (badness 3386) in paragraph at lines 592--596
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 584--588
+Underfull \hbox (badness 10000) in paragraph at lines 592--596
 
  []
 
 File: img/error_distributions.eps Graphic file (type eps)
 <img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 615--629
+Underfull \hbox (badness 10000) in paragraph at lines 623--637
 
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [7]
 File: img/sim_poses.eps Graphic file (type eps)
 
 <img/sim_poses.eps>
@@ -796,11 +797,11 @@ File: img/rmse_sim.eps Graphic file (type eps)
  <img/rmse_sim.eps>
 File: img/rot_error_sim.eps Graphic file (type eps)
 
-<img/rot_error_sim.eps>
+<img/rot_error_sim.eps> [8]
 File: img/sphere1.eps Graphic file (type eps)
  <img/sphere1.eps>
 File: img/sphere2.eps Graphic file (type eps)
- <img/sphere2.eps> [8]
+ <img/sphere2.eps>
 File: img/single_raw_top.eps Graphic file (type eps)
 
 <img/single_raw_top.eps>
@@ -820,40 +821,30 @@ File: img/multi_cor_top.eps Graphic file (type eps)
 <img/multi_cor_top.eps>
 File: img/multi_cor_side.eps Graphic file (type eps)
  <img/multi_cor_side.eps>
-Overfull \hbox (25.92188pt too wide) in paragraph at lines 698--727
+Overfull \hbox (25.92188pt too wide) in paragraph at lines 706--735
  [][][][][] 
  []
 
 File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
-<img/multi_cor_vs_raw_zoom.eps> (./root.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [9]
-[10]
-Underfull \hbox (badness 4467) in paragraph at lines 142--146
+<img/multi_cor_vs_raw_zoom.eps> [9] (./root.bbl
+Underfull \hbox (badness 4467) in paragraph at lines 147--151
 []\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
 d
  []
 
-
-Underfull \hbox (badness 1675) in paragraph at lines 204--208
-[]\OT1/ptm/m/n/8 F. Arzberger, ``Spher-i-cal mo-bile map-ping sys-tems,'' $http
-s : / / github .
- []
-
-) [11] (./root.aux)
+[10]) [11] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18024 strings out of 474223
- 368103 string characters out of 5748759
- 1960972 words of memory out of 5000000
- 39942 multiletter control sequences out of 15000+600000
- 589918 words of font info for 123 fonts, out of 8000000 for 9000
+ 18004 strings out of 474223
+ 367816 string characters out of 5748759
+ 1961972 words of memory out of 5000000
+ 39925 multiletter control sequences out of 15000+600000
+ 587334 words of font info for 112 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 84i,18n,93p,1173b,749s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,18n,93p,1173b,753s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (11 pages, 102732 bytes).
+Output written on root.dvi (11 pages, 107432 bytes).

@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex root"] 1774285698.49074 "root.aux" "root.bbl" "root" 1774285924.19679 0
-  "./root.bib" 1774284069.48185 13842 970e437c8adefedad19ee3993ccefe21 ""
+["bibtex root"] 1774357059.86754 "root.aux" "root.bbl" "root" 1774357069.53481 0
+  "./root.bib" 1774350427.77097 14604 58dd1df6cf56d5044de3b4c93abd0663 ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "root.aux" 1774285915.08669 12308 b8c11187353efbb43994da2073047285 "latex"
+  "root.aux" 1774357060.45167 12328 1b23df816a5f8b5f621f8c5588b159f5 "latex"
   (generated)
   "root.bbl"
   "root.blg"
   (rewritten before read)
-["dvipdf"] 1774285915.28757 "root.dvi" "root.pdf" "root" 1774285924.19841 0
-  "root.dvi" 1774285915.08769 102732 7bef8951fb357ae2e63d0a7d798cae61 "latex"
+["dvipdf"] 1774357060.68486 "root.dvi" "root.pdf" "root" 1774357069.53613 0
+  "root.dvi" 1774357060.45167 107432 05d7ab69bc74579976352d728e6b91b1 "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1774285914.60498 "root.tex" "root.dvi" "root" 1774285924.19688 0
+["latex"] 1774357059.95451 "root.tex" "root.dvi" "root" 1774357069.53489 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -44,18 +44,13 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx7.tfm" 1136768653 1336 3125ccb448c1a09074e3aa4a9832f130 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx8.tfm" 1136768653 1332 1fde11373e221473104d6cc5993f046e ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm" 1136768653 1328 5442e22a7072966dbaf88ca900acf3f0 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmex10.tfm" 1136768653 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi12.tfm" 1136768653 1524 4414a8315f39513458b80dfc63bff03a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi6.tfm" 1136768653 1512 f21f83efb36853c0b70002322c1ab3ad ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi8.tfm" 1136768653 1520 eccf95517727cb11801f4f1aee3a21b4 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmi9.tfm" 1136768653 1524 d89e2d087a9828407a196f428428ef4a ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmmib10.tfm" 1136768653 1524 554068197b70979a55370e6c6495f441 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1136768653 1288 655e228510b4c2a1abe905c368440826 ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm" 1136768653 1292 296a67155bdbfc32aa9c636f21e91433 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr6.tfm" 1136768653 1300 b62933e007d01cfd073f79b963c01526 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr8.tfm" 1136768653 1292 21c1c5bfeaebccffdb478fd231a0997d ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr9.tfm" 1136768653 1292 6b21b9c2c7bebb38aa2273f7ca0fb3af ""
-  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy10.tfm" 1136768653 1124 6c73e740cf17375f03eec0ee63599741 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy6.tfm" 1136768653 1116 933a60c408fc0a863a92debe84b2d294 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy8.tfm" 1136768653 1120 8b7d695260f3cff42e636090a8002094 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm" 1136768653 1116 25a7bf822c58caf309a702ef79f4afbb ""
@@ -172,7 +167,7 @@
   "/var/lib/texmf/web2c/pdftex/latex.fmt" 1742823642 8212925 a0a949188b751869d33c8261e9198b86 ""
   "IEEEtran.cls" 1763646362.46884 288451 2ca944e3837f3f55e325ddfd2f1a2479 ""
   "img/bode.eps" 1771421500.74936 246475 31af8f02a187e4b1adf163ac2ae39151 ""
-  "img/comp_sim.eps" 1773924604.90784 561949 328799d0466039a46076b6498f789ea6 ""
+  "img/comp_sim.eps" 1774355965.78075 538048 5783a4fc214bed83391f08706c90f2cd ""
   "img/derivative_comparison.eps" 1771421488.70636 276396 57c6b7797ceb6951c24a4ad1c294a6f8 ""
   "img/error_distributions.eps" 1771427901.57062 221949 6e111c3952b618b48b43becb1f6b0754 ""
   "img/mis.eps" 1769185881.98486 49879 f3d27d2b70fb14173b654ce926e25fdd ""
@@ -181,19 +176,19 @@
   "img/multi_cor_vs_raw_zoom.eps" 1772632472.43178 13181833 fa3e94e527f80a5e2de42f65a5ea795c ""
   "img/multi_raw_side.eps" 1772632472.54047 2604878 5ef2b9e06855f19df553b6e20ab9b3b0 ""
   "img/multi_raw_top.eps" 1772632472.67376 3700309 5bd9f7213d97b2dec81d487c79ea7d30 ""
-  "img/rmse_sim.eps" 1773923994.01679 190634 b9cf42d3464b82dc940000539b6decd6 ""
-  "img/rot_error_sim.eps" 1773923993.28279 331071 43da0980350784f70e08f1e65437bb50 ""
-  "img/sim_poses.eps" 1773923984.48982 253378 724161d9619b3265528732639df0f4d9 ""
-  "img/sim_readings.eps" 1773923983.45082 1046532 9f9687c5550a3642fc7a16fe98524d7a ""
+  "img/rmse_sim.eps" 1774356001.82851 190634 cae3c65316b0d1d47276617d0adbd9aa ""
+  "img/rot_error_sim.eps" 1774356001.06851 420948 2dc77a408d9520328b51f857a7fecbc4 ""
+  "img/sim_poses.eps" 1774355991.99157 253378 f84470a91eca6adcb53daa80f6114347 ""
+  "img/sim_readings.eps" 1774355991.05658 1050705 5ee0bd8a5111740bfc9a5f03f031b63a ""
   "img/single_cor_side.eps" 1772632472.77753 2376000 727b051e632abd0420e68ef747b1dfa6 ""
   "img/single_cor_top.eps" 1773307869.80537 2891701 15667b87f611a74383da441e7b2d6a8e ""
   "img/single_raw_side.eps" 1772632473.00213 2617789 957510b2903b25898dba6cd1e3270285 ""
   "img/single_raw_top.eps" 1773307759.05138 3311378 7ce6d071aaf1613635ad7afc40286f49 ""
   "img/sphere1.eps" 1773836073.53714 1495749 0359c0b2131839f8efd5e8ed15bdb91e ""
   "img/sphere2.eps" 1773836077.25912 2266603 474e6ac5651d071ef72cb37571ef64b8 ""
-  "root.aux" 1774285915.08669 12308 b8c11187353efbb43994da2073047285 "latex"
-  "root.bbl" 1774285698.56745 9383 b5bb80b43ed8dd206983af0710ac258d "bibtex root"
-  "root.tex" 1774285912.4417 57223 23dee3df8b9f17128dfde25cc661969a ""
+  "root.aux" 1774357060.45167 12328 1b23df816a5f8b5f621f8c5588b159f5 "latex"
+  "root.bbl" 1774357059.95125 9441 35a8a3ae5d47cf98505e1ebf3b10967e "bibtex root"
+  "root.tex" 1774357057.30443 60679 2a3dcc6a2c9ddcf46cd9c3f5b4024483 ""
   (generated)
   "root.aux"
   "root.dvi"
