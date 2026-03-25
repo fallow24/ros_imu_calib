@@ -227,6 +227,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarypatterns
 INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarypatterns.code.tex
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cite/cite.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cite/cite.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 INPUT /usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 INPUT ./root.aux
@@ -317,6 +319,18 @@ INPUT img/sphere1.eps
 INPUT ./img/sphere2.eps
 INPUT ./img/sphere2.eps
 INPUT img/sphere2.eps
+INPUT ./img/pltjgl_accel_edited.eps
+INPUT ./img/pltjgl_accel_edited.eps
+INPUT img/pltjgl_accel_edited.eps
+INPUT ./img/pltjgl_accel_merged_edited.eps
+INPUT ./img/pltjgl_accel_merged_edited.eps
+INPUT img/pltjgl_accel_merged_edited.eps
+INPUT ./img/pltjgl_gyro_edited.eps
+INPUT ./img/pltjgl_gyro_edited.eps
+INPUT img/pltjgl_gyro_edited.eps
+INPUT ./img/pltjgl_gyro_merged_edited.eps
+INPUT ./img/pltjgl_gyro_merged_edited.eps
+INPUT img/pltjgl_gyro_merged_edited.eps
 INPUT ./img/single_raw_top.eps
 INPUT ./img/single_raw_top.eps
 INPUT img/single_raw_top.eps

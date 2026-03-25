@@ -47,6 +47,7 @@
 \DeclareMathOperator{\SE}{SE}
 \DeclareMathOperator{\Exp}{Exp}
 \DeclareMathOperator{\Log}{Log}
+\usepackage{flushend}
 
 \begin{document}
 
@@ -264,7 +265,7 @@ Three additional differences to~\cite{9423615} are:
 (2) our data collection approach does not depend on free-fall data, i.e., does not require throwing the system in the air, and 
 (3) the proposed method uses Derivative of Gaussian (DoG) kernels instead of 3rd-order finite-differences to calculate angular accelerations.
 Finally, there is one remarkable example of motion acceleration compensation from the LiDAR-Inertial Odometry (LIO) community:
-In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry and Mapping'' (DLIOM) in an ArXiv preprint from 2023, which seems to be an unpublished continuation of the authors work in~\cite{chen2022direct}.  
+In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry and Mapping'' (DLIOM) in an ArXiv preprint from 2023, which seems to be a continuation of the authors work in~\cite{chen2022direct}.  
 Notably, in the preprint DLIOM estimates the centripetal- and tangential-accelerations acting on the IMU due to the non-centered placement on the mounting base in Equation~4. 
 Strikingly however, in the corresponding published conference version~\cite{10160508} this Equation does not show up.
 We do not certainly know why the authors have abandoned the idea.
@@ -287,12 +288,12 @@ Specifically, our method estimates the position vectors from the center of rotat
 
 \subsection{Derivation of the Model}\label{ssec:derivation}
 In this Section we derive the model describing the centripetal and tangential
-forces acting on the sensor, resulting from a non-uniform circular motion around the base. 
+forces acting on the sensor, resulting from a non-uniform circular motion around the center. 
 Let $\vec{r}$ be the offset of the sensor from the center of rotation and let
 $\vec{\omega}$ be its angular velocity. The linear velocity of the sensor
 following the circular trajectory is
 \begin{align}
-  \vec{v} = \frac{\partial \vec{r}}{\partial t} = \vec{\omega} \!\times\! \vec{r} \, .
+  \vec{v}(t) = \frac{\partial \vec{r}}{\partial t} = \vec{\omega}(t) \!\times\! \vec{r}(t) \, .
 \end{align}
 Taking the derviative with respect to time results in the linear acceleration:
 \begin{align}
@@ -373,7 +374,7 @@ We apply the method from~\cite{imutk2014} to calibrate the bias, scale, and misa
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/comp_sim}
-  \caption{Comparison of total acceleration magnitude before and after the proposed calibration.
+  \caption{Comparison of total acceleration magnitude before and after the proposed calibration in simulation.
   Before calibration (red) motion acceleration effects are present.
   After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).
   In this example, the position error of the offset vector after calibration is $3.01$~\%.}\label{fig:magnitude}
@@ -566,7 +567,6 @@ Furthermore, we simulate constant sensor bias $\vec{b}_a$, constant scale error 
 \vec{a}[n] &= \mathbf{S}_a \cdot \vec{a}^b[n]+\vec{d}_a[n]+\vec{\eta}_a[n]+\vec{b}_a,\label{eq:simacc}
 \end{align}
 where $\Delta t$ is the mean sampling interval, $\sigma_a$ defines the noise density in units of $\left[\text{m} \cdot \text{s}^{-2} \cdot \text{Hz}^{-0.5}\right]$, and $\sigma_{b_a}$ defines the in-run bias instability in units of $\left[\text{m} \cdot \text{s}^{-3} \cdot \text{Hz}^{-0.5}\right]$.
-
 Analogously, we simulate gyroscope measurements from the orientation sequence.
 Given the rotation matrix $\mathbf{R}$ of each pose, we first compute the relative rotation between consecutive samples:
 \begin{align}
@@ -574,7 +574,7 @@ Given the rotation matrix $\mathbf{R}$ of each pose, we first compute the relati
 \end{align}
 Using the capitalized logarithmic map $\Log:SO(3)\rightarrow\mathbb{R}^3$ of the Lie group~\cite{microlie}, the body-frame angular velocity as measured by a gyroscope is
 \begin{align}
-\boldsymbol{\omega}^b[n] &= \frac{\Log\!\big(\Delta \mathbf{R}[n]\big)}{t[n]-t[n-1]}.
+\boldsymbol{\omega}^b[n] &= \frac{\Log\!\big(\Delta \mathbf{R}[n]\big)}{t[n]-t[n-1]}.\label{eq:liegyro}
 \end{align}
 Similarly to the accelerometer, we apply an axis-wise convolution with a non-causal Gaussian kernel $h_0$ if the trajectory is not fully synthetic:
 \begin{align}
@@ -670,7 +670,7 @@ Without compensation, the attitude estimators accumulate error quickly due to th
   Input to the estimators in the illustrated example are the fully-synthetic simulated accelerometer and gyroscope readings from Figure~\ref{fig:simtraj}.
   We use the following parameters for each estimator. 
   Autogain~\cite{imujasper}: $\Theta = 0.1$, $\theta = 0.1$.
-  QEKF~\cite{ahrs}: $P_{\text{init}} = 1$, $\sigma_a = 0.005$, $\sigma_g = 0.005$.
+  QEKF~\cite{qekf}: $P_{\text{init}} = 1$, $\sigma_a = 0.005$, $\sigma_g = 0.005$.
   Mahony~\cite{mahony}: $K_p = 50$, $K_i = 0.01$.
   (Left:) Root mean squared of rotation errors. 
   (Right:) Rotation errors as timeseries.}\label{fig:simerror}
@@ -689,37 +689,64 @@ We test the proposed calibration and compensation appraoch on our spherical mobi
 \end{figure}
 Figure~\ref{fig:sphere} shows the prototype from our lab.
 On-board sensors includes symmetrically placed Phidget Spatial 3/3/3 1044b IMUs and a Hesai Pandar-XT32 laserscanner.
-During the data collection phase for the calibration we place the spherical system on a roll of tape to ensure stability.
+During the data collection phase for the calibration we place the spherical system on a roll of tape to ensure stability in the static periods.
 Since a roll of tape is a common item, we do not consider it as additional equipment.     
-The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub~\footnote{https://github.com/JMUWRobotics/sphere-mobile-mapping}.
+The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub.\footnote{https://github.com/JMUWRobotics/sphere-mobile-mapping}
+We consider four different cases to evaluate the effectivenes of the proposed calibration and compensation software:
+(a) Using a single non-centered IMU, performing only intrinsic calibration due to~\cite{imutk2014} and no motion compensation, 
+(b) a single non-centered IMU, performing the proposed calibration and motion compensation, 
+(c) multiple symetrically placed non-centered IMUs, performing only intrinsic calibration due to~\cite{imutk2014} without motion compensation, and
+(d) multiple symetrically placed non-centered IMUs, performing the proposed calibration and motion compensation.
+In cases (c) and (d) we average the measurements of multiple IMUs.
+In the latter case the averaging happens after applying the intrinsic calibration and compensating the motion accelerations.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_edited}\hfill
+  \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_merged_edited}\vspace{4pt}
+  \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_edited}\hfill
+  \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_merged_edited}
+  \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.
+  (Above row:) Total magnitude (L2-norm) of measured accelerometer x, y, and z values. 
+  Red indicates no motion compensation, green indicates motion compensation, and blue indicates the magnitude of local gravity.
+  (Below row:) Gyroscope measurements where the colors correspond to x, y, and z axes.
+  (Left column:) Measurements from a single IMU.
+  (Right column:) Averaged measurements of multiple, symmetrically placed IMUs.}\label{fig:realdata}
+\end{figure}
+Figure~\ref{fig:realdata} shows two example datasets, corresponding to the left column which is data from a single IMU, and the right column which is averaged data from multiple IMUs.
+The above row shows the magnitude of measured acceleration where red corresponds to no compensation and green corresponds to active compensation.
+The compensated accelerations are closer to the magnitude of local gravity for both datasets.
+This is an expected result, similar to Figure~\ref{fig:magnitude} which shows simulated data corresponding to the trajectory in Figure~\ref{fig:simtraj}.
+Although the magnitude of angular velocity in the real-world dataset is similar to the simulated one, the compensated accelerometer measurements in the real-world deviate more from the magnitude of local gravity than in the simulation.  
+We are uncertain why this happens but contribute it to non-linearities in the accelerometer sensor which we did not model in the simulation nor in the calibration.
+If that is true, it implies that the direction of the gravity vector is actually correct, it is just scaled improperly.
 
-
-
+Another way to evaluate the effectivenes of the proposed method qualitativley is to use the compensated and uncompensated accelerometer measurements in an attitude filter and apply the resulting estimations to point data available from the on-board LiDAR.
+The filter we use is~\cite{imujasper} since it also estimates the position of the spherical system when rolling on a flat surface without slippage. 
 \begin{figure*}
   \centering{
     \subfloat[]{
-      \begin{minipage}[b]{0.249\textwidth}
+      \begin{minipage}[b]{0.235\textwidth}
         \centering
         \includegraphics[width=\linewidth]{img/single_raw_top}\vspace{4pt}
         \includegraphics[width=\linewidth]{img/single_raw_side}
       \end{minipage}
     }
     \subfloat[]{
-      \begin{minipage}[b]{0.249\textwidth}
+      \begin{minipage}[b]{0.235\textwidth}
         \centering
         \includegraphics[width=\linewidth]{img/single_cor_top}\vspace{4pt}
         \includegraphics[width=\linewidth]{img/single_cor_side}
       \end{minipage}
     }
     \subfloat[]{
-      \begin{minipage}[b]{0.249\textwidth}
+      \begin{minipage}[b]{0.235\textwidth}
         \centering
         \includegraphics[width=\linewidth]{img/multi_raw_top}\vspace{4pt}
         \includegraphics[width=\linewidth]{img/multi_raw_side}
       \end{minipage}
     }
     \subfloat[]{
-      \begin{minipage}[b]{0.249\textwidth}
+      \begin{minipage}[b]{0.235\textwidth}
         \centering
         \includegraphics[width=\linewidth]{img/multi_cor_top}\vspace{4pt}
         \includegraphics[width=\linewidth]{img/multi_cor_side}
@@ -734,21 +761,36 @@ The on-board software running on the prototype, including the implementation of 
   (Column c:) Multiple, symmetrically placed IMU's without compensation.
   (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (c).}\label{fig:pointcompare}
 \end{figure*}
+Figure~\ref{fig:pointcompare} shows the resulting point clouds when applying the attitude estimations with and without compensation.
+The point clouds in the left columns (a) and (b) correspond to the case of a single IMU, and the point clouds in the right columns (c) and (d) correspond to the case of multiple IMUs.
+In a similar fashion as before, (a) and (c) show the point clouds without compensation, and (b) and (d) show the point clouds with compensation.
+The largest improvement is visible in the single IMU case, where the point cloud in (a) is significantly distorted and the point cloud in (b) is much more structured and resembles the true geometry of the environment.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/multi_cor_vs_raw_zoom}
   \caption{Detailed comparison of the point clouds shown in Figure~\ref{fig:pointcompare}~(c) and~(d).
   The view is a truncated orthographic horizontal perspective with one cut wall. 
   (Magenta:) Without compensation, corresponding to Figure~\ref{fig:pointcompare}~(c). 
-  (Yellow:) With compensation, corresponding to Figure~\ref{fig:pointcompare}~(d).}
+  (Yellow:) With compensation, corresponding to Figure~\ref{fig:pointcompare}~(d).}\label{fig:pointzoom}
 \end{figure}
-  % \subsubsection{Motion Compensation}
-% \subsubsection{Redundant IMUs}
-% \subsubsection{Redundant IMUs with Motion Compensation}
+The improvement in the multiple IMU case is less visible, but still noticeable when looking at the details of the point cloud in the zoomed-in view in Figure~\ref{fig:pointzoom}.
 
 \section{Conclusions}
-Some conclusions. Obviously the method is very good. Every attitude filter
-should use it.
+In this work we present a method for calibration and compensation of IMUs that are mounted away from the center of rotation and therefore measure centripetal- and tangential-accelerations in addition to gravity. 
+The method combines intrinsic calibration of the accelerometer and gyroscope triads with an estimation of the displacement vector to the center of rotation and, in the multi-IMU case, the relative orientations between sensors. 
+Using these parameters, we correct the accelerometer measurements online by subtracting the motion-induced acceleration terms predicted from the gyroscope data.
+The evaluation indicates that this correction improves the gravity measurements used by downstream attitude estimators. 
+In a Monte-Carlo simulation, the calibration successfully recoveres the sensor transformations. 
+On synthetic trajectories, the compensated measurements drastically reduces the attitude estimation error for state-of-the-art attitude filters. 
+On the real-world spherical mobile mapping system, the improvement is most pronounced for a single off-centered IMU, where the compensated measurements leads to more accurate attitude estimates and thus, visibly less distorted point clouds. 
+It is also possible to compensate the effect of motion-induced acceleration by symmetrically placing multiple IMUs around the center of rotation, and averaging their measurements.
+Even in this case, when applying the proposed compensation method, the improvement is small but still observable.
+Needless to say, a lot of work remains to be done.
+The real-world experiments suggest that unmodelled sensor non-linearities exist. 
+Furthermore, the extended model for spherical systems, which considers translational effects due to rolling on the ground, additionally requires an estimate of the surface normal in the local sensor frame.
+We also want to evaluate the method on a broader range of systems and trajectories.
+In future work we also plan implement tighter integration of the compensation term into the estimators themselves, e.g., in a Kalman filter. 
+Nevertheless, the proposed method enables more accurate attitude estimation for systems with off-centered IMUs, which are common in countless applications such as mobile mapping, robotics, or in-orbit spacecraft.
 
 \section*{Appendix}
 

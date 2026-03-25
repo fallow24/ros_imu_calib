@@ -1,18 +1,18 @@
 # Fdb version 4
-["bibtex root"] 1774357059.86754 "root.aux" "root.bbl" "root" 1774357069.53481 0
-  "./root.bib" 1774350427.77097 14604 58dd1df6cf56d5044de3b4c93abd0663 ""
+["bibtex root"] 1774454857.40113 "root.aux" "root.bbl" "root" 1774456170.42259 0
+  "./root.bib" 1774437357.66416 14325 2a48146bafe86bb900fd0a463fa4af0f ""
   "/usr/share/texlive/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "root.aux" 1774357060.45167 12328 1b23df816a5f8b5f621f8c5588b159f5 "latex"
+  "root.aux" 1774456160.84841 13116 8ee6db073572dd7aaf1c7f44ebfbdeeb "latex"
   (generated)
   "root.bbl"
   "root.blg"
   (rewritten before read)
-["dvipdf"] 1774357060.68486 "root.dvi" "root.pdf" "root" 1774357069.53613 0
-  "root.dvi" 1774357060.45167 107432 05d7ab69bc74579976352d728e6b91b1 "latex"
+["dvipdf"] 1774456161.06925 "root.dvi" "root.pdf" "root" 1774456170.42392 0
+  "root.dvi" 1774456160.84941 115104 97d168ba457ff4815c31cfa077796490 "latex"
   (generated)
   "root.pdf"
   (rewritten before read)
-["latex"] 1774357059.95451 "root.tex" "root.dvi" "root" 1774357069.53489 0
+["latex"] 1774456160.33225 "root.tex" "root.dvi" "root" 1774456170.42267 0
   "/etc/texmf/web2c/texmf.cnf" 1742823542.20994 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/times/ptmb7t.tfm" 1136768653 2172 fd0c924230362ff848a33632ed45dc23 ""
@@ -155,6 +155,7 @@
   "/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty" 1601326656 325 f9f16d12354225b7dd52a3321f085955 ""
   "/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd" 1137110629 961 15056f4a61917ceed3a44e4ac11fcc52 ""
   "/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty" 1670275497 22490 8cac309b79a4c53a4ffce4b1b07aead0 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty" 1633983922 28406 d50b1f1e09a8ea19dbf64f26f6df71ab ""
   "/usr/share/texlive/texmf-dist/tex/latex/sttools/stfloats.sty" 1633983922 24057 ff20efb65b128d27c08eac20ec07f540 ""
   "/usr/share/texlive/texmf-dist/tex/latex/subfig/subfig.sty" 1158586182 21369 9ef165ca6df8815c92e693146a376c92 ""
   "/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty" 1698869629 12667 e4b5eb11e4b7239e6c8a52bbe074a6c6 ""
@@ -176,6 +177,10 @@
   "img/multi_cor_vs_raw_zoom.eps" 1772632472.43178 13181833 fa3e94e527f80a5e2de42f65a5ea795c ""
   "img/multi_raw_side.eps" 1772632472.54047 2604878 5ef2b9e06855f19df553b6e20ab9b3b0 ""
   "img/multi_raw_top.eps" 1772632472.67376 3700309 5bd9f7213d97b2dec81d487c79ea7d30 ""
+  "img/pltjgl_accel_edited.eps" 1774448205.28939 129912 4c0342951da2327ae17663bb1b9eb4c0 ""
+  "img/pltjgl_accel_merged_edited.eps" 1774446536.01694 142782 ce3126759aa4c8804a59df1ec38da956 ""
+  "img/pltjgl_gyro_edited.eps" 1774448044.70011 122308 1ea3c7fb191017efadec7928dbb029fe ""
+  "img/pltjgl_gyro_merged_edited.eps" 1774447924.91265 143059 d2ef9d0d0ad84e1a0b73c2e2d772ea9a ""
   "img/rmse_sim.eps" 1774356001.82851 190634 cae3c65316b0d1d47276617d0adbd9aa ""
   "img/rot_error_sim.eps" 1774356001.06851 420948 2dc77a408d9520328b51f857a7fecbc4 ""
   "img/sim_poses.eps" 1774355991.99157 253378 f84470a91eca6adcb53daa80f6114347 ""
@@ -186,9 +191,9 @@
   "img/single_raw_top.eps" 1773307759.05138 3311378 7ce6d071aaf1613635ad7afc40286f49 ""
   "img/sphere1.eps" 1773836073.53714 1495749 0359c0b2131839f8efd5e8ed15bdb91e ""
   "img/sphere2.eps" 1773836077.25912 2266603 474e6ac5651d071ef72cb37571ef64b8 ""
-  "root.aux" 1774357060.45167 12328 1b23df816a5f8b5f621f8c5588b159f5 "latex"
-  "root.bbl" 1774357059.95125 9441 35a8a3ae5d47cf98505e1ebf3b10967e "bibtex root"
-  "root.tex" 1774357057.30443 60679 2a3dcc6a2c9ddcf46cd9c3f5b4024483 ""
+  "root.aux" 1774456160.84841 13116 8ee6db073572dd7aaf1c7f44ebfbdeeb "latex"
+  "root.bbl" 1774454857.50179 9190 c0bd30b32d646a8ad06d9af3f12d55de "bibtex root"
+  "root.tex" 1774456158.83268 66876 4ad2227d0107d43ae377954f190f2b1d ""
   (generated)
   "root.aux"
   "root.dvi"

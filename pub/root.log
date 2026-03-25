@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  24 MAR 2026 13:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  25 MAR 2026 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -685,50 +685,72 @@ LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
 Package: cite 2015/02/27  v 5.5
 )
+(/usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty
+Package: flushend 2021/10/04 v4.0 Balancing columns in twocolumn mode
+\flushend@@lastskip@a=\skip68
+\flushend@@lastskip@b=\skip69
+\flushend@@lastnode=\count327
+\var@@loop@iter=\count328
+\var@@temp@spread=\dimen313
+\var@@temp@a=\dimen314
+\var@@temp@loop=\dimen315
+\flushend@@page@rule=\dimen316
+\flushend@@varbox@lastpage=\box72
+\flushend@@varbox@a=\box73
+\flushend@@varbox@c=\box74
+\flushend@@tempbox@a=\box75
+\flushend@@tempbox@c=\box76
+\flushend@@floatbox=\box77
+\@viper=\box78
+\hold@viper=\box79
+\atColsBreak=\toks42
+\atColsEnd=\toks43
+\oldbreak@skip=\dimen317
+)
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
-\l__pdf_internal_box=\box72
-\g__pdf_backend_object_int=\count327
-\l__pdf_backend_content_box=\box73
-\l__pdf_backend_model_box=\box74
-\g__pdf_backend_annotation_int=\count328
-\g__pdf_backend_link_int=\count329
-\g__pdf_backend_link_sf_int=\count330
+\l__pdf_internal_box=\box80
+\g__pdf_backend_object_int=\count329
+\l__pdf_backend_content_box=\box81
+\l__pdf_backend_model_box=\box82
+\g__pdf_backend_annotation_int=\count330
+\g__pdf_backend_link_int=\count331
+\g__pdf_backend_link_sf_int=\count332
 )
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 51.
-LaTeX Font Info:    ... okay on input line 51.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 124
+LaTeX Font Info:    Trying to load font information for U+msa on input line 125
 .
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 124
+LaTeX Font Info:    Trying to load font information for U+msb on input line 125
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 4899) in paragraph at lines 91--186
+Underfull \hbox (badness 4899) in paragraph at lines 92--187
 []\OT1/ptm/m/n/10 Inertial mea-sure-ment units (IMUs) are well known
  []
 
@@ -736,7 +758,7 @@ Underfull \hbox (badness 4899) in paragraph at lines 91--186
 
 
 ] [2] [3]
-Overfull \hbox (3.68529pt too wide) detected at line 362
+Overfull \hbox (3.68529pt too wide) detected at line 363
 []
  []
 
@@ -755,12 +777,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \hbox (badness 2065) in paragraph at lines 478--488
+Underfull \hbox (badness 2065) in paragraph at lines 479--489
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 478--488
+Underfull \hbox (badness 10000) in paragraph at lines 479--489
 
  []
 
@@ -802,6 +824,16 @@ File: img/sphere1.eps Graphic file (type eps)
  <img/sphere1.eps>
 File: img/sphere2.eps Graphic file (type eps)
  <img/sphere2.eps>
+File: img/pltjgl_accel_edited.eps Graphic file (type eps)
+
+<img/pltjgl_accel_edited.eps>
+File: img/pltjgl_accel_merged_edited.eps Graphic file (type eps)
+ <img/pltjgl_accel_merged_edited.eps>
+File: img/pltjgl_gyro_edited.eps Graphic file (type eps)
+
+<img/pltjgl_gyro_edited.eps>
+File: img/pltjgl_gyro_merged_edited.eps Graphic file (type eps)
+ <img/pltjgl_gyro_merged_edited.eps> [9]
 File: img/single_raw_top.eps Graphic file (type eps)
 
 <img/single_raw_top.eps>
@@ -821,30 +853,58 @@ File: img/multi_cor_top.eps Graphic file (type eps)
 <img/multi_cor_top.eps>
 File: img/multi_cor_side.eps Graphic file (type eps)
  <img/multi_cor_side.eps>
-Overfull \hbox (25.92188pt too wide) in paragraph at lines 706--735
- [][][][][] 
- []
-
 File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
-<img/multi_cor_vs_raw_zoom.eps> [9] (./root.bbl
+
+<img/multi_cor_vs_raw_zoom.eps> [10]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [11]
+(./root.bbl
 Underfull \hbox (badness 4467) in paragraph at lines 147--151
 []\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
 d
  []
 
-[10]) [11] (./root.aux)
+)
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 45.01991pt
+[rightcolumn badness]: 1000000 on 45.01991pt
+- LAST -
+Extra skip:24.86008pt
+Left:668.48009pt/0.11192pt
+Right:642.0pt/1.73193pt
+Split: 660.74004pt
+Output:660.74004pt
+Pageshrink: 1.0pt
+Pagestretch: 10.5pt
+@colht:696.0pt
+FLUSHEND [output]: 660.74004pt
+FLUSHEND [leftcolumn badness]: 86
+FUSHEND [rightcolumn badness]: 764
+ [12] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18004 strings out of 474223
- 367816 string characters out of 5748759
- 1961972 words of memory out of 5000000
- 39925 multiletter control sequences out of 15000+600000
+ 18149 strings out of 474223
+ 371132 string characters out of 5748759
+ 1990972 words of memory out of 5000000
+ 40063 multiletter control sequences out of 15000+600000
  587334 words of font info for 112 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,18n,93p,1173b,753s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (11 pages, 107432 bytes).
+Output written on root.dvi (12 pages, 115104 bytes).
