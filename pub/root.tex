@@ -17,6 +17,7 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,decorations.markings,calc,patterns}
 \usepackage{cite}
+\usepackage{pgf}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
@@ -699,18 +700,25 @@ We consider four different cases to evaluate the effectivenes of the proposed ca
 (d) multiple symetrically placed non-centered IMUs, performing the proposed calibration and motion compensation.
 In cases (c) and (d) we average the measurements of multiple IMUs.
 In the latter case the averaging happens after applying the intrinsic calibration and compensating the motion accelerations.
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_edited}\hfill
+%   \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_merged_edited}\vspace{4pt}
+%   \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_edited}\hfill
+%   \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_merged_edited}
+%   \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.
+%   (Above row:) Total magnitude (L2-norm) of measured accelerometer x, y, and z values. 
+%   Red indicates no motion compensation, green indicates motion compensation, and blue indicates the magnitude of local gravity.
+%   (Below row:) Gyroscope measurements where the colors correspond to x, y, and z axes.
+%   (Left column:) Measurements from a single IMU.
+%   (Right column:) Averaged measurements of multiple, symmetrically placed IMUs.}\label{fig:realdata}
+% \end{figure}
+
 \begin{figure}
   \centering
-  \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_edited}\hfill
-  \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_merged_edited}\vspace{4pt}
-  \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_edited}\hfill
-  \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_merged_edited}
-  \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.
-  (Above row:) Total magnitude (L2-norm) of measured accelerometer x, y, and z values. 
-  Red indicates no motion compensation, green indicates motion compensation, and blue indicates the magnitude of local gravity.
-  (Below row:) Gyroscope measurements where the colors correspond to x, y, and z axes.
-  (Left column:) Measurements from a single IMU.
-  (Right column:) Averaged measurements of multiple, symmetrically placed IMUs.}\label{fig:realdata}
+  \resizebox{\linewidth}{!}{\input{img/real_compensation.pgf}}
+  %\includegraphics[width=\linewidth]{img/real_compensation}
+  \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.}\label{fig:realdata}
 \end{figure}
 Figure~\ref{fig:realdata} shows two example datasets, corresponding to the left column which is data from a single IMU, and the right column which is averaged data from multiple IMUs.
 The above row shows the magnitude of measured acceleration where red corresponds to no compensation and green corresponds to active compensation.

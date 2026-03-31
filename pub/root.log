@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  25 MAR 2026 17:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  31 MAR 2026 17:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -720,37 +720,37 @@ File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
-LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
+LaTeX Font Info:    ... okay on input line 53.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 125
+LaTeX Font Info:    Trying to load font information for U+msa on input line 126
 .
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 125
+LaTeX Font Info:    Trying to load font information for U+msb on input line 126
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 4899) in paragraph at lines 92--187
+Underfull \hbox (badness 4899) in paragraph at lines 93--188
 []\OT1/ptm/m/n/10 Inertial mea-sure-ment units (IMUs) are well known
  []
 
@@ -758,7 +758,7 @@ Underfull \hbox (badness 4899) in paragraph at lines 92--187
 
 
 ] [2] [3]
-Overfull \hbox (3.68529pt too wide) detected at line 363
+Overfull \hbox (3.68529pt too wide) detected at line 364
 []
  []
 
@@ -777,12 +777,12 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
-Underfull \hbox (badness 2065) in paragraph at lines 479--489
+Underfull \hbox (badness 2065) in paragraph at lines 480--490
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 479--489
+Underfull \hbox (badness 10000) in paragraph at lines 480--490
 
  []
 
@@ -790,20 +790,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 479--489
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [7]
-Underfull \hbox (badness 3386) in paragraph at lines 592--596
+Underfull \hbox (badness 3386) in paragraph at lines 593--597
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 592--596
+Underfull \hbox (badness 10000) in paragraph at lines 593--597
 
  []
 
 File: img/error_distributions.eps Graphic file (type eps)
 <img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 623--637
+Underfull \hbox (badness 10000) in paragraph at lines 624--638
 
  []
 
@@ -824,16 +824,12 @@ File: img/sphere1.eps Graphic file (type eps)
  <img/sphere1.eps>
 File: img/sphere2.eps Graphic file (type eps)
  <img/sphere2.eps>
-File: img/pltjgl_accel_edited.eps Graphic file (type eps)
+(./img/real_compensation.pgf
+LaTeX Font Info:    Calculating math sizes for size <15> on input line 393.
+)
+Underfull \vbox (badness 1024) has occurred while \output is active []
 
-<img/pltjgl_accel_edited.eps>
-File: img/pltjgl_accel_merged_edited.eps Graphic file (type eps)
- <img/pltjgl_accel_merged_edited.eps>
-File: img/pltjgl_gyro_edited.eps Graphic file (type eps)
-
-<img/pltjgl_gyro_edited.eps>
-File: img/pltjgl_gyro_merged_edited.eps Graphic file (type eps)
- <img/pltjgl_gyro_merged_edited.eps> [9]
+ [9]
 File: img/single_raw_top.eps Graphic file (type eps)
 
 <img/single_raw_top.eps>
@@ -866,32 +862,42 @@ d
  []
 
 )
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
-[leftcolumn badness]: 1000000 on 45.01991pt
-[rightcolumn badness]: 1000000 on 45.01991pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 35.51848pt
+[rightcolumn badness]: 1000000 on 35.51848pt
 - LAST -
-Extra skip:24.86008pt
-Left:668.48009pt/0.11192pt
-Right:642.0pt/1.73193pt
-Split: 660.74004pt
-Output:660.74004pt
+Extra skip:35.98152pt
+Left:614.98152pt/1.73193pt
+Right:579.0pt/1.73193pt
+Split: 607.49075pt
+Output:607.49075pt
 Pageshrink: 1.0pt
-Pagestretch: 10.5pt
+Pagestretch: 8.5pt
 @colht:696.0pt
-FLUSHEND [output]: 660.74004pt
-FLUSHEND [leftcolumn badness]: 86
-FUSHEND [rightcolumn badness]: 764
+FLUSHEND [output]: 607.49075pt
+FLUSHEND [leftcolumn badness]: 78
+FUSHEND [rightcolumn badness]: 3758
  [12] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
@@ -899,12 +905,12 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18149 strings out of 474223
- 371132 string characters out of 5748759
- 1990972 words of memory out of 5000000
- 40063 multiletter control sequences out of 15000+600000
- 587334 words of font info for 112 fonts, out of 8000000 for 9000
+ 18173 strings out of 474223
+ 371016 string characters out of 5748759
+ 1982972 words of memory out of 5000000
+ 40084 multiletter control sequences out of 15000+600000
+ 593712 words of font info for 133 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,18n,93p,1173b,753s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (12 pages, 115104 bytes).
+Output written on root.dvi (12 pages, 335232 bytes).
