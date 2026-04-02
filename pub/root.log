@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  31 MAR 2026 17:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  2 APR 2026 16:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -774,36 +774,35 @@ File: img/bode.eps Graphic file (type eps)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-Underfull \hbox (badness 2065) in paragraph at lines 480--490
+Underfull \hbox (badness 2065) in paragraph at lines 479--489
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 480--490
+Underfull \hbox (badness 10000) in paragraph at lines 479--489
 
  []
 
 [6]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [7]
-Underfull \hbox (badness 3386) in paragraph at lines 593--597
+Underfull \hbox (badness 3386) in paragraph at lines 592--596
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 593--597
+Underfull \hbox (badness 10000) in paragraph at lines 592--596
 
  []
 
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7]
 File: img/error_distributions.eps Graphic file (type eps)
+
 <img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 624--638
+Underfull \hbox (badness 10000) in paragraph at lines 623--637
 
  []
 
@@ -819,85 +818,91 @@ File: img/rmse_sim.eps Graphic file (type eps)
  <img/rmse_sim.eps>
 File: img/rot_error_sim.eps Graphic file (type eps)
 
-<img/rot_error_sim.eps> [8]
+<img/rot_error_sim.eps>
 File: img/sphere1.eps Graphic file (type eps)
  <img/sphere1.eps>
 File: img/sphere2.eps Graphic file (type eps)
  <img/sphere2.eps>
-(./img/real_compensation.pgf
+File: img/sphere_cad1.eps Graphic file (type eps)
+
+<img/sphere_cad1.eps>
+File: img/sphere_cad1_top.eps Graphic file (type eps)
+ <img/sphere_cad1_top.eps>
+File: img/sphere_cad1_front.eps Graphic file (type eps)
+ <img/sphere_cad1_front.eps>
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 706.
+
+(./img/real_compensation_single.pgf
 LaTeX Font Info:    Calculating math sizes for size <15> on input line 393.
-)
-Underfull \vbox (badness 1024) has occurred while \output is active []
+) (./img/real_compensation_single_center.pgf) (./img/real_compensation.pgf)
+File: img/bowling_serial0_raw_top.eps Graphic file (type eps)
+ <img/bowling_serial0_raw_top.eps>
+File: img/bowling_serial0_raw.eps Graphic file (type eps)
 
- [9]
-File: img/single_raw_top.eps Graphic file (type eps)
+<img/bowling_serial0_raw.eps>
+File: img/bowling_serial0_comp_top.eps Graphic file (type eps)
+ <img/bowling_serial0_comp_top.eps>
+File: img/bowling_serial0_comp.eps Graphic file (type eps)
 
-<img/single_raw_top.eps>
-File: img/single_raw_side.eps Graphic file (type eps)
- <img/single_raw_side.eps>
-File: img/single_cor_top.eps Graphic file (type eps)
- <img/single_cor_top.eps>
-File: img/single_cor_side.eps Graphic file (type eps)
+<img/bowling_serial0_comp.eps>
+File: img/bowling_serial1_raw_top.eps Graphic file (type eps)
+ <img/bowling_serial1_raw_top.eps>
+File: img/bowling_serial1_raw.eps Graphic file (type eps)
 
-<img/single_cor_side.eps>
-File: img/multi_raw_top.eps Graphic file (type eps)
- <img/multi_raw_top.eps>
-File: img/multi_raw_side.eps Graphic file (type eps)
- <img/multi_raw_side.eps>
-File: img/multi_cor_top.eps Graphic file (type eps)
+<img/bowling_serial1_raw.eps>
+File: img/bowling_serial1_comp_top.eps Graphic file (type eps)
+ <img/bowling_serial1_comp_top.eps>
+File: img/bowling_serial1_comp.eps Graphic file (type eps)
 
-<img/multi_cor_top.eps>
-File: img/multi_cor_side.eps Graphic file (type eps)
- <img/multi_cor_side.eps>
-File: img/multi_cor_vs_raw_zoom.eps Graphic file (type eps)
+<img/bowling_serial1_comp.eps>
+File: img/bowling_combined_raw_top.eps Graphic file (type eps)
+ <img/bowling_combined_raw_top.eps>
+File: img/bowling_combined_raw.eps Graphic file (type eps)
 
-<img/multi_cor_vs_raw_zoom.eps> [10]
+<img/bowling_combined_raw.eps>
+File: img/bowling_combined_cor_top.eps Graphic file (type eps)
+ <img/bowling_combined_cor_top.eps>
+File: img/bowling_combined_cor.eps Graphic file (type eps)
+
+<img/bowling_combined_cor.eps>
+File: img/bowling_combined_matched_top.eps Graphic file (type eps)
+ <img/bowling_combined_matched_top.eps>
+File: img/bowling_combined_matched.eps Graphic file (type eps)
+
+<img/bowling_combined_matched.eps>
+File: img/bowling_combined_raw_vs_cor.eps Graphic file (type eps)
+ <img/bowling_combined_raw_vs_cor.eps>
+[8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [11]
-(./root.bbl
+ [9]
+[10] [11] (./root.bbl
 Underfull \hbox (badness 4467) in paragraph at lines 147--151
 []\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
 d
  []
 
 )
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
-[leftcolumn badness]: 1000000 on 35.51848pt
-[rightcolumn badness]: 1000000 on 35.51848pt
+[leftcolumn badness]: 1000000 on 3.83698pt
+[rightcolumn badness]: 1000000 on 3.83698pt
+[leftcolumn badness]: 1000000 on 3.83698pt
+[rightcolumn badness]: 1000000 on 3.83698pt
+[leftcolumn badness]: 1000000 on 3.83698pt
+[rightcolumn badness]: 1000000 on 3.83698pt
 - LAST -
-Extra skip:35.98152pt
-Left:614.98152pt/1.73193pt
-Right:579.0pt/1.73193pt
-Split: 607.49075pt
-Output:607.49075pt
+Extra skip:0.0pt
+Left:675.39496pt/0.0pt
+Right:678.0pt/1.73193pt
+Split: 678.19748pt
+Output:678.19748pt
 Pageshrink: 1.0pt
-Pagestretch: 8.5pt
+Pagestretch: 11.5pt
 @colht:696.0pt
-FLUSHEND [output]: 607.49075pt
-FLUSHEND [leftcolumn badness]: 78
-FUSHEND [rightcolumn badness]: 3758
+FLUSHEND [output]: 678.19748pt
+FLUSHEND [leftcolumn badness]: 0
+FUSHEND [rightcolumn badness]: 0
  [12] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
@@ -905,12 +910,12 @@ L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 18173 strings out of 474223
- 371016 string characters out of 5748759
- 1982972 words of memory out of 5000000
- 40084 multiletter control sequences out of 15000+600000
+ 18265 strings out of 474223
+ 374562 string characters out of 5748759
+ 2048972 words of memory out of 5000000
+ 40161 multiletter control sequences out of 15000+600000
  593712 words of font info for 133 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
  84i,18n,93p,1173b,753s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (12 pages, 335232 bytes).
+Output written on root.dvi (12 pages, 921232 bytes).

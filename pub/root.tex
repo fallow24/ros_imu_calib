@@ -375,10 +375,9 @@ We apply the method from~\cite{imutk2014} to calibrate the bias, scale, and misa
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/comp_sim}
-  \caption{Comparison of total acceleration magnitude before and after the proposed calibration in simulation.
+  \caption{Simulated comparison of total acceleration magnitude before and after the proposed calibration.
   Before calibration (red) motion acceleration effects are present.
-  After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).
-  In this example, the position error of the offset vector after calibration is $3.01$~\%.}\label{fig:magnitude}
+  After calibration (green) the measurements are closer to the magnitude of local gravity ($9.81$~m~s$^{-2}$).}\label{fig:magnitude}
 \end{figure}
 The proposed calibration method is based on the principle that after subtracting the accelerations due to motion from the accelerometer measurements, the result should have the same magnitude as local gravity $\norm*{\vec{g}}^2$, which is illustrated by Figure~\ref{fig:magnitude}.
 Thus, to collect an appropriate dataset for calibration, the operator should try to avoid translation of the base when rotating the system, i.e., the center of rotation should stay fixed.
@@ -688,100 +687,154 @@ We test the proposed calibration and compensation appraoch on our spherical mobi
   \caption{The spherical mobile mapping system from our lab. 
   It is equipped with symmetrically placed Phidgets Spatial 3/3/3 IMUs (marked red), as well as a Hesai Pandar-XT32 laser scanner (marked green).}\label{fig:sphere}
 \end{figure}
-Figure~\ref{fig:sphere} shows the prototype from our lab.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.32\linewidth]{img/sphere_cad1}
+  \includegraphics[width=0.32\linewidth]{img/sphere_cad1_top}
+  \includegraphics[width=0.32\linewidth]{img/sphere_cad1_front}
+  \caption{Partial CAD model of the spherical mobile mapping system, highlighting the placement of the IMUs.
+  Other parts are invisible except for the shell, laser scanner, and IMUs.
+  (Left:) Isometric view.
+  (Center:) Orthographic view from above.
+  (Right:) Orthographic view from the front.}\label{fig:spherecad}
+\end{figure}
+Figure~\ref{fig:sphere}~and~\ref{fig:spherecad} shows the prototype from our lab.
 On-board sensors includes symmetrically placed Phidget Spatial 3/3/3 1044b IMUs and a Hesai Pandar-XT32 laserscanner.
 During the data collection phase for the calibration we place the spherical system on a roll of tape to ensure stability in the static periods.
 Since a roll of tape is a common item, we do not consider it as additional equipment.     
 The on-board software running on the prototype, including the implementation of motion acceleration compensation, is available at our labs GitHub.\footnote{https://github.com/JMUWRobotics/sphere-mobile-mapping}
-We consider four different cases to evaluate the effectivenes of the proposed calibration and compensation software:
+\begin{table}[]
+  \caption{Comparison of IMU positions obtained from the CAD model and the proposed calibration.}\label{tab:imus}
+  \centering
+  \resizebox{\linewidth}{!}{%
+    \begin{tabular}{rccc|ccc|ccc}
+    \multicolumn{1}{l}{}                      & \multicolumn{3}{c|}{IMU0}                                    & \multicolumn{3}{c|}{IMU1}                                    & \multicolumn{3}{c}{IMU2}                                                            \\ \cline{2-10} 
+    \multicolumn{1}{l|}{}                     & \multicolumn{1}{c|}{x}    & \multicolumn{1}{c|}{y}    & z    & \multicolumn{1}{c|}{x}    & \multicolumn{1}{c|}{y}    & z    & \multicolumn{1}{c|}{x}     & \multicolumn{1}{c|}{y}     & \multicolumn{1}{c|}{z}    \\ \hline
+    \multicolumn{1}{r|}{CAD {[}cm{]}}         & \multicolumn{1}{c|}{9.00} & \multicolumn{1}{c|}{0.00} & 2.35 & \multicolumn{1}{c|}{0.00} & \multicolumn{1}{c|}{0.00} & 2.35 & \multicolumn{1}{c|}{-9.00} & \multicolumn{1}{c|}{0.00}  & \multicolumn{1}{c|}{2.35} \\ \hline
+    \multicolumn{1}{r|}{Calibration {[}cm{]}} & \multicolumn{1}{c|}{7.68} & \multicolumn{1}{c|}{0.19} & 2.95 & \multicolumn{1}{c|}{0.33} & \multicolumn{1}{c|}{0.04} & 2.88 & \multicolumn{1}{c|}{-7.21} & \multicolumn{1}{c|}{-0.38} & \multicolumn{1}{c|}{3.22} \\ \hline
+    \multicolumn{1}{r|}{Difference {[}cm{]}}  & \multicolumn{3}{c|}{1.46}                                    & \multicolumn{3}{c|}{0.63}                                    & \multicolumn{3}{c}{2.03}                                                           
+    \end{tabular}
+  }
+\end{table}
+Table~\ref{tab:imus} compares the resulting extrinsic vector from the center of rotation to the sensor for each on-board IMU.
+Additionally, we consider four different cases to evaluate the effectivenes of the proposed calibration and compensation software qualitativley:
 (a) Using a single non-centered IMU, performing only intrinsic calibration due to~\cite{imutk2014} and no motion compensation, 
 (b) a single non-centered IMU, performing the proposed calibration and motion compensation, 
-(c) multiple symetrically placed non-centered IMUs, performing only intrinsic calibration due to~\cite{imutk2014} without motion compensation, and
-(d) multiple symetrically placed non-centered IMUs, performing the proposed calibration and motion compensation.
-In cases (c) and (d) we average the measurements of multiple IMUs.
+(c) a single centered IMU, performing only intrinsic calibraiton without motion compensation,
+(d) a single centered IMU, performing performing the proposed calibration and motion compensation,
+(e) multiple symetrically placed non-centered IMUs, performing only intrinsic calibration without motion compensation, and
+(f) multiple symetrically placed non-centered IMUs, performing the proposed calibration and motion compensation.
+The placement of the IMU in (c) and (d) is only approximate centered, but closer as in (a) and (b), c.f.~Figure~\ref{fig:spherecad}.
+In cases (e) and (f) we average the measurements of multiple IMUs.
 In the latter case the averaging happens after applying the intrinsic calibration and compensating the motion accelerations.
-% \begin{figure}
-%   \centering
-%   \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_edited}\hfill
-%   \includegraphics[width=0.495\linewidth]{img/pltjgl_accel_merged_edited}\vspace{4pt}
-%   \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_edited}\hfill
-%   \includegraphics[width=0.495\linewidth]{img/pltjgl_gyro_merged_edited}
-%   \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.
-%   (Above row:) Total magnitude (L2-norm) of measured accelerometer x, y, and z values. 
-%   Red indicates no motion compensation, green indicates motion compensation, and blue indicates the magnitude of local gravity.
-%   (Below row:) Gyroscope measurements where the colors correspond to x, y, and z axes.
-%   (Left column:) Measurements from a single IMU.
-%   (Right column:) Averaged measurements of multiple, symmetrically placed IMUs.}\label{fig:realdata}
-% \end{figure}
-
-\begin{figure}
+Since the sensors are placed symetrically around the center of rotation, the motion accelerations theoretically cancel when averaging.
+\begin{figure*}
   \centering
-  \resizebox{\linewidth}{!}{\input{img/real_compensation.pgf}}
-  %\includegraphics[width=\linewidth]{img/real_compensation}
-  \caption{Example comparison of real-world IMU data from our spherical mobile mapping system.}\label{fig:realdata}
-\end{figure}
-Figure~\ref{fig:realdata} shows two example datasets, corresponding to the left column which is data from a single IMU, and the right column which is averaged data from multiple IMUs.
+  \resizebox{.32\textwidth}{!}{\input{img/real_compensation_single.pgf}}\hfill
+  \resizebox{.32\textwidth}{!}{\input{img/real_compensation_single_center.pgf}}\hfill
+  \resizebox{.32\textwidth}{!}{\input{img/real_compensation.pgf}}
+  \caption{Comparison of compensated and uncompensated real-world IMU data from our spherical mobile mapping system.
+  (Left:) Single off-centered IMU.
+  (Center:) Single centered IMU.
+  (Right:) Average of multiple, symetrically placed IMUs.
+  }\label{fig:realdata}
+\end{figure*}
+Figure~\ref{fig:realdata} shows three example datasets.
+The left column corresponds to case (a) and (b) and plots data from a single off-centered IMU.
+The column in the center corresponds to case (c) and (d) and plots data from a single centered IMU.
+The right column corresponds to case (e) and (f) and plots averaged data from multiple symmetric IMUs.
 The above row shows the magnitude of measured acceleration where red corresponds to no compensation and green corresponds to active compensation.
 The compensated accelerations are closer to the magnitude of local gravity for both datasets.
 This is an expected result, similar to Figure~\ref{fig:magnitude} which shows simulated data corresponding to the trajectory in Figure~\ref{fig:simtraj}.
 Although the magnitude of angular velocity in the real-world dataset is similar to the simulated one, the compensated accelerometer measurements in the real-world deviate more from the magnitude of local gravity than in the simulation.  
 We are uncertain why this happens but contribute it to non-linearities in the accelerometer sensor which we did not model in the simulation nor in the calibration.
 If that is true, it implies that the direction of the gravity vector is actually correct, it is just scaled improperly.
-
 Another way to evaluate the effectivenes of the proposed method qualitativley is to use the compensated and uncompensated accelerometer measurements in an attitude filter and apply the resulting estimations to point data available from the on-board LiDAR.
 The filter we use is~\cite{imujasper} since it also estimates the position of the spherical system when rolling on a flat surface without slippage. 
 \begin{figure*}
   \centering{
-    \subfloat[]{
-      \begin{minipage}[b]{0.235\textwidth}
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{img/single_raw_top}\vspace{4pt}
-        \includegraphics[width=\linewidth]{img/single_raw_side}
-      \end{minipage}
-    }
-    \subfloat[]{
-      \begin{minipage}[b]{0.235\textwidth}
+        \includegraphics[width=\linewidth]{img/bowling_serial0_raw_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_serial0_raw}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{img/single_cor_top}\vspace{4pt}
-        \includegraphics[width=\linewidth]{img/single_cor_side}
-      \end{minipage}
-    }
-    \subfloat[]{
-      \begin{minipage}[b]{0.235\textwidth}
+        \includegraphics[width=\linewidth]{img/bowling_serial0_comp_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_serial0_comp}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{img/multi_raw_top}\vspace{4pt}
-        \includegraphics[width=\linewidth]{img/multi_raw_side}
-      \end{minipage}
-    }
-    \subfloat[]{
-      \begin{minipage}[b]{0.235\textwidth}
+        \includegraphics[width=\linewidth]{img/bowling_serial1_raw_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_serial1_raw}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
         \centering
-        \includegraphics[width=\linewidth]{img/multi_cor_top}\vspace{4pt}
-        \includegraphics[width=\linewidth]{img/multi_cor_side}
-      \end{minipage}
-    }
+        \includegraphics[width=\linewidth]{img/bowling_serial1_comp_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_serial1_comp}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/bowling_combined_raw_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_combined_raw}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/bowling_combined_cor_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_combined_cor}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
+    \hspace{1pt}%
+    \subfloat[]{% <- stops horizontal space
+      \begin{minipage}[b]{0.141\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{img/bowling_combined_matched_top}\vspace{1pt}
+        \includegraphics[width=\linewidth]{img/bowling_combined_matched}
+      \end{minipage}% <- stops horizontal space
+    }% <- stops horizontal space
   }
   \caption{Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation.
   (Above row:) Truncated orthographic birds-eye perspective with cut ceiling.
   (Below row:) Truncated orthographic horizontal perspective with one cut wall.
   (Column a:) Single off-centered IMU without motion acceleration compensation.
-  (Column b:) Single off-centered IMU with compensation. Same point data as in (a). 
-  (Column c:) Multiple, symmetrically placed IMU's without compensation.
-  (Column d:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (c).}\label{fig:pointcompare}
+  (Column b:) Single off-centered IMU with compensation. Same point data as in (a).
+  (Column c:) Single centered IMU without compensation.
+  (Column d:) Single centered IMU with compensation. Same point data as (c).
+  (Column e:) Multiple, symmetrically placed IMU's without compensation.
+  (Column f:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (e).
+  (Column g:) Reference point cloud available from scan matching.}\label{fig:pointcompare}
 \end{figure*}
 Figure~\ref{fig:pointcompare} shows the resulting point clouds when applying the attitude estimations with and without compensation.
-The point clouds in the left columns (a) and (b) correspond to the case of a single IMU, and the point clouds in the right columns (c) and (d) correspond to the case of multiple IMUs.
-In a similar fashion as before, (a) and (c) show the point clouds without compensation, and (b) and (d) show the point clouds with compensation.
-The largest improvement is visible in the single IMU case, where the point cloud in (a) is significantly distorted and the point cloud in (b) is much more structured and resembles the true geometry of the environment.
+The point clouds in the left columns (a) and (b) correspond to the case of a single non-centered IMU, the point clouds in the columns (c) and (d) correspond to the case of a single centered IMU, and the point clouds in the columns (e) and (f) correspond to the case of multiple symetrically placed IMUs.
+In a similar fashion as before, (a), (c), and (e) show the point clouds without compensation, and (b), (d), and (f) show the point clouds with compensation.
+The most right column (g) shows a reference point cloud of the environment.
+The largest improvement is visible in the single IMU cases, where the point clouds in (a) and (c) are significantly distorted and the point clouds in (b) and (d) are more structured and resembles the true geometry of the environment.
 \begin{figure}
   \centering
-  \includegraphics[width=\linewidth]{img/multi_cor_vs_raw_zoom}
-  \caption{Detailed comparison of the point clouds shown in Figure~\ref{fig:pointcompare}~(c) and~(d).
+  \includegraphics[width=\linewidth]{img/bowling_combined_raw_vs_cor}
+  \caption{Detailed comparison of the resulting point clouds with and without the proposed compensation for symetrically placed IMUs.
   The view is a truncated orthographic horizontal perspective with one cut wall. 
-  (Magenta:) Without compensation, corresponding to Figure~\ref{fig:pointcompare}~(c). 
-  (Yellow:) With compensation, corresponding to Figure~\ref{fig:pointcompare}~(d).}\label{fig:pointzoom}
+  (Yellow:) Without compensation, corresponding to Figure~\ref{fig:pointcompare}~(e). 
+  (Magenta:) With compensation, corresponding to Figure~\ref{fig:pointcompare}~(f).}\label{fig:pointzoom}
 \end{figure}
-The improvement in the multiple IMU case is less visible, but still noticeable when looking at the details of the point cloud in the zoomed-in view in Figure~\ref{fig:pointzoom}.
+The improvement in the multiple IMU case is less visible, but still noticeable when looking at the details of the point cloud in Figure~\ref{fig:pointzoom}:
+The magenta colored point cloud, corresponding to active compensation, shows overall less angular error than the yellow colored one.  
 
 \section{Conclusions}
 In this work we present a method for calibration and compensation of IMUs that are mounted away from the center of rotation and therefore measure centripetal- and tangential-accelerations in addition to gravity. 

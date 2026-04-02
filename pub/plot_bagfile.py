@@ -14,9 +14,15 @@ plt.rcParams['xtick.labelsize'] = 10 +font_increase  # X-axis ticks
 plt.rcParams['ytick.labelsize'] = 10 +font_increase  # Y-axis ticks
 plt.rcParams['legend.fontsize'] = 11 +font_increase  # Legend
 
+
 acc, gyr = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/tim_without_lio_bowling_2026-03-27-14-37-10.bag", '/posePub_merged', 1774618640, 1774618648)
 acc_raw, gyr_raw = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/tim_without_lio_bowling_2026-03-27-14-37-10.bag", '/posePub_merged_raw', 1774618640, 1774618648)
 
+# acc, gyr = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/centripetal_info_serial0_2026-04-01-12-34-00.bag", '/posePub_merged', 1775039648, 1775039664)
+# acc_raw, gyr_raw = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/centripetal_info_serial0_2026-04-01-12-34-00.bag", '/posePub_merged_raw', 1775039648, 1775039664)
+
+# acc, gyr = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/centripetal_info_serial1_2026-04-01-12-35-12.bag", '/posePub_merged', 1775039717, 1775039732)
+# acc_raw, gyr_raw = bagio.load_rosbag_imu("/home/fabi/Documents/Bagfiles/centripetal_info_serial1_2026-04-01-12-35-12.bag", '/posePub_merged_raw', 1775039717, 1775039732)
 
 samples = 10
 kernel = np.ones(samples)/samples
@@ -32,12 +38,13 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
 
 acc_magnitude = (acc[:, 1]**2 + acc[:, 2]**2 + acc[:, 3]**2)**0.5
 acc_raw_magnitude = (acc_raw[:, 1]**2 + acc_raw[:, 2]**2 + acc_raw[:, 3]**2)**0.5
-gravity_magnitude = 9.81
+gravity_magnitude = 9.81 
 ax1.axhline(gravity_magnitude / gravity_magnitude, color='blue', linestyle='--', label='Gravity')
-ax1.plot(acc_time, acc_magnitude / gravity_magnitude, label='Compensated', color='green')
 ax1.plot(acc_raw_time, acc_raw_magnitude / gravity_magnitude, label='Uncompensated', color='red')
+ax1.plot(acc_time, acc_magnitude / gravity_magnitude, label='Compensated', color='green')
 ax1.set_title('Total Magnitude of Acceleration')
 ax1.set_ylabel('Acceleration [g]')
+ax1.set_ylim(0.1, 2.7)
 ax1.legend(loc='lower left')
 ax1.grid()
 # Plot the gyroscope values (x, y, z)
