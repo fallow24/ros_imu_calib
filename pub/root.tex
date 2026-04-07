@@ -17,7 +17,8 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,decorations.markings,calc,patterns}
 \usepackage{cite}
-\usepackage{pgf}
+\usepackage{pgf} 
+\usepackage{doi}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 % updated with editorial comments 8/9/2021
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
@@ -76,7 +77,7 @@
   Attitude estimation based on inertial sensing requires measurements of local angular velocities and local gravity via gyroscopes and accelerometers.
   However, during the motion of a mobile system the inertial measurement unit (IMU) will be subject to additional accelerations which skews the measurement of local gravity.
   This effect gets amplified the further away the IMU is from the base of the system.
-  Many attitude estimation filters account for this by relying more on gyroscope integration for periods of high angular velocity.
+  Many attitude estimation filters, such as FIXME and FIXME, account for this by relying more on gyroscope integration for periods of high angular velocity.
   However, this approach is prone to accumulate long term error especially around the gravity vector.
   In this work we utilize the gyroscope measurements to compensate the additional accelerations induced by the motion of the system, i.e., centripetal- and tangential-accelerations.
   Additionally, we introduce a calibration method that estimates intrinsic IMU parameters such as axes misalignment, bias, scale, as well as the extrinsic base-to-IMU vector without the necessity for additional external equipment.
@@ -90,10 +91,11 @@
 
 \section{Introduction}
 
-Inertial measurement units (IMUs) are well known and essential sensors for many types of mobile systems.
+Inertial measurement units (IMUs) are well-known and essential sensors for many types of mobile systems.
 IMUs consist of accelerometer-, gyroscope-, and sometimes, magnetometer-triads.
-They are vital instruments for attitude estimation and are used in countless robotic-, navigation-, and computer-vision-pipelines.  
-Some systems do not rely on the magnetometer, especially considering applications with strong external magnetic fields, or space, where a magnetic field is not always available.
+They are vital instruments for attitude estimation and are used in countless robotic-, navigation-, and computer-vision-pipelines.
+% TODO: Maybe add prominent citations for this claim
+Some systems do not rely on the magnetometer, especially considering applications with strong external magnetic fields, or spaces, where a magnetic field is not always available.
 The field of gravity, on the other hand, is a more reliably source of inertial direction measured by the accelerometer.
 Since the rotation around the gravity direction is not observable by the accelerometers alone, one has to rely partially on either the magnetometers or measurements of the bodies angular velocity.
 The gyroscopes measure anuglar velocity, which makes rotations around all 3 degrees of freedom (DoF) observable.
@@ -162,19 +164,20 @@ Any rotation around that center leads to centripetal- and tangential-forces in t
 \end{figure}
 In this work, we put a particular emphasis to spherical systems as illustrated in Figure~\ref{fig:spherical_model}, which is one possible application for motion force compensation.
 Many other examples exist where the same idea applies.
+% E.g., satellite systems, where precise attitude determination is essential. 
 The effect of rotation related forces on IMUs have been identified early on, yet the center of rotation varies across systems.
-For example, in 1969 the NASA considered the trajectory of a vertical and/or short take-off and landing (V/STOL) aircraft~\cite{ibm1969vstol}.
+For example, in 1969 the NASA considered the trajectory of a vertical and/or short take-off and landing (V/STOL) aircraft~\cite{ibm1969vstol_alt}.
 Using the aircraft trajectory, which is estimated from the INS, RADAR, and control inputs, they calculate and subsequently subtract the centripetal- and coriolis-forces acting on the aircraft.
 Their work omits the tangential-force, since the primary motion acceleration effect was due to a large distance to the center of rotation during turning flight, instead of fast rotary dynamics. 
 Similarly, in a military technical report from 1979~\cite{hung1979size} the authors identify the effect of centripetal- and tangential-forces on the strapdown accelerometer in cruise missiles and label it the ``size effect''.  
 They also identify a simple yet effective way to negate the effects due to the vehicles own body angular rate, which is to mount multiple IMUs symetrically around the missiles turning center and average their measurements. 
 Another similar but more recent example is~\cite{euston2008complementary}, where the authors propose an attitude estimation filter for a fixed-wing unmanned aerial vehicle (UAV).
 When the UAV banks in, the filter estimates the turn radius using bank angle and airspeed data, calculates the resulting centripetal acceleration and subtracts it from the accelerometer reading.   
-While the idea of motion acceleration compensation exists primarily in the aerospace and military community, it is heavily underrepresented in the scientific community.
+While the idea of motion acceleration compensation exists primarily in the aerospace and military community, it is heavily underrepresented in the robotics community.
 Since the centripetal- and tangential-accelerations depend on the angular velocity measurement and its derivative (c.f.~Figure~\ref{fig:spherical_model}), one possible explanation is the comparably lower precision in micro-electro-mechanical systems (MEMS) gyroscopes.
 Another explanation might be a lack of motivation for systems where the displacement to the center of rotation or magnitude of angular velocity are small. 
 Whilst not applicable to all systems, there exist many examples where the non-centered placement of the IMU on the systems base is rigid, a center of rotation exists while turning, and motion acceleration effects are not negligable:
-(1) Spherical mobile mapping, where the IMU is mounted rigidly inside the rolling ball, (2) robotic arms or grippers, where the IMU is mounted on the end-effector, (3) bio-inspired mobile robots, (4) rotary-wing UAVs, or (5) in-orbit spacecrafts.
+(1) Spherical mobile mapping, where the IMU is mounted rigidly inside the rolling ball, (2) robotic arms or grippers, where the IMU is mounted on the end-effector, (3) bio-inspired mobile robots, (4) rotary-wing UAVs, or (5) in-orbit spacecrafts and satellite systems.
 Placing the IMU on the center of rotation might not be possible due to design constraints.
 Generally, the measurement of local gravity gets more skewed the higher the angular velocity and the higher the displacement of the sensor towards the center of rotation is. 
 Many attitude estimation filters account for this effect by putting more weight in the gyroscope integration for periods of higher angular velocity, leading to drift.
@@ -191,16 +194,13 @@ The contributions of this work are:
   \item We open-source our calibration- and simulation-software, as well as calibration datasets from our spherical mobile mapping prototype.\footnote{\url{https://github.com/fallow24/ros_imu_calib}}
 \end{itemize}
 
-
-%Figure~\ref{fig:spherical_model} is a good illustation of the tangential and centripetal force.
-
 \section{Related Works}
 
 The proposed calibration method is inspired by~\cite{imutk2014}, which is a robust method for intrinsic accelerometer and gyroscope triads calibration without external equippment. 
-In the literature the data collection approach is commonly reffered to as the ``multi-position method'',  consisting of two steps: 
-(1) First, the IMU system is static for a moderate duration.
+In the literature the data collection approach is commonly referred to as the ``multi-position method'',  consisting of two steps: 
+First, the IMU system is static for a moderate duration.
 The authors suggest $60$~s as a generally good value but note that sensor dependend values can be derived from plotting the Allan variance.
-(2) Then, an operator has to manually put the IMU system in different orientations for a brief duration.
+Then second, an operator has to manually put the IMU system in different orientations for a brief duration.
 The authors state that $36$ to $50$ different attitudes for at least $5$~s are sufficient for good calibration. 
 Our proposed calibration method does not change this data collection approach.
 We extend their method, using the same data, to recover the displacement vector from the center of rotation towards the sensor, as well as the relative orientations between sensors in a multi-IMU system.
@@ -231,16 +231,20 @@ Generally, UKF achive higher-order accuracy and increased robustness compared to
 Many of the aforementioned works estimate dynamic accelerations indirectly, yet the centripetal- and tangential-accelerations are never explicitly modelled. 
 Arguably the most commonly used filter due to its simplicity and good performance is the Complementary filter~\cite{complementary}.
 It has usually only one dynamic parameter that weights the attitude estimations of the accerlerometer and gyroscope complementarily, hence the name.
-The weight of the accelerometer estimation can then be decreased heuristically by either considering the estimated gravity direction error or the magnitude of the angular velocity. 
-Another common filter is the ``Mahony'' filter~\cite{mahony}.
-This filter can be categorized as a non-linear explicit complementary filter that acts directly on the SO$(3)$ group and additionally estimates the gyroscope bias online.
+The weight of the accelerometer estimation is then decreased heuristically by either considering the estimated gravity direction error or the magnitude of the angular velocity. 
+Another common filter is the ``Mahony''-filter~\cite{mahony}.
+This filter can be categorized as a non-linear explicit complementary filter that acts directly on the $SO(3)$ group and additionally estimates the gyroscope bias online.
+% Ich schreib das SO immer im math mode :-)
 A geometric observer estimates the gyroscope integration error on the manifold which is then used in a proportional-integral feedback scheme.
 This is clearly motivated by control theory, i.e., the authors perform Lyapunov-stability analysis to ensure global stability in the observed error.  
-The ``Madgwick'' filter~\cite{madgwick} also estimates the gyroscope integration error and corrects it with a gradient descent appraoch using accelerometer data.
+The ``Madgwick''-filter~\cite{madgwick} also estimates the gyroscope integration error and corrects it with a gradient descent appraoch using accelerometer data.
 The method needs to compute only four derivatives, one for each quaternion dimension, and is thus computationally efficient.
-Furthermore, the Madgwick filter has only one parameter which is linked to the mean zero gyroscope error and is thus straightforward to tune. 
-Finally, the ``Autogain'' filter, a design from our lab~\cite{imujasper} which is specialized for spherical systems.
-It combines the well known Complementary-~\cite{complementary} with the Madgwick-~\cite{madgwick} filter and automatically adjusts the filter gains based on the angular velocity. 
+Furthermore, the Madgwick filter has only one parameter which is linked to the mean zero gyroscope error and is thus straightforward to tune.
+% FIXME: You need to anonymize the paper for TRO!!!
+Finally, the ``Autogain''-filter
+%, a design from our lab~\cite{imujasper} which
+is specialized for spherical systems.
+It combines the well-known Complementary-~\cite{complementary} with the Madgwick-~\cite{madgwick} filter and automatically adjusts the filter gains based on the angular velocity. 
 
 All of the abovementioned attitude estimation filters rely on the measured direction of gravity in the inertial frame, yet the IMU measurements also include acceleration due to motion. 
 Consequently, a method that compensates for the additional accelerations during motion improves the estimation accuracy of any filter. 
@@ -266,17 +270,14 @@ Three additional differences to~\cite{9423615} are:
 (2) our data collection approach does not depend on free-fall data, i.e., does not require throwing the system in the air, and 
 (3) the proposed method uses Derivative of Gaussian (DoG) kernels instead of 3rd-order finite-differences to calculate angular accelerations.
 Finally, there is one remarkable example of motion acceleration compensation from the LiDAR-Inertial Odometry (LIO) community:
-In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry and Mapping'' (DLIOM) in an ArXiv preprint from 2023, which seems to be a continuation of the authors work in~\cite{chen2022direct}.  
-Notably, in the preprint DLIOM estimates the centripetal- and tangential-accelerations acting on the IMU due to the non-centered placement on the mounting base in Equation~4. 
+In~\cite{chen2023direct} the authors present ``Direct LiDAR-Inertial Odometry and Mapping'' (DLIOM) in an ArXiv preprint from 2023, which seems to be a continuation of the authors work in~\cite{chen2022direct}.
+Notably, in the preprint DLIOM estimates the centripetal- and tangential-accelerations acting on the IMU due to the non-centered placement on the mounting base in Equation~4.
+% Hast Du die mal angemailt und gefragt, warum das nicht auftaucht?
 Strikingly however, in the corresponding published conference version~\cite{10160508} this Equation does not show up.
 We do not certainly know why the authors have abandoned the idea.
 A possible explanation is an issue with the angular acceleration needed for the tangential term, which has to be numerically derived using noisy gyroscope measurements. 
 In the following sections of this work, we first derive the motion compensation model and show it is beneficial if the derivative of the angular velocity is handled carefully.
 Based on this, we propose a calibration framework to estimate the displacement vector to the center of rotation, which is then used to correct the accelerometer measurment on-line. 
-
-% \subsection{Multi-Position IMU Calibration}
-% Here will be some references about offline and online IMU calibration. None of
-% these calibrate the extrinsic base-to-IMU vector.
 
 \section{Method}
 It is our goal to correct the accelerometer measurement, i.e., subtract the accelerations due to linear and angular motion, such that only the gravity component remains. 
@@ -284,11 +285,11 @@ This benefits the downstream attitude estimation, which relies on the direction 
 The presented procedure uses the same data recording approach as in~\cite{imutk2014}, i.e., we need to collect measurements where the sensor is static for a short duration ($\approx 5~s$) and then rotated into a different orientation.
 This process is repeated around $36 - 50$ times.
 Depending on the platform, a user moves the system in different orientations, or the system might do this itself. 
-The calibration procedure then recovers the SE$(3)$ transformation between all IMUs.
+The calibration procedure then recovers the $SE(3)$ transformation between all IMUs.
 Specifically, our method estimates the position vectors from the center of rotation towards the sensors, as well as the orientation between them.
 
 \subsection{Derivation of the Model}\label{ssec:derivation}
-In this Section we derive the model describing the centripetal and tangential
+In this section we derive the model describing the centripetal and tangential
 forces acting on the sensor, resulting from a non-uniform circular motion around the center. 
 Let $\vec{r}$ be the offset of the sensor from the center of rotation and let
 $\vec{\omega}$ be its angular velocity. The linear velocity of the sensor
@@ -323,7 +324,7 @@ center:
 \begin{align}
   \vec{r} = \vec{r}_e + \vec{r}_c \,.
 \end{align}
-The same considerations from the previous Section~\ref{ssec:derivation} apply to $\vec{r_e}$, i.e.
+The same considerations from the previous Section~\ref{ssec:derivation} apply to $\vec{r_e}$, i.e.,
 \begin{align}
   \vec{v}_e & = \frac{\partial \vec{r}_e}{\partial t} = \vec{\omega} \!\times\! \vec{r}_e \, , \\
   \vec{a}_e & = \frac{\partial \vec{v}_e}{\partial t} = \frac{\partial \vec{\omega}}{\partial t} \!\times\! \vec{r}_e \, + \, \vec{\omega} \!\times\! \left( \vec{\omega} \!\times\! \vec{r}_e \right) \, .
@@ -349,7 +350,7 @@ Including the measured gravity $\vec{a}_g$ as done in Section~\ref{ssec:derivati
 However, this model requires a good estimate of the normal vector $\vec{n}$ in the local sensor frame, which is subject to future work.
 
 \subsection{IMU Intrinsic Calibration}
-In order to correct the accelerometer data using the angular motion measured by the gyroscopes, both triads need to provide their readings in a shared coordinate system.
+To correct the accelerometer data using the angular motion measured by the gyroscopes, both triads need to provide their readings in a shared coordinate system.
 This intrinsic calibration step is indispensable for our proposed extrinsic calibration method, which is why we introduce some common notation here.
 For further details regarding derivation and calibration residuals, reffer to the original paper~\cite{imutk2014}. 
 The model for intrinsic calibration of the IMU triads, taking into account scale, bias, and misalignments between the triad axes with respect to the accelerometers x-axis, is:
@@ -389,7 +390,7 @@ The optimization problem subject to the error $E \in \mathbb{R}$ is:
   &= \left(\sum_{n=1}^{N} \abs{ \norm*{\vec{g}}^2 - \norm*{\vec{\omega}_n \!\times\! \left( \vec{\omega}_n \!\times\! \tilde{\vec{r}} \right) + \frac{\partial \vec{\omega}_n}{\partial t} \!\times\! \tilde{\vec{r}} - \vec{a}_n}^2} \right)^2 \nonumber \\
   \vec{r} &= \argmin_{\tilde{\vec{r}}} \left( E(\tilde{\vec{r}}) \right)\,.\label{eq:mindisplacement}
 \end{align}
-We compute the gradient using automatic differentiation (AD) and minimize Equation~\eqref{eq:mindisplacement} using the well known Levenberg-Marquardt (LM) optimization algorithm in Ceres.
+We compute the gradient using automatic differentiation (AD) and minimize Equation~\eqref{eq:mindisplacement} using the well-known Levenberg-Marquardt (LM) optimization algorithm in Ceres.
 For AD to work properly, we have to provide a numerically stable implementation of the angular acceleration term $\frac{\partial \vec{\omega}}{\partial t}$.
 
 \subsection{Implementation of Discrete Derivative}
@@ -447,7 +448,7 @@ corresponding to approximately $\pm 3\sigma$ of the Gaussian, which represents $
 Figure~\ref{fig:derivatives} illustrates the resulting derivatives of a noisy input signal for the method of finite differences, causal-, and non-causal-DoG kernels.
 The non-causal convolution produces a smooth, zero-phase derivative given the selected cutoff frequency of $5$~Hz, which is well suited for the offline calibration procedure.   
 
-In order to select an appropriate cutoff frequency $f_{\text{cut}}$ for online processing, we consider the phase shift, as well as the signal- and noise-gain, as a function of the cutoff frequency.
+To select an appropriate cutoff frequency $f_{\text{cut}}$ for online processing, we consider the phase shift, as well as the signal- and noise-gain, as a function of the cutoff frequency.
 \begin{figure}
   \centering
   \includegraphics[width=\linewidth]{img/bode}
@@ -559,7 +560,7 @@ Thus, the full simulated measurement in the inertial sensor body frame, includin
 \mathbf{a}^b[n] &= \mathbf{a}^{b}_{g}[n] + \mathbf{a}^{b}_{m}[n].
 \end{align}
 If the trajectory is fully synthetic and is not subject to any noise, we simulate accelerometer noise as sampled additive white noise $\vec{\eta}_a$.
-Furthermore, we simulate constant sensor bias $\vec{b}_a$, constant scale error $\mathbf{S}_a$ as well as drift $\vec{d}_a$ as brownian motion: 
+Furthermore, we simulate constant sensor bias $\vec{b}_a$, constant scale error $\mathbf{S}_a$ as well as drift $\vec{d}_a$ as Brownian motion: 
 \begin{align}
 \vec{\eta}_a[n] &\sim \mathcal{N}\!\left(\mathbf{0},\;\frac{\sigma_{a}^2}{\Delta t}\mathbf{I}\right),\nonumber \\
 \vec{d}_a[n] &= \sigma_{b_a}\sqrt{\Delta t}\sum_{k=1}^{n}\boldsymbol{\xi}_k,\quad
@@ -595,7 +596,7 @@ $\sigma_{b_\omega}$ is the gyroscope in-run bias instability in units of $\left[
 \newline
 
 \subsubsection{Calibration}
-In order to quantify the accuracy of the proposed calibration method we use a Monte-Carlo simulation that calibrates $2000$ IMUs using semi-synthetic data.
+To quantify the accuracy of the proposed calibration method we use a Monte-Carlo simulation that calibrates $2000$ IMUs using semi-synthetic data.
 We generate the input trajectories for the semi-synthetic datasets by first recording real-world gyroscope data
 \begin{align}
   \boldsymbol{\omega}_{\mathrm{in}}[n] &= \lbrace t[n],\;\hat{\vec{\omega}}[n]\rbrace,
@@ -654,7 +655,7 @@ Figure~\ref{fig:simtraj} shows an example of the simulated trochoidal trajectory
   In this example, we do not simulate scale and bias errors, since attitude estimation happens after applying calibration.}\label{fig:simtraj}
 \end{figure*}
 These simulated measurements are input to three state-of-the-art attitude estimation algorithms: 
-(1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well known Madgwick- with the Complementary-filter~\cite{madgwick,complementary}. 
+(1) The ``Autogain'' filter which is specialized for spherical systems~\cite{imujasper}, combining the well-known Madgwick- with the Complementary-filter~\cite{madgwick,complementary}. 
 (2) A quaternion-based Extended Kalman Filter (QEKF)~\cite{qekf}.
 We use the magnetometer-free reference implementation from the AHRS toolbox\footnote{\url{https://ahrs.readthedocs.io/en/latest/filters/ekf.html}}.
 Finally, (3) the Mahony filter~\cite{mahony}.
@@ -751,74 +752,100 @@ We are uncertain why this happens but contribute it to non-linearities in the ac
 If that is true, it implies that the direction of the gravity vector is actually correct, it is just scaled improperly.
 Another way to evaluate the effectivenes of the proposed method qualitativley is to use the compensated and uncompensated accelerometer measurements in an attitude filter and apply the resulting estimations to point data available from the on-board LiDAR.
 The filter we use is~\cite{imujasper} since it also estimates the position of the spherical system when rolling on a flat surface without slippage. 
+% Sehr schöne Grafik, aber ich würde das größer machen. Was natürlich bei 7 schweirig wird. Ginge 8 und dann alles 2x so groß
+% Oder so, aufgeteilt in 4 Quadranten ? 
 \begin{figure*}
-  \centering{
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+  \centering
+  % Quadrant 1 (top-left): subfloats (a), (b)
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    % (a) Single off-centered IMU without compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_serial0_raw_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_serial0_raw}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+    \hspace{2pt}%
+    % (b) Single off-centered IMU with compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_serial0_comp_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_serial0_comp}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+  \end{minipage}
+  %\hspace{0.01\textwidth}
+  % Quadrant 2 (top-right): subfloats (c), (d)
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    % (c) Single centered IMU without compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_serial1_raw_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_serial1_raw}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+    \hspace{2pt}%
+    % (d) Single centered IMU with compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_serial1_comp_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_serial1_comp}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+  \end{minipage}
+
+  \vspace{6pt}
+
+  % Quadrant 3 (bottom-left): subfloats (e), (f)
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    % (e) Multiple symmetrically placed IMUs without compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_combined_raw_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_combined_raw}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+    \hspace{2pt}%
+    % (f) Multiple symmetrically placed IMUs with compensation
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_combined_cor_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_combined_cor}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-    \hspace{1pt}%
-    \subfloat[]{% <- stops horizontal space
-      \begin{minipage}[b]{0.141\textwidth}
+      \end{minipage}%
+    }%
+  \end{minipage}
+  %\hspace{0.01\textwidth}
+  % Quadrant 4 (bottom-right): subfloat (g), centered in this quadrant
+  \begin{minipage}[t]{0.485\textwidth}
+    \centering
+    % (g) Reference point cloud from scan matching
+    \subfloat[]{%
+      \begin{minipage}[b]{0.485\linewidth}
         \centering
         \includegraphics[width=\linewidth]{img/bowling_combined_matched_top}\vspace{1pt}
         \includegraphics[width=\linewidth]{img/bowling_combined_matched}
-      \end{minipage}% <- stops horizontal space
-    }% <- stops horizontal space
-  }
+      \end{minipage}%
+    }%
+  \end{minipage}
   \caption{Comparison of resulting point clouds from a spherical mobile mapping system when applying the attitude estimations of the ``Autogain''-filter with and without the proposed compensation.
-  (Above row:) Truncated orthographic birds-eye perspective with cut ceiling.
-  (Below row:) Truncated orthographic horizontal perspective with one cut wall.
-  (Column a:) Single off-centered IMU without motion acceleration compensation.
-  (Column b:) Single off-centered IMU with compensation. Same point data as in (a).
-  (Column c:) Single centered IMU without compensation.
-  (Column d:) Single centered IMU with compensation. Same point data as (c).
-  (Column e:) Multiple, symmetrically placed IMU's without compensation.
-  (Column f:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (e).
-  (Column g:) Reference point cloud available from scan matching.}\label{fig:pointcompare}
+  (Above rows:) Truncated orthographic birds-eye perspective with cut ceiling.
+  (Below rows:) Truncated orthographic horizontal perspective with one cut wall.
+  (a:) Single off-centered IMU without motion acceleration compensation.
+  (b:) Single off-centered IMU with compensation. Same point data as in (a).
+  (c:) Single centered IMU without compensation.
+  (d:) Single centered IMU with compensation. Same point data as (c).
+  (e:) Multiple, symmetrically placed IMU's without compensation.
+  (f:) Multiple, symmetrically placed IMU's with compensation. Same point data as in (e).
+  (g:) Reference point cloud available from scan matching.}\label{fig:pointcompare}
 \end{figure*}
 Figure~\ref{fig:pointcompare} shows the resulting point clouds when applying the attitude estimations with and without compensation.
 The point clouds in the left columns (a) and (b) correspond to the case of a single non-centered IMU, the point clouds in the columns (c) and (d) correspond to the case of a single centered IMU, and the point clouds in the columns (e) and (f) correspond to the case of multiple symetrically placed IMUs.
@@ -853,6 +880,11 @@ We also want to evaluate the method on a broader range of systems and trajectori
 In future work we also plan implement tighter integration of the compensation term into the estimators themselves, e.g., in a Kalman filter. 
 Nevertheless, the proposed method enables more accurate attitude estimation for systems with off-centered IMUs, which are common in countless applications such as mobile mapping, robotics, or in-orbit spacecraft.
 
+\bibliographystyle{IEEEtran_doi}
+\bibliography{root}
+
+%FIXME: Oft kommt der Appendix nach den Referenzen
+% done
 \section*{Appendix}
 
 \subsection{Derivation of EMA parameter}\label{apx:ema}
@@ -895,8 +927,6 @@ which yields a quadratic polynomial in $\alpha$:
 \end{align}
 
 
-\bibliographystyle{IEEEtran}
-\bibliography{root}
 
 \end{document}
 

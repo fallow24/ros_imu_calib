@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  2 APR 2026 16:53
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=latex 2025.3.24)  7 APR 2026 17:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -685,80 +685,233 @@ LaTeX Info: Redefining \cite on input line 302.
 LaTeX Info: Redefining \nocite on input line 332.
 Package: cite 2015/02/27  v 5.5
 )
-(/usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty
+(/usr/share/texlive/texmf-dist/tex/latex/doi/doi.sty
+Package: doi 2018/09/09 handle doi numbers
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2024-01-20 v7.01h Hypertext links for LaTeX
+
+(/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+)
+(/usr/share/texlive/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode is ignored in DVI mode.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
+
+(/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count327
+)
+(/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count328
+)
+\@linkdim=\dimen313
+\Hy@linkcounter=\count329
+\Hy@pagecounter=\count330
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2024-01-20 v7.01h Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+)
+(/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count331
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2024-01-20 v7.01h Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4179.
+Package hyperref Info: Link nesting OFF on input line 4184.
+Package hyperref Info: Hyper index ON on input line 4187.
+Package hyperref Info: Plain pages OFF on input line 4194.
+Package hyperref Info: Backreferencing OFF on input line 4199.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4446.
+\c@Hy@tempcnt=\count332
+LaTeX Info: Redefining \url on input line 4784.
+\XeTeXLinkMargin=\dimen314
+
+(/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count333
+\Field@Width=\dimen315
+\Fld@charsize=\dimen316
+Package hyperref Info: Hyper figures OFF on input line 6063.
+Package hyperref Info: Link nesting OFF on input line 6068.
+Package hyperref Info: Hyper index ON on input line 6071.
+Package hyperref Info: backreferencing OFF on input line 6078.
+Package hyperref Info: Link coloring OFF on input line 6083.
+Package hyperref Info: Link coloring with OCG OFF on input line 6088.
+Package hyperref Info: PDF/A mode OFF on input line 6093.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count334
+\c@Item=\count335
+\c@Hfootnote=\count336
+)
+Package hyperref Info: Driver (default): hdvips.
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hdvips.def
+File: hdvips.def 2024-01-20 v7.01h Hyperref driver for dvips
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pdfmark.def
+File: pdfmark.def 2024-01-20 v7.01h Hyperref definitions for pdfmark specials
+\pdf@docset=\toks42
+\pdf@box=\box72
+\pdf@toks=\toks43
+\pdf@defaulttoks=\toks44
+\HyField@AnnotCount=\count337
+\Fld@listcount=\count338
+\c@bookmark@seq@number=\count339
+
+(/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
+kage
+with kernel methods
+)
+(/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+85.
+)
+\Hy@SectionHShift=\skip68
+))) (/usr/share/texlive/texmf-dist/tex/latex/sttools/flushend.sty
 Package: flushend 2021/10/04 v4.0 Balancing columns in twocolumn mode
-\flushend@@lastskip@a=\skip68
-\flushend@@lastskip@b=\skip69
-\flushend@@lastnode=\count327
-\var@@loop@iter=\count328
-\var@@temp@spread=\dimen313
-\var@@temp@a=\dimen314
-\var@@temp@loop=\dimen315
-\flushend@@page@rule=\dimen316
-\flushend@@varbox@lastpage=\box72
-\flushend@@varbox@a=\box73
-\flushend@@varbox@c=\box74
-\flushend@@tempbox@a=\box75
-\flushend@@tempbox@c=\box76
-\flushend@@floatbox=\box77
-\@viper=\box78
-\hold@viper=\box79
-\atColsBreak=\toks42
-\atColsEnd=\toks43
-\oldbreak@skip=\dimen317
+\flushend@@lastskip@a=\skip69
+\flushend@@lastskip@b=\skip70
+\flushend@@lastnode=\count340
+\var@@loop@iter=\count341
+\var@@temp@spread=\dimen317
+\var@@temp@a=\dimen318
+\var@@temp@loop=\dimen319
+\flushend@@page@rule=\dimen320
+\flushend@@varbox@lastpage=\box73
+\flushend@@varbox@a=\box74
+\flushend@@varbox@c=\box75
+\flushend@@tempbox@a=\box76
+\flushend@@tempbox@c=\box77
+\flushend@@floatbox=\box78
+\@viper=\box79
+\hold@viper=\box80
+\atColsBreak=\toks45
+\atColsEnd=\toks46
+\oldbreak@skip=\dimen321
 )
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
 File: l3backend-dvips.def 2024-01-04 L3 backend support: dvips
-\l__pdf_internal_box=\box80
-\g__pdf_backend_object_int=\count329
-\l__pdf_backend_content_box=\box81
-\l__pdf_backend_model_box=\box82
-\g__pdf_backend_annotation_int=\count330
-\g__pdf_backend_link_int=\count331
-\g__pdf_backend_link_sf_int=\count332
+\l__pdf_internal_box=\box81
+\g__pdf_backend_object_int=\count342
+\l__pdf_backend_content_box=\box82
+\l__pdf_backend_model_box=\box83
+\g__pdf_backend_annotation_int=\count343
+\g__pdf_backend_link_int=\count344
+\g__pdf_backend_link_sf_int=\count345
 )
 (./root.aux)
 \openout1 = `root.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 53.
-LaTeX Font Info:    ... okay on input line 53.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
+LaTeX Font Info:    ... okay on input line 54.
 
 -- Lines per column: 58 (exact).
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 126
+Package hyperref Info: Link coloring OFF on input line 54.
+(./root.out) (./root.out)
+\@outlinefile=\write4
+\openout4 = `root.out'.
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 128
 .
+
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 126
+LaTeX Font Info:    Trying to load font information for U+msb on input line 128
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Underfull \hbox (badness 4899) in paragraph at lines 93--188
-[]\OT1/ptm/m/n/10 Inertial mea-sure-ment units (IMUs) are well known
+Underfull \hbox (badness 4927) in paragraph at lines 94--191
+\OT1/ptm/m/n/10 es-sen-tial sen-sors for many types of mo-bile sys-tems.
  []
 
 [1
 
 
 ] [2] [3]
-Overfull \hbox (3.68529pt too wide) detected at line 364
+Overfull \hbox (3.68529pt too wide) detected at line 365
 []
  []
 
@@ -774,24 +927,24 @@ File: img/bode.eps Graphic file (type eps)
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [5]
-Underfull \hbox (badness 2065) in paragraph at lines 479--489
+Underfull \hbox (badness 2065) in paragraph at lines 480--490
 []\OT1/ptm/m/n/10 After the in-trin-sic and ex-trin-sic pa-ram-e-ters for each
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 479--489
+Underfull \hbox (badness 10000) in paragraph at lines 480--490
 
  []
 
 [6]
-Underfull \hbox (badness 3386) in paragraph at lines 592--596
+Underfull \hbox (badness 3386) in paragraph at lines 593--597
 \OT1/ptm/m/n/10 where $\OT1/cmr/m/n/10 ^^A\OML/cmm/m/it/10 t$ \OT1/ptm/m/n/10 i
 s the mean sam-pling in-ter-val, $\OML/cmm/m/it/10 ^^[[]$ \OT1/ptm/m/n/10 is th
 e
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 592--596
+Underfull \hbox (badness 10000) in paragraph at lines 593--597
 
  []
 
@@ -802,7 +955,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: img/error_distributions.eps Graphic file (type eps)
 
 <img/error_distributions.eps>
-Underfull \hbox (badness 10000) in paragraph at lines 623--637
+Underfull \hbox (badness 10000) in paragraph at lines 624--638
 
  []
 
@@ -832,7 +985,7 @@ File: img/sphere_cad1_front.eps Graphic file (type eps)
  <img/sphere_cad1_front.eps>
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 706.
+               Default added (so using `tbp') on input line 707.
 
 (./img/real_compensation_single.pgf
 LaTeX Font Info:    Calculating math sizes for size <15> on input line 393.
@@ -879,43 +1032,110 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9]
 [10] [11] (./root.bbl
-Underfull \hbox (badness 4467) in paragraph at lines 147--151
-[]\OT1/ptm/m/n/8 J. Zev-er-ing, A. Bre-den-beck, F. Arzberger, D. Bor-rmann, an
-d
+Underfull \hbox (badness 10000) in paragraph at lines 28--32
+[]\OT1/ptm/m/n/8 ``V/STOL In-er-tial Nav-i-ga-tion with Radar Up-date Ca-pa-bil
+-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--32
+\OT1/ptm/m/n/8 ity,'' NASA Con-trac-tor Re-port, NAS12-610, Aug. 1969,
+ []
+
+
+Underfull \hbox (badness 2478) in paragraph at lines 90--94
+\OT1/ptm/m/it/8 29th Chi-nese Con-trol And De-ci-sion Con-fer-ence (CCDC)\OT1/p
+tm/m/n/8 , 2017.
+ []
+
+
+Underfull \hbox (badness 1742) in paragraph at lines 107--110
+[]\OT1/ptm/m/n/8 E. J. Lef-ferts, F. L. Markley, and M. D. Shus-ter, \OT1/ptm/m
+/it/8 Kalman fil-
+ []
+
+
+Underfull \hbox (badness 3386) in paragraph at lines 107--110
+\OT1/ptm/m/it/8 ter-ing for space-craft at-ti-tude es-ti-ma-tion\OT1/ptm/m/n/8 
+, 1982, vol. 5, no. 5.
+ []
+
+
+Underfull \hbox (badness 2556) in paragraph at lines 148--152
+[]\OT1/ptm/m/n/8 R. Ma-hony, T. Hamel, and J.-M. Pflim-lin, ``Non-lin-ear com-p
+le-
+ []
+
+
+Underfull \hbox (badness 1406) in paragraph at lines 165--170
+\OT1/ptm/m/n/8 fog-imu based on si-nu-soidal swing scheme,'' in \OT1/ptm/m/it/8
+ 2020 IEEE/ION
+ []
+
+
+Underfull \hbox (badness 5563) in paragraph at lines 165--170
+\OT1/ptm/m/it/8 Po-si-tion, Lo-ca-tion and Nav-i-ga-tion Sym-po-sium (PLANS)\OT
+1/ptm/m/n/8 , 2020.
+ []
+
+[12]
+Underfull \hbox (badness 1960) in paragraph at lines 202--205
+[]\OT1/ptm/m/n/8 J. Sola, J. De-ray, and D. Atchuthan, ``A mi-cro lie the-ory f
+or
+ []
+
+
+Underfull \hbox (badness 5711) in paragraph at lines 202--205
+\OT1/ptm/m/n/8 state es-ti-ma-tion in robotics,'' \OT1/ptm/m/it/8 arXiv preprin
+t arXiv:1812.01537\OT1/ptm/m/n/8 .
+ []
+
+
+Underfull \hbox (badness 1817) in paragraph at lines 214--219
+\OT1/ptm/m/n/8 ``Imu-based pose-estimation for spher-i-cal robots with lim-ited
+ re-
+ []
+
+
+Underfull \hbox (badness 3724) in paragraph at lines 214--219
+\OT1/ptm/m/n/8 sources,'' in \OT1/ptm/m/it/8 2021 IEEE In-ter-na-tional Con-fer
+-ence on Mul-ti-sen-
+ []
+
+
+Underfull \hbox (badness 1609) in paragraph at lines 214--219
+\OT1/ptm/m/it/8 sor Fu-sion and In-te-gra-tion for In-tel-li-gent Sys-tems (MFI
+)\OT1/ptm/m/n/8 , 2021.
  []
 
 )
-[leftcolumn badness]: 1000000 on 3.83698pt
-[rightcolumn badness]: 1000000 on 3.83698pt
-[leftcolumn badness]: 1000000 on 3.83698pt
-[rightcolumn badness]: 1000000 on 3.83698pt
-[leftcolumn badness]: 1000000 on 3.83698pt
-[rightcolumn badness]: 1000000 on 3.83698pt
 - LAST -
-Extra skip:0.0pt
-Left:675.39496pt/0.0pt
-Right:678.0pt/1.73193pt
-Split: 678.19748pt
-Output:678.19748pt
-Pageshrink: 1.0pt
-Pagestretch: 11.5pt
+Extra skip:15.37941pt
+Left:349.27441pt/0.0pt
+Right:330.29497pt/3.60004pt
+Split: 341.2901pt
+Output:341.2901pt
+Pageshrink: 0.0pt
+Pagestretch: 0.0pt
 @colht:696.0pt
-FLUSHEND [output]: 678.19748pt
-FLUSHEND [leftcolumn badness]: 0
-FUSHEND [rightcolumn badness]: 0
- [12] (./root.aux)
+FLUSHEND [output]: 341.2901pt
+FLUSHEND [leftcolumn badness]: 95
+FUSHEND [rightcolumn badness]: 10000
+ [13] (./root.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+Package rerunfilecheck Info: File `root.out' has not changed.
+(rerunfilecheck)             Checksum: D8D85D59192EB6349995BEFB3C4F6670;3192.
  ) 
 Here is how much of TeX's memory you used:
- 18265 strings out of 474223
- 374562 string characters out of 5748759
- 2048972 words of memory out of 5000000
- 40161 multiletter control sequences out of 15000+600000
+ 25183 strings out of 474223
+ 481173 string characters out of 5748759
+ 2040972 words of memory out of 5000000
+ 46973 multiletter control sequences out of 15000+600000
  593712 words of font info for 133 fonts, out of 8000000 for 9000
  1145 hyphenation exceptions out of 8191
- 84i,18n,93p,1173b,753s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,18n,93p,1189b,765s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on root.dvi (12 pages, 921232 bytes).
+Output written on root.dvi (13 pages, 980272 bytes).
