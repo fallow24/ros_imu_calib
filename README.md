@@ -107,6 +107,21 @@ This is the corresponding citation:
 }
 ```
 
+The extrinsic calibration is described in detail in [this paper](https://doi.org/10.48550/arXiv.2607.25784).
+For now you can cite the preprint from arxiv:
+
+```
+@misc{arzberger2026motionaccelerationcalibrationcompensationimus,
+      title={Motion-Acceleration Calibration and Compensation in IMUs without External Equipment for Attitude Estimation Filters}, 
+      author={Fabian Arzberger and Andreas Nüchter},
+      year={2026},
+      eprint={2607.25784},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2607.25784}, 
+}
+```
+
 ### Intrinsic Correction
 
 Given a raw sensor reading X (e.g., the acceleration ), the calibrated "unbiased" reading X' is obtained.
