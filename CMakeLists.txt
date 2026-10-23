@@ -179,6 +179,7 @@ include_directories(
 add_executable(bag_calib apps/bag_calib.cpp)
 add_executable(bag_calib_extr apps/bag_calib_extr.cpp)
 add_executable(bag_calib_multi apps/bag_calib_multi.cpp)
+add_executable(csv_calib_extr apps/csv_calib_extr.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -205,6 +206,13 @@ add_executable(bag_calib_multi apps/bag_calib_multi.cpp)
  )
 
  target_link_libraries(bag_calib_multi
+   ${catkin_LIBRARIES}
+   ${IMU_TK_LIBS}
+   Ceres::ceres
+   ${YAML_CPP_LIBRARIES}
+ )
+
+  target_link_libraries(csv_calib_extr
    ${catkin_LIBRARIES}
    ${IMU_TK_LIBS}
    Ceres::ceres

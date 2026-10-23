@@ -303,7 +303,7 @@ public:
    * setGyroDataPeriod() should be called beforehand!
    * Also sets the sigma and win_size parameters needed for the gaussian kernels (see filter.h) 
    */
-  void setLowpassFreq(int val) { 
+  void setLowpassFreq(double val) { 
     lowpass_frequency_cut_ = val; 
     sigma_ = 1.0 / (2 * M_PI * lowpass_frequency_cut_);
     if (gyro_dt_ <= 0.0) {
@@ -442,7 +442,7 @@ private:
   std::vector< TriadData_<_T> > calib_acc_samples_, calib_gyro_samples_;
   std::vector<_T> extrinsic_vector_; 
   std::vector<_T> init_extrinsic_vector_;
-  int lowpass_frequency_cut_;
+  double lowpass_frequency_cut_;
   _T sigma_;
   int win_size_;
   bool verbose_output_;

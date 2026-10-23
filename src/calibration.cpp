@@ -285,9 +285,9 @@ template <typename _T>
     options.minimizer_progress_to_stdout = verbose_output_;
     // Below options might be overkill but we dont need to optimize for speed anyway
     options.max_num_iterations = 5000;
-    options.function_tolerance = 1e-24;
-    options.gradient_tolerance = 1e-28;
-    options.parameter_tolerance = 1e-26;
+    options.function_tolerance = 1e-12;
+    options.gradient_tolerance = 1e-16;
+    options.parameter_tolerance = 1e-14;
     options.max_linear_solver_iterations = 10000;
 
     ceres::Solver::Summary summary;
@@ -464,9 +464,9 @@ template <typename _T>
   
   ceres::Solver::Options options;
   options.max_num_iterations = 5000;
-  options.function_tolerance = 1e-24;
-  options.gradient_tolerance = 1e-28;
-  options.parameter_tolerance = 1e-26;
+  options.function_tolerance = 1e-12;
+  options.gradient_tolerance = 1e-16;
+  options.parameter_tolerance = 1e-14;
   options.max_linear_solver_iterations = 10000;
   options.linear_solver_type = ceres::DENSE_QR;
   options.minimizer_progress_to_stdout = verbose_output_;
@@ -579,9 +579,9 @@ template <typename _T>
   // Solve the optimization problem
   ceres::Solver::Options options;
   options.max_num_iterations = 5000;
-  options.function_tolerance = 1e-24;
-  options.gradient_tolerance = 1e-28;
-  options.parameter_tolerance = 1e-26;
+  options.function_tolerance = 1e-12;
+  options.gradient_tolerance = 1e-16;
+  options.parameter_tolerance = 1e-14;
   options.max_linear_solver_iterations = 10000;
   options.linear_solver_type = ceres::DENSE_QR;
   options.minimizer_progress_to_stdout = verbose_output_;
