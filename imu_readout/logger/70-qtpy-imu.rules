@@ -1,0 +1,8 @@
+# Adafruit QT Py RP2040 (BNO085 IMU logger)
+# - group plugdev so the user can open the port without being in dialout
+# - keep ModemManager from probing the port during the firmware's 5 s open window
+# - stable symlink /dev/imu_qtpy
+# - RP2040 bootloader (BOOTSEL mode) accessible for picotool without sudo
+# Install: sudo cp logger/70-qtpy-imu.rules /etc/udev/rules.d/ && sudo udevadm control --reload-rules && sudo udevadm trigger
+SUBSYSTEM=="tty", ATTRS{idVendor}=="239a", ATTRS{idProduct}=="80f7", GROUP="plugdev", MODE="0660", ENV{ID_MM_DEVICE_IGNORE}="1", SYMLINK+="imu_qtpy"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="2e8a", ATTRS{idProduct}=="0003", GROUP="plugdev", MODE="0660"

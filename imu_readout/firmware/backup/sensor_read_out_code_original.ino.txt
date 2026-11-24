@@ -1,0 +1,320 @@
+#include <Adafruit_BNO08x.h>
+#include <Adafruit_NeoPixel.h>
+#include <Wire.h>
+
+// COLOR CODES
+#define ORANGE 0xffa000
+#define BLACK 0x000000
+#define PURPLE 0x800080
+#define RED 0xff0000
+#define GREEN 0x00ff00
+#define BLUE 0x0000ff
+#define YELLOW 0xffff00
+#define WHITE 0xffffff
+
+#define STATE_STARTUP 0
+#define STATE_SERIAL_INIT 1
+#define STATE_SENSOR_INIT 2
+#define STATE_SETUP 3
+#define STATE_RUN 4
+#define STATE_ERR -1
+
+#define STARTUP_DELAY 5000 //millisec
+#define LED_BLINK_TIME 500 //millisec
+#define MAX_TIME_SERIAL_INIT 5000 //millisec
+#define MAX_TIME_SENSOR_INIT 2000 //millisec
+#define MAX_TIME_SENSOR_READOUT 5000 //millisec
+#define MAX_SENSOR_CONNECTION_RETRIES 5
+
+
+#define SERIAL_INIT_ERROR 1
+#define SENSOR_INIT_ERROR 2
+#define SENSOR_SETUP_ERROR 3
+#define SENSOR_UNRESPONSIVE_ERROR 4
+
+#define BNO08X_RESET -1
+
+/*
+  States of the program:
+  STATE_SERIAL_INIT  ==> Program is initializing serial communication
+  STATE_SENSOR_INIT  ==> Program is initializing sensor communication
+  STATE_SETUP ==> Program is setting up sensor
+  STATE_RUN  ==> Program is running
+  STATE_ERR ==> Program has entered fault state
+*/
+int state = 0;
+
+int err_type = 0;
+
+int sensor_connection_retries = 0;
+
+long startup_time;
+
+long time_serial_init_start;
+
+long time_sensor_init_start;
+
+int missed_sensor_readout = 0;
+long time_missed_sensor_readout; 
+
+long time_led_color_change;
+int led_color_1 = ORANGE;
+int led_color_2 = BLACK;
+char current_color = 0;
+
+int new_data_package[2] = {0, 0};
+
+struct vector {
+  int16_t x, y, z;
+};
+
+struct Data_Package {
+  vector acc, gyro;
+};
+
+Data_Package current_data_package = {{0,0,0}, {0,0,0}};
+
+Adafruit_BNO08x  bno08x(BNO08X_RESET);
+
+Adafruit_NeoPixel led(1, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
+
+void setup() {
+  startup_time = millis();
+  // LED setup
+  #if defined(NEOPIXEL_POWER)
+  pinMode(NEOPIXEL_POWER, OUTPUT);
+  digitalWrite(NEOPIXEL_POWER, HIGH);
+  #endif
+
+  Wire1.setClock(400000);
+
+  led.begin();
+  led.setBrightness(50);
+
+}
+
+void led_update() {
+  if ((millis()- time_led_color_change) > LED_BLINK_TIME) {
+    if (current_color == 0) {
+      led.fill(led_color_2);
+      led.show();
+      current_color = 1;
+    } else {
+      led.fill(led_color_1);
+      led.show();
+      current_color = 0;
+    }
+    time_led_color_change = millis();
+  }
+}
+
+void throw_error(int reason) {
+  state = STATE_ERR;
+  led_color_1 = RED;
+  led_color_2 = BLACK;
+  if (reason != SERIAL_INIT_ERROR) {
+    Serial.print("[ERR] ");
+    switch (reason) {
+      case SENSOR_INIT_ERROR:
+        Serial.println("Sensor connection failed!");
+        led_color_2 = PURPLE;
+        break;
+      case SENSOR_SETUP_ERROR:
+        Serial.println("Failed sensor setup!");
+        led_color_2 = YELLOW;
+        break;
+      case SENSOR_UNRESPONSIVE_ERROR:
+        Serial.println("No data from sensor is being received!");
+        led_color_2 = BLUE;
+    }
+  }else {
+        led_color_2 = ORANGE;
+    }
+  err_type = reason;
+}
+
+void start_serial_init () {
+  Serial.begin(115200);
+  time_serial_init_start = millis();
+  state = STATE_SERIAL_INIT;
+}
+
+void startup() {
+  if ((millis() - startup_time) > STARTUP_DELAY) {
+    start_serial_init();
+  }
+}
+
+void begin_sensor_init() {
+  time_sensor_init_start = millis();
+  state = STATE_SENSOR_INIT;
+}
+
+void state_serial_init() {
+  if (Serial) {
+    Serial.println("[Info] Serial connection established.");
+    begin_sensor_init();
+  } else if ( (millis() - time_serial_init_start) > MAX_TIME_SERIAL_INIT) {
+     throw_error(SERIAL_INIT_ERROR);
+  }
+}
+
+void state_sensor_init() {
+  if (!bno08x.begin_I2C(0x4A, &Wire1)) {
+    if ( (millis() - time_sensor_init_start) > MAX_TIME_SENSOR_INIT) {
+      throw_error(SENSOR_INIT_ERROR);
+    }
+  } else {
+    Serial.println("[Info] Sensor connection established.");
+    state = STATE_SETUP;
+  }
+}
+
+void state_setup() {
+  if (! bno08x.enableReport(SH2_ACCELEROMETER, 5000)) {
+    throw_error(SENSOR_SETUP_ERROR);
+    return;
+  } 
+  if (! bno08x.enableReport(SH2_GYROSCOPE_UNCALIBRATED, 5000)) {
+    throw_error(SENSOR_SETUP_ERROR);
+    return;
+  } 
+  if (! bno08x.enableReport(SH2_RAW_ACCELEROMETER, 5000)) {
+    throw_error(SENSOR_SETUP_ERROR);
+    return;
+  } 
+  if (! bno08x.enableReport(SH2_RAW_GYROSCOPE, 5000)) {
+    throw_error(SENSOR_SETUP_ERROR);
+    return;
+  } 
+  Serial.println("[Info] Sensor setup successful.");
+  Serial.println("[Info] Sending data...");
+  state = STATE_RUN;
+  
+}
+
+void send_int16(int16_t arg) {
+  byte* data = (byte*) &arg;
+
+  Serial.write(data, sizeof(arg));
+}
+
+void state_run() {
+  sh2_SensorValue_t sensor_value;
+  led_color_1 = GREEN;
+  led_color_2 = WHITE;
+  if (bno08x.wasReset()) {
+    state = STATE_SETUP;
+    return;
+  }
+
+  if (!bno08x.getSensorEvent(&sensor_value)) {
+    if (missed_sensor_readout) {
+      if ( (millis() - time_missed_sensor_readout) > MAX_TIME_SENSOR_READOUT) {
+        if (sensor_connection_retries < MAX_SENSOR_CONNECTION_RETRIES) {
+          sensor_connection_retries += 1;
+          missed_sensor_readout = 0;
+          begin_sensor_init();
+        } else {
+          throw_error(SENSOR_UNRESPONSIVE_ERROR);
+        }
+      }
+      return;
+    } else {
+      missed_sensor_readout = 1;
+      time_missed_sensor_readout = millis();
+      return;
+    }
+  }
+
+  missed_sensor_readout = 0;
+
+  switch (sensor_value.sensorId) {
+    case SH2_RAW_ACCELEROMETER: 
+      /*Serial.print("-da ");
+      Serial.print(sensor_value.un.rawAccelerometer.x);
+      Serial.print(", ");
+      Serial.print(sensor_value.un.rawAccelerometer.y);
+      Serial.print(", ");
+      Serial.println(sensor_value.un.rawAccelerometer.z);*/
+      current_data_package.acc = {
+        sensor_value.un.rawAccelerometer.x,
+        sensor_value.un.rawAccelerometer.y,
+        sensor_value.un.rawAccelerometer.z
+      };
+      new_data_package[0] = 1; 
+      break;
+    case SH2_RAW_GYROSCOPE:
+      /*Serial.print("-dg ");
+      Serial.print(sensor_value.un.rawGyroscope.x);
+      Serial.print(", ");
+      Serial.print(sensor_value.un.rawGyroscope.y);
+      Serial.print(", ");
+      Serial.println(sensor_value.un.rawGyroscope.z);*/
+      current_data_package.gyro = {
+        sensor_value.un.rawGyroscope.x,
+        sensor_value.un.rawGyroscope.y,
+        sensor_value.un.rawGyroscope.z
+      };
+      new_data_package[1] = 1;
+      break;
+  }
+
+  if (new_data_package[0] && new_data_package[1]) {
+    new_data_package[0] = 0;
+    new_data_package[1] = 0;
+
+    // send data over serial to pc
+    //Serial.print("-d ");
+    Serial.print(current_data_package.acc.x);
+    //send_int16(current_data_package.acc.x);
+    Serial.print(",");
+    Serial.print(current_data_package.acc.y);
+    //send_int16(current_data_package.acc.y);
+    Serial.print(",");
+    Serial.print(current_data_package.acc.z);
+    //send_int16(current_data_package.acc.z);
+    Serial.print(",");
+    Serial.print(current_data_package.gyro.x);
+    //send_int16(current_data_package.gyro.x);
+    Serial.print(",");
+    Serial.print(current_data_package.gyro.y);
+    //send_int16(current_data_package.gyro.y);
+    Serial.print(",");
+    Serial.print(current_data_package.gyro.z);
+    //send_int16(current_data_package.gyro.z);
+    Serial.println();
+  }
+
+}
+
+
+void err_state() {
+
+}
+
+void loop() {
+  while(1) {
+    led_update();
+    switch (state) {
+      case STATE_STARTUP:
+        startup();
+        break;
+      case STATE_SERIAL_INIT:
+        state_serial_init();
+        break;
+      case STATE_SENSOR_INIT:
+        state_sensor_init();
+        break;
+      case STATE_SETUP:
+        state_setup();
+        break;
+      case STATE_RUN:
+        state_run();
+        break;
+      default:
+        err_state();
+    }
+    
+  }
+}
